@@ -4,6 +4,7 @@ import { CustomerLayoutComponent } from './layouts/customer-layout/customer-layo
 export const routes: Routes = [
     {
         path: '',
-        component: CustomerLayoutComponent
+        component: CustomerLayoutComponent,
+        loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule)
     }
 ];
