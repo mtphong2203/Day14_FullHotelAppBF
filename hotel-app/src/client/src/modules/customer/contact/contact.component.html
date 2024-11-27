@@ -1,0 +1,52 @@
+<div class="container mt-4">
+  <h1 class="text-3xl text-center font-medium mb-2">Contact</h1>
+  <div class="contact">
+    <form class="form-contact" [formGroup]="contact" (ngSubmit)="onSubmit()">
+      <div class="form-group mb-2">
+        <label for="name" class="block mb-1">Name</label>
+        <input
+          type="text"
+          class="w-full rounded-md p-1 px-2 focus:outline-slate-200 border-2"
+          id="name"
+          placeholder="Enter your name"
+          formControlName="name"
+        />
+      </div>
+      <div class="form-group mb-2">
+        <label for="email" class="block mb-1">Email</label>
+        <input
+          type="text"
+          class="w-full rounded-md p-1 px-2 focus:outline-slate-200 border-2"
+          id="email"
+          placeholder="Enter your email"
+          formControlName="email"
+        />
+      </div>
+      <div class="form-group mb-2">
+        <label for="message" class="block mb-1">Message</label>
+        <textarea
+          formControlName="message"
+          class="w-full rounded-md p-1 px-2 focus:outline-slate-200 border-2"
+          id="message"
+          placeholder="Enter your message"
+        ></textarea>
+      </div>
+      <div class="button flex justify-between mb-4">
+        <button type="submit" class="p-2 text-white bg-blue-500 rounded-md">
+          Send
+        </button>
+        <button
+          type="submit"
+          class="p-2 text-white bg-blue-500 rounded-md"
+          (click)="onCreate()"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="isShow" class="date-contact flex gap-4 items-center">
+    <p class="title">HotelApp</p>
+    <p>Online {{ time | formatDate }} ago</p>
+  </div>
+</div>

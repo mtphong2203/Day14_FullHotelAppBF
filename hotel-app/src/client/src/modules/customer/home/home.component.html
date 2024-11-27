@@ -1,0 +1,24 @@
+<div class="container mt-4">
+  <h1 class="text-center text-3xl font-medium">Home Page</h1>
+  <div class="content mt-6 flex justify-between">
+    <div class="title w-[50%]">
+      <h2 class="text-2xl font-medium mb-1">HotelApp</h2>
+      <p class="mb-4">
+        We've been working in this actives about 10 years. We have much
+        experience and customer. Welcome to my application
+      </p>
+      <a
+        [routerLink]="['/about']"
+        class="p-2 bg-blue-500 rounded-md hover:bg-blue-600 text-white"
+        >More information</a
+      >
+    </div>
+    <div class="brand-home">
+      <img
+        [src]="brandHome"
+        class="rounded-full w-96 h-96 object-fill"
+        alt=""
+      />
+    </div>
+  </div>
+</div>
