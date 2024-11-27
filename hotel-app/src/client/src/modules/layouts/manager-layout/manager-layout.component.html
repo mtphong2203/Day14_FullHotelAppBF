@@ -1,0 +1,10 @@
+<div class="h-screen flex flex-col">
+  <app-header></app-header>
+  <main class="flex grow">
+    <app-sidebar class="w-[15%]"></app-sidebar>
+    <div class="management w-[85%]">
+      <router-outlet />
+    </div>
+  </main>
+  <app-footer></app-footer>
+</div>
