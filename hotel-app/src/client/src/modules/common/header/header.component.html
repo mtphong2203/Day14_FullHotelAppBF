@@ -1,0 +1,43 @@
+<header class="bg-slate-100 shadow-md">
+  <div class="container w-[75%] m-auto flex justify-between items-center">
+    <div class="header__brand">
+      <a [routerLink]="['/']" class="font-medium text-2xl">HotelApp</a>
+    </div>
+
+    <nav class="navbar">
+      <ul class="nav-list flex">
+        <li class="nav-item">
+          <a [routerLink]="['/']" class="nav-link p-2 hover:font-medium"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
+          <a [routerLink]="['/manager']" class="nav-link p-2 hover:font-medium"
+            >Management
+          </a>
+        </li>
+        <li class="nav-item">
+          <a [routerLink]="['/about']" class="nav-link p-2 hover:font-medium"
+            >About</a
+          >
+        </li>
+        <li class="nav-item">
+          <a [routerLink]="['/contact']" class="nav-link p-2 hover:font-medium"
+            >Contact</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="profile flex">
+      <a [routerLink]="['/auth/login']" class="nav-link p-2 hover:font-medium"
+        >Login</a
+      >
+      <a
+        [routerLink]="['/auth/register']"
+        class="nav-link p-2 hover:font-medium"
+        >Register</a
+      >
+    </div>
+  </div>
+</header>
