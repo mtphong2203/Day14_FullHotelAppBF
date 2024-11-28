@@ -30,7 +30,36 @@
     </form>
   </div>
   <!-- list -->
-  <div>list</div>
+  <div class="list mt-4">
+    <table class="w-full border-collapse text-center">
+      <thead>
+        <tr class="*:border-2 p-2">
+          <th>No</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of dataApi; let i = index"
+          class="*:border-2 *:p-2"
+        >
+          <td>{{ i }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.price }}</td>
+          <td class="flex gap-3 justify-center">
+            <button type="submit" title="Edit">
+              <fa-icon [icon]="faEdit" class="text-green-500"></fa-icon>
+            </button>
+            <button type="submit" title="Delete">
+              <fa-icon [icon]="faTrash" class="text-red-500"></fa-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <!-- details -->
   <app-hotel-details *ngIf="isShowDetail"></app-hotel-details>
 </div>
