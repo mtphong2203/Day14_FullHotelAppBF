@@ -1,0 +1,36 @@
+<div class="hotel-service p-4">
+  <div class="card border-2 rounded-sm">
+    <div class="card-header">
+      <h1 class="text-2xl text-center font-medium mb-4 border-b-2 p-2">
+        Hotel Service Management
+      </h1>
+    </div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="searchForm">
+      <div class="card-body border-b-2 p-2">
+        <div class="form-group">
+          <label for="keyword" class="block mb-1">Keyword</label>
+          <input
+            type="text"
+            name="keyword"
+            id="keyword"
+            placeholder="Enter keyword"
+            class="w-full p-2 border-2 rounded-md focus:outline-slate-500"
+            formControlName="keyword"
+          />
+        </div>
+      </div>
+      <div class="card-footer flex justify-between p-4">
+        <button type="submit" class="p-2 bg-green-500 text-white rounded-full">
+          <fa-icon [icon]="faPlus" class="mr-1"></fa-icon>Create
+        </button>
+        <button type="submit" class="p-2 bg-blue-500 text-white rounded-full">
+          <fa-icon [icon]="faSearch" class="mr-1"></fa-icon>Search
+        </button>
+      </div>
+    </form>
+  </div>
+  <!-- list -->
+  <div>list</div>
+  <!-- details -->
+  <app-hotel-details *ngIf="isShowDetail"></app-hotel-details>
+</div>
