@@ -1,5 +1,6 @@
 package com.maiphong.hotelapp.entities;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -24,5 +25,11 @@ public class Room {
     private int capacity;
 
     private double price;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    private boolean isActive;
 
 }

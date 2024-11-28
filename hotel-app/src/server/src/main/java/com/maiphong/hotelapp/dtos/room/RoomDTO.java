@@ -21,4 +21,6 @@ public class RoomDTO {
     private int capacity;
 
     private double price;
+
+    private boolean isActive;
 }

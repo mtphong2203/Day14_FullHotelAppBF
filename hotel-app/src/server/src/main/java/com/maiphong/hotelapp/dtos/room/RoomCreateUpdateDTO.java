@@ -28,4 +28,7 @@ public class RoomCreateUpdateDTO {
 
     @PositiveOrZero(message = "Should greater or equal zero")
     private double price;
+
+    @NotNull(message = "Active is not null")
+    private boolean isActive;
 }

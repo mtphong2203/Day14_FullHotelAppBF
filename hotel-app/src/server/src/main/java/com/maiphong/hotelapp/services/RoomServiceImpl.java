@@ -1,5 +1,6 @@
 package com.maiphong.hotelapp.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,15 +14,18 @@ import com.maiphong.hotelapp.dtos.room.RoomCreateUpdateDTO;
 import com.maiphong.hotelapp.dtos.room.RoomDTO;
 import com.maiphong.hotelapp.entities.Room;
 import com.maiphong.hotelapp.entities.RoomType;
+import com.maiphong.hotelapp.mappers.RoomMapper;
 import com.maiphong.hotelapp.repositories.RoomRepository;
 
 @Service
 @Transactional
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
+    private final RoomMapper roomMapper;
 
-    public RoomServiceImpl(RoomRepository roomRepository) {
+    public RoomServiceImpl(RoomRepository roomRepository, RoomMapper roomMapper) {
         this.roomRepository = roomRepository;
+        this.roomMapper = roomMapper;
     }
 
     @Override
@@ -29,12 +33,7 @@ public class RoomServiceImpl implements RoomService {
         List<Room> rooms = roomRepository.findAll();
 
         List<RoomDTO> roomDTOs = rooms.stream().map(room -> {
-            RoomDTO roomDTO = new RoomDTO();
-            roomDTO.setId(room.getId());
-            roomDTO.setNumber(room.getNumber());
-            roomDTO.setCapacity(room.getCapacity());
-            roomDTO.setType(room.getType());
-            roomDTO.setPrice(room.getPrice());
+            RoomDTO roomDTO = roomMapper.toRoomDTO(room);
             return roomDTO;
         }).toList();
 
@@ -49,12 +48,7 @@ public class RoomServiceImpl implements RoomService {
             throw new IllegalArgumentException("Room is not found");
         }
 
-        RoomDTO roomDTO = new RoomDTO();
-        roomDTO.setId(room.getId());
-        roomDTO.setNumber(room.getNumber());
-        roomDTO.setCapacity(room.getCapacity());
-        roomDTO.setType(room.getType());
-        roomDTO.setPrice(room.getPrice());
+        RoomDTO roomDTO = roomMapper.toRoomDTO(room);
 
         return roomDTO;
     }
@@ -71,11 +65,8 @@ public class RoomServiceImpl implements RoomService {
             throw new IllegalArgumentException("Room number is already exist!");
         }
 
-        Room newRoom = new Room();
-        newRoom.setNumber(roomCreateUpdateDTO.getNumber());
-        newRoom.setCapacity(roomCreateUpdateDTO.getCapacity());
-        newRoom.setType(roomCreateUpdateDTO.getType());
-        newRoom.setPrice(roomCreateUpdateDTO.getPrice());
+        Room newRoom = roomMapper.toRoom(roomCreateUpdateDTO);
+        newRoom.setCreatedAt(LocalDateTime.now());
 
         newRoom = roomRepository.save(newRoom);
 
@@ -95,10 +86,8 @@ public class RoomServiceImpl implements RoomService {
             throw new IllegalArgumentException("Room is not found!");
         }
 
-        room.setNumber(roomCreateUpdateDTO.getNumber());
-        room.setCapacity(roomCreateUpdateDTO.getCapacity());
-        room.setType(roomCreateUpdateDTO.getType());
-        room.setPrice(roomCreateUpdateDTO.getPrice());
+        roomMapper.toRoom(roomCreateUpdateDTO, room);
+        room.setUpdatedAt(LocalDateTime.now());
 
         room = roomRepository.save(room);
 
@@ -119,53 +108,64 @@ public class RoomServiceImpl implements RoomService {
 
     }
 
-    // @Override
-    // public Page<RoomDTO> searchByNumber(String number, Pageable pageable) {
-    // Specification<Room> spec = (root, query, criteriaBuilder) -> {
-    // return criteriaBuilder.equal(root.get("number"), number);
-    // };
+    @Override
+    public Page<RoomDTO> search(String keyword, Pageable pageable) {
+        Specification<Room> spec = (root, query, criteriaBuilder) -> {
+            if (keyword == null) {
+                return null;
+            }
+            return criteriaBuilder.like(criteriaBuilder.lower(root.get("number")), "%" + keyword.toLowerCase() + "%");
+        };
 
-    // var rooms = roomRepository.findAll(spec, pageable);
+        Page<Room> rooms = roomRepository.findAll(spec, pageable);
 
-    // var roomDTOs = rooms.map(room -> {
-    // RoomDTO roomDTO = new RoomDTO();
-    // roomDTO.setId(room.getId());
-    // roomDTO.setNumber(room.getNumber());
-    // roomDTO.setCapacity(room.getCapacity());
-    // roomDTO.setType(room.getType());
-    // roomDTO.setPrice(room.getPrice());
+        Page<RoomDTO> roomDTOs = rooms.map(room -> {
+            RoomDTO roomDTO = roomMapper.toRoomDTO(room);
+            return roomDTO;
+        });
+        return roomDTOs;
+    }
 
-    // return roomDTO;
-    // });
+    @Override
+    public List<RoomDTO> searchByType(RoomType roomType) {
+        Specification<Room> spec = (root, query, criteriaBuilder) -> {
+            if (roomType == null) {
+                return null;
+            }
 
-    // return roomDTOs;
-    // }
+            return criteriaBuilder.equal(root.get("type"), roomType);
+        };
 
-    // @Override
-    // public List<RoomDTO> searchByType(RoomType roomType, Pageable pageable) {
-    // Specification<Room> spec = (root, query, criteriaBuilder) -> {
-    // return criteriaBuilder.equal(root.get("type"), roomType);
-    // };
+        List<Room> rooms = roomRepository.findAll(spec);
 
-    // var rooms = roomRepository.findAll(spec);
+        List<RoomDTO> roomDTOs = rooms.stream().map(room -> {
+            RoomDTO roomDTO = roomMapper.toRoomDTO(room);
 
-    // // var roomDTOs = rooms.map(room -> {
-    // // RoomDTO roomDTO = new RoomDTO();
-    // // roomDTO.setId(room.getId());
-    // // roomDTO.setNumber(room.getNumber());
-    // // roomDTO.setCapacity(room.getCapacity());
-    // // roomDTO.setType(room.getType());
-    // // roomDTO.setPrice(room.getPrice());
-    // // return roomDTO;
-    // // });
-    // return null;
+            return roomDTO;
+        }).toList();
+        return roomDTOs;
+    }
 
-    // }
+    @Override
+    public List<RoomDTO> searchByNumber(String number) {
+        Specification<Room> spec = (root, query, cb) -> {
+            if (number == null) {
+                return null;
+            }
 
-    // @Override
-    // public List<RoomDTO> search(String keyword) {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method 'search'");
-    // }
+            return cb.like(cb.lower(root.get("number")), "%" + number.toLowerCase() + "%");
+        };
+
+        List<Room> rooms = roomRepository.findAll(spec);
+
+        List<RoomDTO> roomDTOs = rooms.stream().map(room -> {
+            RoomDTO roomDTO = roomMapper.toRoomDTO(room);
+
+            return roomDTO;
+        }).toList();
+
+        return roomDTOs;
+
+    }
 
 }
