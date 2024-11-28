@@ -57,16 +57,16 @@ public class OrderController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam(required = false) String name,
+    public ResponseEntity<?> search(@RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer size) {
-        if (name == null) {
+        if (keyword == null) {
             getAll();
         }
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<OrderDTO> orders = orderService.search(name, pageable);
+        Page<OrderDTO> orders = orderService.search(keyword, pageable);
 
         var orderModel = pageResource.toModel(orders);
 
