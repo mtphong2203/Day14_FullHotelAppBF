@@ -1,8 +1,6 @@
 package com.maiphong.hotelapp.dtos.room;
 
-import java.util.UUID;
-
-import com.maiphong.hotelapp.dtos.BaseDTO;
+import com.maiphong.hotelapp.dtos.MasterDTO;
 import com.maiphong.hotelapp.entities.RoomType;
 
 import lombok.*;
@@ -11,7 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomDTO extends BaseDTO {
+public class RoomMasterDTO extends MasterDTO {
 
     private String number;
 

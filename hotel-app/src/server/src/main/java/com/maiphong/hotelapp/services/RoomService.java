@@ -6,28 +6,24 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-// import org.springframework.data.domain.Page;
-// import org.springframework.data.domain.Pageable;
-
 import com.maiphong.hotelapp.dtos.room.RoomCreateUpdateDTO;
-import com.maiphong.hotelapp.dtos.room.RoomDTO;
-// import com.maiphong.hotelapp.entities.RoomType;
+import com.maiphong.hotelapp.dtos.room.RoomMasterDTO;
 import com.maiphong.hotelapp.entities.RoomType;
 
 public interface RoomService {
-    List<RoomDTO> getAll();
+    List<RoomMasterDTO> getAll();
 
-    Page<RoomDTO> search(String keyword, Pageable pageable);
+    Page<RoomMasterDTO> searchPage(String keyword, Pageable pageable);
 
-    List<RoomDTO> searchByType(RoomType roomType);
+    List<RoomMasterDTO> searchByType(RoomType roomType);
 
-    List<RoomDTO> searchByNumber(String number);
+    List<RoomMasterDTO> searchByNumber(String number);
 
-    RoomDTO getById(UUID id);
+    RoomMasterDTO getById(String id);
 
-    boolean create(RoomCreateUpdateDTO roomCreateUpdateDTO);
+    RoomMasterDTO create(RoomCreateUpdateDTO roomDTO);
 
-    boolean update(UUID id, RoomCreateUpdateDTO roomCreateUpdateDTO);
+    RoomMasterDTO update(UUID id, RoomCreateUpdateDTO roomDTO);
 
     boolean delete(UUID id);
 

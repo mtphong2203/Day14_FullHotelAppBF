@@ -1,6 +1,5 @@
 package com.maiphong.hotelapp.services;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,9 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.maiphong.hotelapp.dtos.room.RoomCreateUpdateDTO;
-import com.maiphong.hotelapp.dtos.room.RoomDTO;
+import com.maiphong.hotelapp.dtos.room.RoomMasterDTO;
 import com.maiphong.hotelapp.entities.Room;
 import com.maiphong.hotelapp.entities.RoomType;
+import com.maiphong.hotelapp.exceptions.ResourceNotFoundException;
 import com.maiphong.hotelapp.mappers.RoomMapper;
 import com.maiphong.hotelapp.repositories.RoomRepository;
 
@@ -29,11 +29,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<RoomDTO> getAll() {
+    public List<RoomMasterDTO> getAll() {
         List<Room> rooms = roomRepository.findAll();
 
-        List<RoomDTO> roomDTOs = rooms.stream().map(room -> {
-            RoomDTO roomDTO = roomMapper.toRoomDTO(room);
+        List<RoomMasterDTO> roomDTOs = rooms.stream().map(room -> {
+            RoomMasterDTO roomDTO = roomMapper.toMasterDTO(room);
             return roomDTO;
         }).toList();
 
@@ -41,57 +41,65 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomDTO getById(UUID id) {
-        Room room = roomRepository.findById(id).orElse(null);
+    public RoomMasterDTO getById(String id) {
+        Room room = roomRepository.findById(UUID.fromString(id)).orElse(null);
 
         if (room == null) {
             throw new IllegalArgumentException("Room is not found");
         }
 
-        RoomDTO roomDTO = roomMapper.toRoomDTO(room);
+        RoomMasterDTO roomDTO = roomMapper.toMasterDTO(room);
 
         return roomDTO;
     }
 
     @Override
-    public boolean create(RoomCreateUpdateDTO roomCreateUpdateDTO) {
-        if (roomCreateUpdateDTO == null) {
+    public RoomMasterDTO create(RoomCreateUpdateDTO roomDTO) {
+        if (roomDTO == null) {
             throw new IllegalArgumentException("Room create is not null");
         }
 
-        Room room = roomRepository.findByNumber(roomCreateUpdateDTO.getNumber());
+        Room room = roomRepository.findByNumber(roomDTO.getNumber());
 
         if (room != null) {
             throw new IllegalArgumentException("Room number is already exist!");
         }
 
-        Room newRoom = roomMapper.toRoom(roomCreateUpdateDTO);
-        newRoom.setCreatedAt(LocalDateTime.now());
+        Room newRoom = roomMapper.toEntity(roomDTO);
 
         newRoom = roomRepository.save(newRoom);
 
-        return newRoom != null;
+        RoomMasterDTO masterDTO = roomMapper.toMasterDTO(newRoom);
+
+        return masterDTO;
 
     }
 
     @Override
-    public boolean update(UUID id, RoomCreateUpdateDTO roomCreateUpdateDTO) {
-        if (roomCreateUpdateDTO == null) {
+    public RoomMasterDTO update(UUID id, RoomCreateUpdateDTO roomDTO) {
+        if (roomDTO == null) {
             throw new IllegalArgumentException("Room create is not null");
         }
 
-        Room room = roomRepository.findByNumber(roomCreateUpdateDTO.getNumber());
+        Room existRoom = roomRepository.findByNumber(roomDTO.getNumber());
 
-        if (room != null && !room.getId().equals(id)) {
-            throw new IllegalArgumentException("Room is not found!");
+        if (existRoom != null && existRoom.getId().equals(id)) {
+            throw new IllegalArgumentException("Room is already exists!");
         }
 
-        roomMapper.toRoom(roomCreateUpdateDTO, room);
-        room.setUpdatedAt(LocalDateTime.now());
+        Room room = roomRepository.findById(id).orElse(null);
+
+        if (room == null) {
+            throw new ResourceNotFoundException("Room is not found");
+        }
+
+        roomMapper.toEntity(roomDTO, room);
 
         room = roomRepository.save(room);
 
-        return room != null;
+        RoomMasterDTO masterDTO = roomMapper.toMasterDTO(room);
+
+        return masterDTO;
     }
 
     @Override
@@ -109,8 +117,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Page<RoomDTO> search(String keyword, Pageable pageable) {
-        Specification<Room> spec = (root, query, criteriaBuilder) -> {
+    public Page<RoomMasterDTO> searchPage(String keyword, Pageable pageable) {
+        Specification<Room> spec = (root, _, criteriaBuilder) -> {
             if (keyword == null) {
                 return null;
             }
@@ -119,16 +127,16 @@ public class RoomServiceImpl implements RoomService {
 
         Page<Room> rooms = roomRepository.findAll(spec, pageable);
 
-        Page<RoomDTO> roomDTOs = rooms.map(room -> {
-            RoomDTO roomDTO = roomMapper.toRoomDTO(room);
+        Page<RoomMasterDTO> roomDTOs = rooms.map(room -> {
+            RoomMasterDTO roomDTO = roomMapper.toMasterDTO(room);
             return roomDTO;
         });
         return roomDTOs;
     }
 
     @Override
-    public List<RoomDTO> searchByType(RoomType roomType) {
-        Specification<Room> spec = (root, query, criteriaBuilder) -> {
+    public List<RoomMasterDTO> searchByType(RoomType roomType) {
+        Specification<Room> spec = (root, _, criteriaBuilder) -> {
             if (roomType == null) {
                 return null;
             }
@@ -138,8 +146,8 @@ public class RoomServiceImpl implements RoomService {
 
         List<Room> rooms = roomRepository.findAll(spec);
 
-        List<RoomDTO> roomDTOs = rooms.stream().map(room -> {
-            RoomDTO roomDTO = roomMapper.toRoomDTO(room);
+        List<RoomMasterDTO> roomDTOs = rooms.stream().map(room -> {
+            RoomMasterDTO roomDTO = roomMapper.toMasterDTO(room);
 
             return roomDTO;
         }).toList();
@@ -147,8 +155,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<RoomDTO> searchByNumber(String number) {
-        Specification<Room> spec = (root, query, cb) -> {
+    public List<RoomMasterDTO> searchByNumber(String number) {
+        Specification<Room> spec = (root, _, cb) -> {
             if (number == null) {
                 return null;
             }
@@ -158,8 +166,8 @@ public class RoomServiceImpl implements RoomService {
 
         List<Room> rooms = roomRepository.findAll(spec);
 
-        List<RoomDTO> roomDTOs = rooms.stream().map(room -> {
-            RoomDTO roomDTO = roomMapper.toRoomDTO(room);
+        List<RoomMasterDTO> roomDTOs = rooms.stream().map(room -> {
+            RoomMasterDTO roomDTO = roomMapper.toMasterDTO(room);
 
             return roomDTO;
         }).toList();

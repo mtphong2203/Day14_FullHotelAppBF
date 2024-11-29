@@ -2,6 +2,7 @@ package com.maiphong.hotelapp.dtos.room;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.maiphong.hotelapp.dtos.MasterCreateUpdateDTO;
 import com.maiphong.hotelapp.entities.RoomType;
 
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +14,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomCreateUpdateDTO {
+public class RoomCreateUpdateDTO extends MasterCreateUpdateDTO {
 
     @NotBlank(message = "Room number is required")
     @Length(min = 2, max = 255, message = "Between 2 to 255 characters")
@@ -28,7 +29,4 @@ public class RoomCreateUpdateDTO {
 
     @PositiveOrZero(message = "Should greater or equal zero")
     private double price;
-
-    @NotNull(message = "Active is not null")
-    private boolean isActive;
 }
