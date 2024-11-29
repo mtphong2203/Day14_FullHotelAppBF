@@ -1,6 +1,5 @@
 package com.maiphong.hotelapp.services;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,13 +10,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.maiphong.hotelapp.dtos.user.UserCreateDTO;
-import com.maiphong.hotelapp.dtos.user.UserDTO;
-import com.maiphong.hotelapp.dtos.user.UserUpdateDTO;
+import com.maiphong.hotelapp.dtos.user.UserCreateUpdateDTO;
+import com.maiphong.hotelapp.dtos.user.UserMasterDTO;
 import com.maiphong.hotelapp.entities.User;
 import com.maiphong.hotelapp.exceptions.ResourceNotFoundException;
 import com.maiphong.hotelapp.mappers.UserMapper;
 import com.maiphong.hotelapp.repositories.UserRepository;
+
+import jakarta.persistence.criteria.Predicate;
 
 @Service
 @Transactional
@@ -33,11 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAll() {
+    public List<UserMasterDTO> getAll() {
         List<User> users = userRepository.findAll();
 
-        List<UserDTO> userDTOs = users.stream().map(user -> {
-            UserDTO userDTO = userMapper.toUserDTO(user);
+        List<UserMasterDTO> userDTOs = users.stream().map(user -> {
+            UserMasterDTO userDTO = userMapper.toMasterDTO(user);
             return userDTO;
         }).toList();
 
@@ -45,57 +45,66 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO getById(UUID id) {
+    public UserMasterDTO getById(String id) {
+        User user = userRepository.findById(UUID.fromString(id)).orElse(null);
+
+        if (user == null) {
+            throw new ResourceNotFoundException("User is not found");
+        }
+
+        UserMasterDTO userDTO = userMapper.toMasterDTO(user);
+
+        return userDTO;
+    }
+
+    @Override
+    public UserMasterDTO create(UserCreateUpdateDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("User create can not null");
+        }
+
+        User user = userRepository.findByUsername(userDTO.getUsername());
+
+        if (user != null) {
+            throw new IllegalArgumentException("User name is already exist!");
+        }
+
+        User newUser = userMapper.toEntity(userDTO);
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+        newUser = userRepository.save(newUser);
+
+        UserMasterDTO masterDTO = userMapper.toMasterDTO(newUser);
+
+        return masterDTO;
+    }
+
+    @Override
+    public UserMasterDTO update(UUID id, UserCreateUpdateDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("User create can not null");
+        }
+
+        User existUser = userRepository.findByUsername(userDTO.getUsername());
+
+        if (existUser != null && existUser.getId().equals(id)) {
+            throw new ResourceNotFoundException("User name is already exist!");
+        }
+
         User user = userRepository.findById(id).orElse(null);
 
         if (user == null) {
             throw new ResourceNotFoundException("User is not found");
         }
 
-        UserDTO userDTO = userMapper.toUserDTO(user);
-        return userDTO;
-    }
-
-    @Override
-    public boolean create(UserCreateDTO userCreateDTO) {
-        if (userCreateDTO == null) {
-            throw new IllegalArgumentException("User create can not null");
-        }
-
-        User user = userRepository.findByUsername(userCreateDTO.getUsername());
-
-        if (user != null) {
-            throw new IllegalArgumentException("User name is already exist!");
-        }
-
-        User newUser = userMapper.toUser(userCreateDTO);
-        newUser.setPassword(passwordEncoder.encode(userCreateDTO.getPassword()));
-        newUser.setCreatedAt(LocalDateTime.now());
-
-        newUser = userRepository.save(newUser);
-
-        return newUser != null;
-    }
-
-    @Override
-    public boolean update(UUID id, UserUpdateDTO userUpdateDTO) {
-        if (userUpdateDTO == null) {
-            throw new IllegalArgumentException("User create can not null");
-        }
-
-        User user = userRepository.findByUsername(userUpdateDTO.getUsername());
-
-        if (user == null || !user.getId().equals(id)) {
-            throw new ResourceNotFoundException("User name is not exist!");
-        }
-
-        userMapper.toUser(userUpdateDTO, user);
-        user.setPassword(passwordEncoder.encode(userUpdateDTO.getPassword()));
-        user.setUpdatedAt(LocalDateTime.now());
+        userMapper.toEntity(userDTO, user);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         user = userRepository.save(user);
 
-        return user != null;
+        UserMasterDTO masterDTO = userMapper.toMasterDTO(user);
+
+        return masterDTO;
     }
 
     @Override
@@ -112,21 +121,47 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> searchByUsername(String username, Pageable pageable) {
-        Specification<User> spec = (root, query, cb) -> {
-            if (username == null) {
+    public Page<UserMasterDTO> searchByPage(String keyword, Pageable pageable) {
+        Specification<User> spec = (root, _, cb) -> {
+            if (keyword == null) {
                 return null;
             }
 
-            return cb.like(cb.lower(root.get("username")), "%" + username.toLowerCase() + "%");
+            return cb.like(cb.lower(root.get("username")), "%" + keyword.toLowerCase() + "%");
         };
 
         Page<User> users = userRepository.findAll(spec, pageable);
 
-        Page<UserDTO> userDTOs = users.map(user -> {
-            UserDTO userDTO = userMapper.toUserDTO(user);
+        Page<UserMasterDTO> userDTOs = users.map(user -> {
+            UserMasterDTO userDTO = userMapper.toMasterDTO(user);
             return userDTO;
         });
+
+        return userDTOs;
+    }
+
+    @Override
+    public List<UserMasterDTO> searchByKeyword(String keyword) {
+        Specification<User> spec = (root, _, cb) -> {
+            if (keyword == null) {
+                return null;
+            }
+
+            Predicate predicate = cb.like(cb.lower(root.get("username")), "%" + keyword.toLowerCase() + "%");
+
+            predicate = cb.or(predicate, cb.like(cb.lower(root.get("email")), "%" + keyword.toLowerCase() + "%"));
+
+            predicate = cb.or(predicate, cb.like(cb.lower(root.get("phoneNumber")), "%" + keyword.toLowerCase() + "%"));
+
+            return predicate;
+        };
+
+        List<User> users = userRepository.findAll(spec);
+
+        List<UserMasterDTO> userDTOs = users.stream().map(user -> {
+            UserMasterDTO userDTO = userMapper.toMasterDTO(user);
+            return userDTO;
+        }).toList();
 
         return userDTOs;
     }

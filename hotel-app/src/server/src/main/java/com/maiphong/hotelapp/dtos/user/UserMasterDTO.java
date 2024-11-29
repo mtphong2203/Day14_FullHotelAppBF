@@ -2,7 +2,7 @@ package com.maiphong.hotelapp.dtos.user;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.maiphong.hotelapp.dtos.BaseDTO;
+import com.maiphong.hotelapp.dtos.MasterDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -11,8 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO extends BaseDTO {
-
+public class UserMasterDTO extends MasterDTO {
     @NotBlank(message = "First Name is required")
     @Length(min = 2, max = 50, message = "First Name must be between 2 and 50 characters")
     private String firstName;
@@ -32,5 +31,4 @@ public class UserDTO extends BaseDTO {
     @NotBlank(message = "Phone is required")
     @Length(min = 2, max = 20, message = "Phone must be between 2 and 20 characters")
     private String phoneNumber;
-
 }

@@ -1,20 +1,23 @@
 package com.maiphong.hotelapp.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
-import com.maiphong.hotelapp.dtos.user.UserCreateDTO;
+import com.maiphong.hotelapp.dtos.auth.RegisterRequestDTO;
+import com.maiphong.hotelapp.dtos.user.UserCreateUpdateDTO;
 import com.maiphong.hotelapp.dtos.user.UserDTO;
-import com.maiphong.hotelapp.dtos.user.UserUpdateDTO;
+import com.maiphong.hotelapp.dtos.user.UserMasterDTO;
 import com.maiphong.hotelapp.entities.User;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
+    User toEntity(UserCreateUpdateDTO DTO);
 
-    User toUser(UserCreateDTO userCreateUpdateDTO);
+    User toEntity(RegisterRequestDTO DTO);
 
-    User toUser(UserUpdateDTO userCreateUpdateDTO, @MappingTarget User user);
+    User toEntity(UserCreateUpdateDTO DTO, @MappingTarget User entity);
 
-    UserDTO toUserDTO(User user);
+    UserDTO toDTO(User entity);
+
+    UserMasterDTO toMasterDTO(User entity);
 
 }

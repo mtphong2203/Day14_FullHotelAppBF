@@ -6,20 +6,21 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.maiphong.hotelapp.dtos.user.UserCreateDTO;
-import com.maiphong.hotelapp.dtos.user.UserDTO;
-import com.maiphong.hotelapp.dtos.user.UserUpdateDTO;
+import com.maiphong.hotelapp.dtos.user.UserCreateUpdateDTO;
+import com.maiphong.hotelapp.dtos.user.UserMasterDTO;
 
 public interface UserService {
-    List<UserDTO> getAll();
+    List<UserMasterDTO> getAll();
 
-    UserDTO getById(UUID id);
+    List<UserMasterDTO> searchByKeyword(String keyword);
 
-    Page<UserDTO> searchByUsername(String username, Pageable pageable);
+    Page<UserMasterDTO> searchByPage(String keyword, Pageable pageable);
 
-    boolean create(UserCreateDTO userCreateDTO);
+    UserMasterDTO getById(String id);
 
-    boolean update(UUID id, UserUpdateDTO userUpdateDTO);
+    UserMasterDTO create(UserCreateUpdateDTO userDTO);
+
+    UserMasterDTO update(UUID id, UserCreateUpdateDTO userDTO);
 
     boolean delete(UUID id);
 }

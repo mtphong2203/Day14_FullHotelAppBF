@@ -1,14 +1,9 @@
 package com.maiphong.hotelapp.entities;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -17,41 +12,30 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class User extends MasterEntityBase {
 
-    @Column(name = "first_name")
+    @Column(nullable = false, columnDefinition = "NVARCHAR(20)")
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(columnDefinition = "NVARCHAR(20)")
     private String lastName;
 
-    @Column(name = "username", unique = true, length = 20, nullable = false)
+    @Column(columnDefinition = "NVARCHAR(30)", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "phone_number")
+    @Column(columnDefinition = "NVARCHAR(30)", unique = true, nullable = false)
     private String phoneNumber;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "email")
+    @Column(columnDefinition = "NVARCHAR(30)", unique = true, nullable = false)
     private String email;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    private boolean isActive;
+    @Column(nullable = false)
+    private String password;
 
     @ManyToMany()
     @JoinTable(name = "UserRoles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    private Set<Role> roles;
 
 }
