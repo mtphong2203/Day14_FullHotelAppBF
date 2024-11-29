@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.maiphong.hotelapp.dtos.order.OrderCreateEditDTO;
-import com.maiphong.hotelapp.dtos.order.OrderDTO;
+import com.maiphong.hotelapp.dtos.order.OrderMasterDTO;
 import com.maiphong.hotelapp.entities.Order;
 import com.maiphong.hotelapp.exceptions.ResourceNotFoundException;
 import com.maiphong.hotelapp.mappers.OrderMapper;
@@ -28,11 +28,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> getAll() {
+    public List<OrderMasterDTO> getAll() {
         List<Order> orders = orderRepository.findAll();
 
-        List<OrderDTO> orderDTOs = orders.stream().map(order -> {
-            OrderDTO orderDTO = orderMapper.toOrderDTO(order);
+        List<OrderMasterDTO> orderDTOs = orders.stream().map(order -> {
+            OrderMasterDTO orderDTO = orderMapper.toMasterDTO(order);
             return orderDTO;
         }).toList();
 
@@ -40,31 +40,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO getById(UUID id) {
-        Order order = orderRepository.findById(id).orElse(null);
+    public OrderMasterDTO getById(String id) {
+        Order order = orderRepository.findById(UUID.fromString(id)).orElse(null);
 
         if (order == null) {
             throw new ResourceNotFoundException("Order is not found");
         }
-        OrderDTO orderDTO = orderMapper.toOrderDTO(order);
+        OrderMasterDTO orderDTO = orderMapper.toMasterDTO(order);
 
         return orderDTO;
     }
 
     @Override
-    public Page<OrderDTO> search(String name, Pageable pageable) {
-        Specification<Order> spec = (root, query, cb) -> {
-            if (name == null) {
+    public Page<OrderMasterDTO> searchPage(String keyword, Pageable pageable) {
+        Specification<Order> spec = (root, _, cb) -> {
+            if (keyword == null) {
                 return null;
             }
 
-            return cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%");
+            return cb.like(cb.lower(root.get("name")), "%" + keyword.toLowerCase() + "%");
         };
 
         Page<Order> orders = orderRepository.findAll(spec, pageable);
 
-        Page<OrderDTO> orderDTOs = orders.map(order -> {
-            OrderDTO orderDTO = orderMapper.toOrderDTO(order);
+        Page<OrderMasterDTO> orderDTOs = orders.map(order -> {
+            OrderMasterDTO orderDTO = orderMapper.toMasterDTO(order);
             return orderDTO;
         });
 
@@ -72,22 +72,56 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean create(OrderCreateEditDTO orderCreateEditDTO) {
-        if (orderCreateEditDTO == null) {
-            throw new IllegalArgumentException("Order create can not null");
-        }
+    public List<OrderMasterDTO> searchByName(String keyword) {
+        Specification<Order> spec = (root, _, cb) -> {
+            if (keyword == null) {
+                return null;
+            }
 
-        Order order = orderMapper.toOrder(orderCreateEditDTO);
+            return cb.like(cb.lower(root.get("name")), "%" + keyword.toLowerCase() + "%");
+        };
 
-        order = orderRepository.save(order);
+        List<Order> orders = orderRepository.findAll(spec);
 
-        return order != null;
+        List<OrderMasterDTO> orderDTOs = orders.stream().map(order -> {
+            OrderMasterDTO orderDTO = orderMapper.toMasterDTO(order);
+            return orderDTO;
+        }).toList();
+
+        return orderDTOs;
     }
 
     @Override
-    public boolean update(UUID id, OrderCreateEditDTO orderCreateEditDTO) {
-        if (orderCreateEditDTO == null) {
+    public OrderMasterDTO create(OrderCreateEditDTO orderDTO) {
+        if (orderDTO == null) {
             throw new IllegalArgumentException("Order create can not null");
+        }
+
+        Order existOrder = orderRepository.findByName(orderDTO.getName());
+
+        if (existOrder != null) {
+            throw new IllegalArgumentException("Order is already exist!");
+        }
+
+        Order order = orderMapper.toEntity(orderDTO);
+
+        order = orderRepository.save(order);
+
+        OrderMasterDTO masterDTO = orderMapper.toMasterDTO(order);
+
+        return masterDTO;
+    }
+
+    @Override
+    public OrderMasterDTO update(UUID id, OrderCreateEditDTO orderDTO) {
+        if (orderDTO == null) {
+            throw new IllegalArgumentException("Order create can not null");
+        }
+
+        Order existOrder = orderRepository.findByName(orderDTO.getName());
+
+        if (existOrder != null && existOrder.getId().equals(id)) {
+            throw new IllegalArgumentException("Order is already exist!");
         }
 
         Order order = orderRepository.findById(id).orElse(null);
@@ -96,11 +130,13 @@ public class OrderServiceImpl implements OrderService {
             throw new ResourceNotFoundException("Order is not found");
         }
 
-        orderMapper.toOrder(orderCreateEditDTO, order);
+        orderMapper.toEntity(orderDTO, order);
 
         order = orderRepository.save(order);
 
-        return order != null;
+        OrderMasterDTO masterDTO = orderMapper.toMasterDTO(order);
+
+        return masterDTO;
     }
 
     @Override

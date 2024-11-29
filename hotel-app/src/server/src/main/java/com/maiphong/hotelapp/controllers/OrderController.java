@@ -6,8 +6,10 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,80 +21,89 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.maiphong.hotelapp.dtos.order.OrderCreateEditDTO;
-import com.maiphong.hotelapp.dtos.order.OrderDTO;
+import com.maiphong.hotelapp.dtos.order.OrderMasterDTO;
 import com.maiphong.hotelapp.services.OrderService;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("api/manager/order")
+@RequestMapping("api/v1/orders")
 public class OrderController {
 
     private final OrderService orderService;
-    private final PagedResourcesAssembler<OrderDTO> pageResource;
+    private final PagedResourcesAssembler<OrderMasterDTO> pageResource;
 
-    public OrderController(OrderService orderService, PagedResourcesAssembler<OrderDTO> page) {
+    public OrderController(OrderService orderService, PagedResourcesAssembler<OrderMasterDTO> pageResource) {
         this.orderService = orderService;
-        this.pageResource = page;
+        this.pageResource = pageResource;
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAll() {
-        List<OrderDTO> orderDTOs = orderService.getAll();
-
-        if (orderDTOs == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(orderDTOs);
+    public ResponseEntity<List<OrderMasterDTO>> getAll() {
+        List<OrderMasterDTO> masterDTOs = orderService.getAll();
+        return ResponseEntity.ok(masterDTOs);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getById(@PathVariable UUID id) {
-        OrderDTO orderDTO = orderService.getById(id);
-
-        if (orderDTO == null) {
-            return ResponseEntity.notFound().build();
-        }
-
+    public ResponseEntity<OrderMasterDTO> getById(@PathVariable String id) {
+        OrderMasterDTO orderDTO = orderService.getById(id);
         return ResponseEntity.ok(orderDTO);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam(required = false) String keyword,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "10") Integer size) {
-        if (keyword == null) {
-            getAll();
+    public ResponseEntity<?> searchPage(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false, defaultValue = "number") String sortBy,
+            @RequestParam(required = false, defaultValue = "asc") String order,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size) {
+
+        Pageable pageable = null;
+
+        if (order.equals("asc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        } else {
+            pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         }
 
-        Pageable pageable = PageRequest.of(page, size);
+        Page<OrderMasterDTO> orders = orderService.searchPage(keyword, pageable);
 
-        Page<OrderDTO> orders = orderService.search(keyword, pageable);
+        return ResponseEntity.ok(pageResource.toModel(orders));
+    }
 
-        var orderModel = pageResource.toModel(orders);
-
-        return ResponseEntity.ok(orderModel);
+    @GetMapping("/searchByName")
+    public ResponseEntity<List<OrderMasterDTO>> searchByNumber(@RequestParam(required = false) String keyword) {
+        var masterDTOs = orderService.searchByName(keyword);
+        return ResponseEntity.ok(masterDTOs);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody OrderCreateEditDTO orderCreateEditDTO) {
-        boolean isCreated = orderService.create(orderCreateEditDTO);
+    public ResponseEntity<?> create(@Valid @RequestBody OrderCreateEditDTO orderDTO, BindingResult bindingResult) {
 
-        if (!isCreated) {
-            return ResponseEntity.badRequest().body(isCreated);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+        var masterDTO = orderService.create(orderDTO);
+
+        if (masterDTO == null) {
+            return ResponseEntity.badRequest().body("Fail to create order");
         }
 
-        return ResponseEntity.status(201).body(isCreated);
+        return ResponseEntity.status(201).body(masterDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody OrderCreateEditDTO orderCreateEditDTO) {
-        boolean isUpdated = orderService.update(id, orderCreateEditDTO);
+    public ResponseEntity<?> update(@PathVariable UUID id, @Valid @RequestBody OrderCreateEditDTO orderDTO,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+        var masterDTO = orderService.update(id, orderDTO);
 
-        if (!isUpdated) {
-            return ResponseEntity.badRequest().body(isUpdated);
+        if (masterDTO == null) {
+            return ResponseEntity.badRequest().body("Fail to update order");
         }
 
-        return ResponseEntity.ok(isUpdated);
+        return ResponseEntity.ok(masterDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -100,7 +111,7 @@ public class OrderController {
         boolean isDeleted = orderService.delete(id);
 
         if (!isDeleted) {
-            return ResponseEntity.badRequest().body(isDeleted);
+            return ResponseEntity.badRequest().body("Fail to delete order");
         }
 
         return ResponseEntity.ok(isDeleted);

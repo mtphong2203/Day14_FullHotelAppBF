@@ -1,6 +1,6 @@
 package com.maiphong.hotelapp.dtos.order;
 
-import com.maiphong.hotelapp.dtos.BaseDTO;
+import com.maiphong.hotelapp.dtos.MasterDTO;
 
 import lombok.*;
 
@@ -8,8 +8,9 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTO extends BaseDTO {
+public class OrderMasterDTO extends MasterDTO {
     private String name;
 
     private double price;
+
 }

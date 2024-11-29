@@ -7,18 +7,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.maiphong.hotelapp.dtos.order.OrderCreateEditDTO;
-import com.maiphong.hotelapp.dtos.order.OrderDTO;
+import com.maiphong.hotelapp.dtos.order.OrderMasterDTO;
 
 public interface OrderService {
-    List<OrderDTO> getAll();
+    List<OrderMasterDTO> getAll();
 
-    OrderDTO getById(UUID id);
+    List<OrderMasterDTO> searchByName(String keyword);
 
-    Page<OrderDTO> search(String name, Pageable pageable);
+    Page<OrderMasterDTO> searchPage(String keyword, Pageable pageable);
 
-    boolean create(OrderCreateEditDTO orderCreateEditDTO);
+    OrderMasterDTO getById(String id);
 
-    boolean update(UUID id, OrderCreateEditDTO orderCreateEditDTO);
+    OrderMasterDTO create(OrderCreateEditDTO orderDTO);
+
+    OrderMasterDTO update(UUID id, OrderCreateEditDTO orderDTO);
 
     boolean delete(UUID id);
 }
