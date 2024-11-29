@@ -1,36 +1,37 @@
 package com.maiphong.hotelapp.entities;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.ZonedDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
+
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "bookings")
-public class Booking {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class Booking extends MasterEntityBase {
 
-    @Column(name = "booking_date", nullable = false)
-    private LocalDateTime bookingDate;
+    @TimeZoneStorage(TimeZoneStorageType.NATIVE)
+    @Column(columnDefinition = "DATETIMEOFFSET", nullable = false)
+    private ZonedDateTime bookingDate;
 
-    @Column(name = "check_in")
-    private LocalDateTime checkInDate;
+    @TimeZoneStorage(TimeZoneStorageType.NATIVE)
+    @Column(columnDefinition = "DATETIMEOFFSET", nullable = false)
+    private ZonedDateTime checkInDate;
 
-    @Column(name = "check_out")
-    private LocalDateTime checkOutDate;
+    @TimeZoneStorage(TimeZoneStorageType.NATIVE)
+    @Column(columnDefinition = "DATETIMEOFFSET", nullable = false)
+    private ZonedDateTime checkOutDate;
 
+    @Column(nullable = false)
     private BookingStatus status;
+
+    @PrePersist
+    public void prePersist() {
+        this.bookingDate = ZonedDateTime.now();
+    }
 
 }

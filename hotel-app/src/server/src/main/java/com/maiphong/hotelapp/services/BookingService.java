@@ -3,17 +3,20 @@ package com.maiphong.hotelapp.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.maiphong.hotelapp.dtos.booking.BookingCreateUpdate;
-import com.maiphong.hotelapp.dtos.booking.BookingDTO;
+import com.maiphong.hotelapp.dtos.booking.BookingMasterDTO;
 
 public interface BookingService {
-    List<BookingDTO> getAll();
+    List<BookingMasterDTO> getAll();
 
-    BookingDTO getById(UUID id);
+    BookingMasterDTO getById(String id);
 
-    boolean create(BookingCreateUpdate bookingCreateUpdate);
+    BookingMasterDTO create(BookingCreateUpdate bookingDTO);
 
-    boolean update(UUID id, BookingCreateUpdate bookingCreateUpdate);
+    BookingMasterDTO update(UUID id, BookingCreateUpdate bookingDTO);
 
     boolean delete(UUID id);
 

@@ -1,14 +1,18 @@
 package com.maiphong.hotelapp.services;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.maiphong.hotelapp.dtos.booking.BookingCreateUpdate;
-import com.maiphong.hotelapp.dtos.booking.BookingDTO;
+import com.maiphong.hotelapp.dtos.booking.BookingMasterDTO;
 import com.maiphong.hotelapp.entities.Booking;
 import com.maiphong.hotelapp.exceptions.ResourceNotFoundException;
 import com.maiphong.hotelapp.mappers.BookingMapper;
@@ -27,11 +31,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDTO> getAll() {
+    public List<BookingMasterDTO> getAll() {
         List<Booking> bookings = bookingRepository.findAll();
 
-        List<BookingDTO> bookingDTOs = bookings.stream().map(booking -> {
-            BookingDTO bookingDTO = bookingMapper.toBookingDTO(booking);
+        List<BookingMasterDTO> bookingDTOs = bookings.stream().map(booking -> {
+            BookingMasterDTO bookingDTO = bookingMapper.toMasterDTO(booking);
             return bookingDTO;
         }).toList();
 
@@ -39,48 +43,51 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDTO getById(UUID id) {
-        Booking booking = bookingRepository.findById(id).orElse(null);
+    public BookingMasterDTO getById(String id) {
+        Booking booking = bookingRepository.findById(UUID.fromString(id)).orElse(null);
 
         if (booking == null) {
             throw new ResourceNotFoundException("Booking is not found");
         }
-        BookingDTO bookingDTO = bookingMapper.toBookingDTO(booking);
+        BookingMasterDTO bookingDTO = bookingMapper.toMasterDTO(booking);
 
         return bookingDTO;
 
     }
 
     @Override
-    public boolean create(BookingCreateUpdate bookingCreateUpdate) {
-        if (bookingCreateUpdate == null) {
+    public BookingMasterDTO create(BookingCreateUpdate bookingDTO) {
+        if (bookingDTO == null) {
             throw new IllegalArgumentException("Can not null");
         }
 
-        Booking booking = bookingMapper.toBooking(bookingCreateUpdate);
-        booking.setBookingDate(LocalDateTime.now());
+        Booking booking = bookingMapper.toEntity(bookingDTO);
+
         booking = bookingRepository.save(booking);
 
-        return booking != null;
+        BookingMasterDTO masterDTO = bookingMapper.toMasterDTO(booking);
+
+        return masterDTO;
     }
 
     @Override
-    public boolean update(UUID id, BookingCreateUpdate bookingCreateUpdate) {
-        if (bookingCreateUpdate == null) {
+    public BookingMasterDTO update(UUID id, BookingCreateUpdate bookingDTO) {
+        if (bookingDTO == null) {
             throw new IllegalArgumentException("Can not null");
         }
-
         Booking booking = bookingRepository.findById(id).orElse(null);
 
         if (booking == null) {
-            throw new ResourceNotFoundException("Booking is not found");
+            throw new ResourceNotFoundException("Booking is not exist!");
         }
 
-        bookingMapper.toBooking(bookingCreateUpdate, booking);
+        bookingMapper.toEntity(bookingDTO, booking);
 
         booking = bookingRepository.save(booking);
 
-        return booking != null;
+        BookingMasterDTO masterDTO = bookingMapper.toMasterDTO(booking);
+
+        return masterDTO;
     }
 
     @Override

@@ -1,17 +1,21 @@
 package com.maiphong.hotelapp.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import com.maiphong.hotelapp.dtos.booking.BookingCreateUpdate;
 import com.maiphong.hotelapp.dtos.booking.BookingDTO;
+import com.maiphong.hotelapp.dtos.booking.BookingMasterDTO;
 import com.maiphong.hotelapp.entities.Booking;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BookingMapper {
-    Booking toBooking(BookingCreateUpdate bookingCreateUpdate);
 
-    Booking toBooking(BookingCreateUpdate bookingCreateUpdate, @MappingTarget Booking booking);
+    Booking toEntity(BookingCreateUpdate DTO);
 
-    BookingDTO toBookingDTO(Booking booking);
+    Booking toEntity(BookingCreateUpdate DTO, @MappingTarget Booking entity);
+
+    BookingDTO toDTO(Booking entity);
+
+    BookingMasterDTO toMasterDTO(Booking entity);
+
 }

@@ -1,7 +1,8 @@
 package com.maiphong.hotelapp.dtos.booking;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
+import com.maiphong.hotelapp.dtos.MasterCreateUpdateDTO;
 import com.maiphong.hotelapp.entities.BookingStatus;
 
 import jakarta.validation.constraints.NotNull;
@@ -11,13 +12,13 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingCreateUpdate {
+public class BookingCreateUpdate extends MasterCreateUpdateDTO {
 
     @NotNull(message = "Check in date should not null")
-    private LocalDateTime checkInDate;
+    private ZonedDateTime checkInDate;
 
     @NotNull(message = "Check out date should not null")
-    private LocalDateTime checkOutDate;
+    private ZonedDateTime checkOutDate;
 
     private BookingStatus status;
 }
