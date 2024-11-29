@@ -1,18 +1,21 @@
 package com.maiphong.hotelapp.mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import com.maiphong.hotelapp.dtos.role.RoleCreateUpdateDTO;
 import com.maiphong.hotelapp.dtos.role.RoleDTO;
+import com.maiphong.hotelapp.dtos.role.RoleMasterDTO;
 import com.maiphong.hotelapp.entities.Role;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoleMapper {
-    Role toRole(RoleCreateUpdateDTO roleCreateUpdateDTO);
 
-    Role toRole(RoleCreateUpdateDTO roleCreateUpdateDTO, @MappingTarget Role role);
+    Role toEntity(RoleCreateUpdateDTO DTO);
 
-    RoleDTO toRoleDTO(Role role);
+    Role toEntity(RoleCreateUpdateDTO DTO, @MappingTarget Role entity);
+
+    RoleDTO toDTO(Role entity);
+
+    RoleMasterDTO toMasterDTO(Role entity);
 
 }

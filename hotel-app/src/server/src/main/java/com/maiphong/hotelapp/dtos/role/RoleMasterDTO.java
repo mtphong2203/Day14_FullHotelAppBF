@@ -1,6 +1,6 @@
 package com.maiphong.hotelapp.dtos.role;
 
-import com.maiphong.hotelapp.dtos.BaseDTO;
+import com.maiphong.hotelapp.dtos.MasterDTO;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleDTO extends BaseDTO {
+public class RoleMasterDTO extends MasterDTO {
 
     private String name;
 

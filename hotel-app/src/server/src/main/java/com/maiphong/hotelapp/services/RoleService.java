@@ -3,17 +3,24 @@ package com.maiphong.hotelapp.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.maiphong.hotelapp.dtos.role.RoleCreateUpdateDTO;
-import com.maiphong.hotelapp.dtos.role.RoleDTO;
+import com.maiphong.hotelapp.dtos.role.RoleMasterDTO;
 
 public interface RoleService {
-    List<RoleDTO> getAll();
+    List<RoleMasterDTO> getAll();
 
-    RoleDTO getById(UUID id);
+    List<RoleMasterDTO> searchByName(String keyword);
 
-    boolean create(RoleCreateUpdateDTO roleCreateUpdateDTO);
+    Page<RoleMasterDTO> searchPage(String keyword, Pageable pageable);
 
-    boolean update(UUID id, RoleCreateUpdateDTO roleCreateUpdateDTO);
+    RoleMasterDTO getById(String id);
+
+    RoleMasterDTO create(RoleCreateUpdateDTO roleDTO);
+
+    RoleMasterDTO update(UUID id, RoleCreateUpdateDTO roleDTO);
 
     boolean delete(UUID id);
 }

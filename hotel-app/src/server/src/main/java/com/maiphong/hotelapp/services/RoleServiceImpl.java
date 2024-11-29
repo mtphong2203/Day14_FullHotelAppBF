@@ -3,11 +3,14 @@ package com.maiphong.hotelapp.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.maiphong.hotelapp.dtos.role.RoleCreateUpdateDTO;
-import com.maiphong.hotelapp.dtos.role.RoleDTO;
+import com.maiphong.hotelapp.dtos.role.RoleMasterDTO;
 import com.maiphong.hotelapp.entities.Role;
 import com.maiphong.hotelapp.exceptions.ResourceNotFoundException;
 import com.maiphong.hotelapp.mappers.RoleMapper;
@@ -26,11 +29,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDTO> getAll() {
+    public List<RoleMasterDTO> getAll() {
         List<Role> roles = roleRepository.findAll();
 
-        List<RoleDTO> roleDTOs = roles.stream().map(role -> {
-            RoleDTO roleDTO = roleMapper.toRoleDTO(role);
+        List<RoleMasterDTO> roleDTOs = roles.stream().map(role -> {
+            RoleMasterDTO roleDTO = roleMapper.toMasterDTO(role);
 
             return roleDTO;
         }).toList();
@@ -38,35 +41,48 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDTO getById(UUID id) {
-        Role role = roleRepository.findById(id).orElse(null);
+    public RoleMasterDTO getById(String id) {
+        Role role = roleRepository.findById(UUID.fromString(id)).orElse(null);
 
         if (role == null) {
             throw new ResourceNotFoundException("Role is not found");
         }
 
-        RoleDTO roleDTO = roleMapper.toRoleDTO(role);
+        RoleMasterDTO roleDTO = roleMapper.toMasterDTO(role);
 
         return roleDTO;
     }
 
     @Override
-    public boolean create(RoleCreateUpdateDTO roleCreateUpdateDTO) {
-        if (roleCreateUpdateDTO == null) {
+    public RoleMasterDTO create(RoleCreateUpdateDTO roleDTO) {
+        if (roleDTO == null) {
             throw new IllegalArgumentException("Role create is not null");
         }
 
-        Role role = roleMapper.toRole(roleCreateUpdateDTO);
+        var existingRole = roleRepository.findByName(roleDTO.getName());
+        if (existingRole != null) {
+            throw new IllegalArgumentException("Role number already exists");
+        }
+
+        Role role = roleMapper.toEntity(roleDTO);
 
         role = roleRepository.save(role);
 
-        return role != null;
+        RoleMasterDTO masterDTO = roleMapper.toMasterDTO(role);
+
+        return masterDTO;
     }
 
     @Override
-    public boolean update(UUID id, RoleCreateUpdateDTO roleCreateUpdateDTO) {
-        if (roleCreateUpdateDTO == null) {
+    public RoleMasterDTO update(UUID id, RoleCreateUpdateDTO roleDTO) {
+        if (roleDTO == null) {
             throw new IllegalArgumentException("Role create is not null");
+        }
+
+        var existingRole = roleRepository.findByName(roleDTO.getName());
+
+        if (existingRole != null && !existingRole.getId().equals(id)) {
+            throw new IllegalArgumentException("Role number already exists");
         }
 
         Role role = roleRepository.findById(id).orElse(null);
@@ -75,11 +91,13 @@ public class RoleServiceImpl implements RoleService {
             throw new ResourceNotFoundException("Role is not found");
         }
 
-        roleMapper.toRole(roleCreateUpdateDTO, role);
+        roleMapper.toEntity(roleDTO, role);
 
         role = roleRepository.save(role);
 
-        return role != null;
+        RoleMasterDTO masterDTO = roleMapper.toMasterDTO(role);
+
+        return masterDTO;
     }
 
     @Override
@@ -93,6 +111,44 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.delete(role);
 
         return !roleRepository.existsById(id);
+    }
+
+    @Override
+    public List<RoleMasterDTO> searchByName(String keyword) {
+        Specification<Role> spec = (root, _, cb) -> {
+            if (keyword == null) {
+                return null;
+            }
+
+            return cb.like(cb.lower(root.get("name")), "%" + keyword.toLowerCase() + "%");
+        };
+
+        List<Role> roles = roleRepository.findAll(spec);
+
+        List<RoleMasterDTO> roleDTOs = roles.stream().map(role -> {
+            return roleMapper.toMasterDTO(role);
+        }).toList();
+
+        return roleDTOs;
+    }
+
+    @Override
+    public Page<RoleMasterDTO> searchPage(String keyword, Pageable pageable) {
+        Specification<Role> spec = (root, _, cb) -> {
+            if (keyword == null) {
+                return null;
+            }
+
+            return cb.like(cb.lower(root.get("name")), "%" + keyword.toLowerCase() + "%");
+        };
+
+        Page<Role> roles = roleRepository.findAll(spec, pageable);
+
+        Page<RoleMasterDTO> roleDTOs = roles.map(role -> {
+            return roleMapper.toMasterDTO(role);
+        });
+
+        return roleDTOs;
     }
 
 }

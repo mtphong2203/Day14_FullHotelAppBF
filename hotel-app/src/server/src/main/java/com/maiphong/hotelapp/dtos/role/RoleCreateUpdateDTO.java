@@ -2,6 +2,8 @@ package com.maiphong.hotelapp.dtos.role;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.maiphong.hotelapp.dtos.MasterCreateUpdateDTO;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -9,7 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleCreateUpdateDTO {
+public class RoleCreateUpdateDTO extends MasterCreateUpdateDTO {
     @NotNull(message = "Name is required")
     private String name;
 
