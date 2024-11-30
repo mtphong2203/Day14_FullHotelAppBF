@@ -3,11 +3,12 @@ package com.maiphong.hotelapp.controllers;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,25 +19,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.maiphong.hotelapp.dtos.user.UserCreateDTO;
-import com.maiphong.hotelapp.dtos.user.UserDTO;
-import com.maiphong.hotelapp.dtos.user.UserUpdateDTO;
+import com.maiphong.hotelapp.dtos.user.UserCreateUpdateDTO;
+import com.maiphong.hotelapp.dtos.user.UserMasterDTO;
 import com.maiphong.hotelapp.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("api/manager/user")
+@RequestMapping("api/v1/users")
 public class UserController {
 
     private final UserService userService;
-    private final PagedResourcesAssembler<UserDTO> pageResource;
+    private final PagedResourcesAssembler<UserMasterDTO> pageResource;
 
-    public UserController(UserService userService, PagedResourcesAssembler<UserDTO> pageResource) {
+    public UserController(UserService userService, PagedResourcesAssembler<UserMasterDTO> pageResource) {
         this.userService = userService;
         this.pageResource = pageResource;
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll() {
+    public ResponseEntity<List<UserMasterDTO>> getAll() {
         var userDTOs = userService.getAll();
 
         if (userDTOs == null) {
@@ -47,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable UUID id) {
+    public ResponseEntity<UserMasterDTO> getById(@PathVariable String id) {
         var userDTO = userService.getById(id);
 
         if (userDTO == null) {
@@ -58,43 +60,58 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(
-            @RequestParam(required = false) String username,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "10") Integer size) {
-        if (username == null) {
-            getAll();
+    public ResponseEntity<?> searchPage(@RequestParam(required = false) String keyword,
+            @RequestParam(required = false, defaultValue = "number") String sortBy,
+            @RequestParam(required = false, defaultValue = "asc") String order,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int size) {
+
+        Pageable pageable = null;
+
+        if (order.equals("asc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
+        } else {
+            pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         }
 
-        Pageable pageable = PageRequest.of(page, size);
+        var masterDTOs = userService.searchByPage(keyword, pageable);
 
-        var users = userService.searchByUsername(username, pageable);
+        return ResponseEntity.ok(pageResource.toModel(masterDTOs));
+    }
 
-        var pageModel = pageResource.toModel(users);
-
-        return ResponseEntity.ok(pageModel);
+    @GetMapping("/searchByName")
+    public ResponseEntity<List<UserMasterDTO>> searchByName(@RequestParam String keyword) {
+        var masterDTOs = userService.searchByKeyword(keyword);
+        return ResponseEntity.ok(masterDTOs);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody UserCreateDTO userCreateDTO) {
-        boolean isCreated = userService.create(userCreateDTO);
+    public ResponseEntity<?> create(@Valid @RequestBody UserCreateUpdateDTO userDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+        var masterDTO = userService.create(userDTO);
 
-        if (!isCreated) {
-            return ResponseEntity.badRequest().body(isCreated);
+        if (masterDTO == null) {
+            return ResponseEntity.badRequest().body("Fail to create user");
         }
 
-        return ResponseEntity.status(201).body(isCreated);
+        return ResponseEntity.status(201).body(masterDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody UserUpdateDTO userUpdateDTO) {
-        boolean isUpdated = userService.update(id, userUpdateDTO);
+    public ResponseEntity<?> update(@PathVariable UUID id, @Valid @RequestBody UserCreateUpdateDTO userDTO,
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+        var masterDTO = userService.update(id, userDTO);
 
-        if (!isUpdated) {
-            return ResponseEntity.badRequest().body(isUpdated);
+        if (masterDTO == null) {
+            return ResponseEntity.badRequest().body("Fail to update user");
         }
 
-        return ResponseEntity.ok(isUpdated);
+        return ResponseEntity.ok(masterDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -104,7 +121,6 @@ public class UserController {
         if (!isDeleted) {
             return ResponseEntity.badRequest().body(isDeleted);
         }
-
         return ResponseEntity.ok(isDeleted);
     }
 
