@@ -49,6 +49,12 @@ public class BookingController {
         return ResponseEntity.ok(bookingDTO);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<BookingMasterDTO>> search(@RequestParam(required = false) String keyword) {
+        var masterDTOs = bookingService.searchByBooking(keyword);
+        return ResponseEntity.ok(masterDTOs);
+    }
+
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody BookingCreateUpdate bookingDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

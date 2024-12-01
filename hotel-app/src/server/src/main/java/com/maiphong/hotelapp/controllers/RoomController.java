@@ -57,12 +57,12 @@ public class RoomController {
     }
 
     @GetMapping("/searchByNumber")
-    public ResponseEntity<List<RoomMasterDTO>> searchByNumber(@RequestParam String number) {
-        if (number == null) {
+    public ResponseEntity<List<RoomMasterDTO>> searchByNumber(@RequestParam String keyword) {
+        if (keyword == null) {
             return ResponseEntity.notFound().build();
         }
 
-        List<RoomMasterDTO> roomDTOs = roomService.searchByNumber(number);
+        List<RoomMasterDTO> roomDTOs = roomService.searchByNumber(keyword);
 
         if (roomDTOs == null) {
             return ResponseEntity.notFound().build();

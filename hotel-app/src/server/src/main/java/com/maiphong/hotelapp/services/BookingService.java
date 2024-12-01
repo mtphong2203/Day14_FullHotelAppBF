@@ -14,6 +14,8 @@ public interface BookingService {
 
     BookingMasterDTO getById(String id);
 
+    List<BookingMasterDTO> searchByBooking(String keyword);
+
     BookingMasterDTO create(BookingCreateUpdate bookingDTO);
 
     BookingMasterDTO update(UUID id, BookingCreateUpdate bookingDTO);

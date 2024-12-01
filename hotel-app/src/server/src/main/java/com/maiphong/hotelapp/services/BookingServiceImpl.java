@@ -1,12 +1,9 @@
 package com.maiphong.hotelapp.services;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.maiphong.hotelapp.dtos.booking.BookingCreateUpdate;
 import com.maiphong.hotelapp.dtos.booking.BookingMasterDTO;
 import com.maiphong.hotelapp.entities.Booking;
+import com.maiphong.hotelapp.entities.BookingStatus;
 import com.maiphong.hotelapp.exceptions.ResourceNotFoundException;
 import com.maiphong.hotelapp.mappers.BookingMapper;
 import com.maiphong.hotelapp.repositories.BookingRepository;
@@ -101,5 +99,28 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.delete(booking);
 
         return !bookingRepository.existsById(id);
+    }
+
+    @Override
+    public List<BookingMasterDTO> searchByBooking(String keyword) {
+        Specification<Booking> spec = (root, _, cb) -> {
+            if (keyword == null) {
+                return null;
+            }
+
+            BookingStatus bookingStatus = BookingStatus.valueOf(keyword.toUpperCase());
+
+            return cb.equal(root.get("status"), bookingStatus);
+
+        };
+
+        List<Booking> bookings = bookingRepository.findAll(spec);
+
+        List<BookingMasterDTO> masterDTOs = bookings.stream().map(booking -> {
+            BookingMasterDTO bookingDTO = bookingMapper.toMasterDTO(booking);
+            return bookingDTO;
+        }).toList();
+
+        return masterDTOs;
     }
 }
