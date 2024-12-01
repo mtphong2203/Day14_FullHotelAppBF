@@ -1,0 +1,102 @@
+<div class="card border-2 border-slate-200 rounded-md">
+  <div class="card-header border-b-2 p-2">
+    <h1 class="text-2xl font-medium">
+      {{ isEdit ? "Edit" : "Create" }} Service
+    </h1>
+    <p class="text-center font-medium text-2xl text-green-400">{{ message }}</p>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row flex justify-between items-center gap-4 border-b-2 p-2">
+      <div class="form-group w-[50%]">
+        <label for="firstName" class="block font-medium">First Name</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          id="firstName"
+          placeholder="Enter first name"
+          class="border w-full border-slate-400 p-1 rounded-md"
+        />
+      </div>
+      <div class="form-group w-[50%]">
+        <label for="lastName" class="block font-medium">Last Name</label>
+        <input
+          type="text"
+          formControlName="lastName"
+          id="lastName"
+          placeholder="Enter last name"
+          class="border w-full border-slate-400 p-1 rounded-md"
+        />
+      </div>
+    </div>
+    <div class="row flex justify-between items-center gap-4 border-b-2 p-2">
+      <div class="form-group w-[50%]">
+        <label for="username" class="block font-medium">Username</label>
+        <input
+          type="text"
+          formControlName="username"
+          id="username"
+          placeholder="Enter user name"
+          class="border w-full border-slate-400 p-1 rounded-md"
+        />
+      </div>
+      <div class="form-group w-[50%]">
+        <label for="email" class="block font-medium">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          id="email"
+          placeholder="Enter your email"
+          class="border w-full border-slate-400 p-1 rounded-md"
+        />
+      </div>
+    </div>
+    <div class="row flex justify-between items-center gap-4 border-b-2 p-2">
+      <div class="form-group w-[50%]">
+        <label for="phoneNumber" class="block font-medium">PhoneNumber</label>
+        <input
+          type="text"
+          formControlName="phoneNumber"
+          id="phoneNumber"
+          placeholder="Enter phone number"
+          class="border w-full border-slate-400 p-1 rounded-md"
+        />
+      </div>
+      <div class="form-group w-[50%]">
+        <label for="password" class="block font-medium">Password</label>
+        <input
+          type="text"
+          formControlName="password"
+          id="password"
+          placeholder="Enter password"
+          class="border w-full border-slate-400 p-1 rounded-md"
+        />
+      </div>
+    </div>
+    <div class="row border-b-2 p-2">
+      <div class="form-group w-[50%] flex gap-1">
+        <label for="isActive" class="block font-medium">Active</label>
+        <input
+          type="checkbox"
+          formControlName="isActive"
+          id="isActive"
+          class="scale-125"
+        />
+      </div>
+    </div>
+    <div class="card-footer flex justify-end gap-3 p-2">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="p-2 bg-slate-300 text-white rounded-full"
+      >
+        <fa-icon [icon]="faCancel" class="mr-1"></fa-icon>Cancel
+      </button>
+      <button type="reset" class="p-2 bg-green-500 text-white rounded-full">
+        <fa-icon [icon]="faRefresh" class="mr-1"></fa-icon>Reset
+      </button>
+      <button type="submit" class="p-2 bg-blue-500 text-white rounded-full">
+        <fa-icon [icon]="faSave" class="mr-1"></fa-icon>Submit
+      </button>
+    </div>
+  </form>
+</div>
