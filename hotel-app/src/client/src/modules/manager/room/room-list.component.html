@@ -1,19 +1,19 @@
 <div class="hotel-service p-4">
   <div class="card border-2 border-slate-200 rounded-md">
     <div class="card-header">
-      <h1 class="text-2xl text-center font-medium mb-4 border-b-2 p-2">
+      <h1 class="text-2xl text-center font-medium border-b-2 p-2">
         Room Service Management
       </h1>
     </div>
     <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
       <div class="card-body border-b-2 p-2">
         <div class="form-group">
-          <label for="keyword" class="block mb-1">Keyword</label>
+          <label for="keyword" class="block mb-1">Search by number</label>
           <input
             type="text"
             id="keyword"
             placeholder="Enter keyword"
-            class="w-full p-2 border-2 rounded-md focus:outline-slate-500"
+            class="w-full p-1 border-2 rounded-md focus:outline-slate-500"
             formControlName="keyword"
           />
           <span
@@ -27,7 +27,7 @@
           </span>
         </div>
       </div>
-      <div class="card-footer flex justify-between p-4">
+      <div class="card-footer flex justify-between p-2">
         <button
           type="button"
           (click)="onCreate()"
@@ -86,6 +86,7 @@
       (reSearch)="reSearch()"
       [editSelectItem]="editSelect"
       [isEdit]="isEdit"
+      [dataApi]="dataApi"
     ></app-room-details>
   </div>
 </div>

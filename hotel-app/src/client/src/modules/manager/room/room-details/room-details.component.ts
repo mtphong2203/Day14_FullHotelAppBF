@@ -17,6 +17,7 @@ export class RoomDetailsComponent implements OnChanges {
   @Output() reSearch: EventEmitter<void> = new EventEmitter<void>();
   @Input('editSelectItem') editSelectItem: any;
   @Input('isEdit') isEdit: any;
+  @Input('dataApi') dataApi: any;
 
   // form control and api
   public form!: FormGroup;
@@ -24,9 +25,6 @@ export class RoomDetailsComponent implements OnChanges {
 
   //response
   public message: string = '';
-
-  // boolean
-  public resetForm: boolean = true;
 
   // icon
   public faCancel: IconDefinition = faCancel;
@@ -59,21 +57,18 @@ export class RoomDetailsComponent implements OnChanges {
     if (this.form.invalid) {
       return;
     }
+    this.validateForm();
 
     const data = this.form.value;
     if (this.isEdit) {
-      if (this.form.value.number == this.editSelectItem.number) {
-        this.message = 'Number is can not unique';
-      } else {
-        this.http.put(`${this.apiURL}/${this.editSelectItem.id}`, data).subscribe((result: any) => {
-          if (result) {
-            this.message = 'Update success!';
-          } else {
-            this.message = 'Fail to update!';
-          }
-          this.onReset();
-        });
-      }
+      this.http.put(`${this.apiURL}/${this.editSelectItem.id}`, data).subscribe((result: any) => {
+        if (result) {
+          this.message = 'Update success!';
+        } else {
+          this.message = 'Fail to update!';
+        }
+        this.onReset();
+      });
     } else {
       this.http.post(this.apiURL, data).subscribe((result: any) => {
         if (result) {
@@ -86,11 +81,18 @@ export class RoomDetailsComponent implements OnChanges {
     }
   }
 
+  private validateForm(): void {
+    if (this.dataApi.find((item: any) => item.number == this.form.value.number)) {
+      this.message = 'Number is already exist!';
+    } else if (this.form.value.capacity < 0) {
+      this.message = 'Capacity must greater or equal zero';
+    } else if (this.form.value.price < 0) {
+      this.message = 'Price must greater or equal zero';
+    }
+  }
   private onReset(): void {
     this.reSearch.emit();
-    if (this.resetForm) {
-      this.form.reset();
-    }
+    this.form.reset();
   }
 
   public onCancel(): void {

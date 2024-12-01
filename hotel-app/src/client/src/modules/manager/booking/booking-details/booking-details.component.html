@@ -6,14 +6,14 @@
     <p class="text-green-500 text-2xl font-medium text-center">{{ message }}</p>
   </div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="row flex justify-between items-center gap-4 border-b-2 p-4">
+    <div class="row flex justify-between items-center gap-4 border-b-2 p-2">
       <div class="form-group w-[50%]">
         <label for="checkInDate" class="block font-medium">Check In</label>
         <input
           type="text"
           formControlName="checkInDate"
           id="checkInDate"
-          class="border w-full border-slate-400 p-2 rounded-md"
+          class="border w-full border-slate-400 p-1 rounded-md"
         />
       </div>
       <div class="form-group w-[50%]">
@@ -22,17 +22,17 @@
           type="text"
           formControlName="checkOutDate"
           id="checkOutDate"
-          class="border w-full border-slate-400 p-2 rounded-md"
+          class="border w-full border-slate-400 p-1 rounded-md"
         />
       </div>
     </div>
-    <div class="row border-b-2 p-4">
+    <div class="row border-b-2 p-2">
       <div class="form-group">
         <label for="status" class="block font-medium">Status</label>
         <select
           formControlName="status"
           id="status"
-          class="border w-full border-slate-400 p-2 rounded-md"
+          class="border w-full border-slate-400 p-1 rounded-md"
         >
           <option>PENDING</option>
           <option>CONFIRMED</option>
@@ -41,7 +41,7 @@
         </select>
       </div>
     </div>
-    <div class="row border-b-2 p-4">
+    <div class="row border-b-2 p-2">
       <div class="form-group flex gap-2">
         <label for="isActive" class="block font-medium">Active</label>
         <input
@@ -52,7 +52,7 @@
         />
       </div>
     </div>
-    <div class="card-footer flex justify-end gap-3 p-4">
+    <div class="card-footer flex justify-end gap-3 p-2">
       <button
         type="button"
         (click)="onCancel()"

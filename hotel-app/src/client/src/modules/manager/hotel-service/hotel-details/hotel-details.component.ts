@@ -14,8 +14,11 @@ export class HotelDetailsComponent implements OnChanges {
   @Input('selected-item') selectedItem: any;
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
   @Input('isEdit') isEditMode: any;
+  @Input('dataApi') dataApi: any;
 
   private apiURL: string = 'http://localhost:8080/api/v1/orders';
+
+  public message: string = '';
 
   constructor(private http: HttpClient) { }
 
@@ -39,7 +42,7 @@ export class HotelDetailsComponent implements OnChanges {
   private createForm(): void {
     this.form = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
-      price: new FormControl('', Validators.min(0)),
+      price: new FormControl('', Validators.required),
       isActive: new FormControl(true),
     });
   }
@@ -48,16 +51,17 @@ export class HotelDetailsComponent implements OnChanges {
     if (this.form.invalid) {
       return;
     }
+
+    this.validateForm();
     const data = this.form.value;
 
     if (this.isEditMode) {
       this.http.put(`${this.apiURL}/${this.selectedItem.id}`, data).subscribe((result: any) => {
         if (result) {
-          console.log("Update success");
+          this.message = 'Update successfully!';
           this.cancel.emit();
         } else {
-          console.log("Fail to update");
-
+          this.message = 'Fail to update!';
         }
       });
     } else {
@@ -69,7 +73,14 @@ export class HotelDetailsComponent implements OnChanges {
         }
       });
     }
+  }
 
+  private validateForm(): void {
+    if (this.dataApi.find((item: any) => item.name == this.form.value.name)) {
+      this.message = 'Name is already exist!';
+    } else if (this.form.value.price < 0) {
+      this.message = 'Price must greater than 0';
+    }
   }
 
   public onCancel(): void {

@@ -1,18 +1,20 @@
 <div class="card border-2 border-slate-200 rounded-md">
   <div class="card-header">
-    <h1 class="text-2xl font-medium mb-4 border-b-2 p-2">
+    <h1 class="text-2xl font-medium border-b-2 p-2">
       {{ isEditMode ? "Edit" : "Create" }} Service
     </h1>
+    <p class="text-center text-2xl font-medium text-green-400">{{ message }}</p>
   </div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="row flex justify-between items-center gap-4 border-b-2 p-4">
+    <div class="row flex justify-between items-center gap-4 border-b-2 p-2">
       <div class="form-group w-[50%]">
         <label for="name" class="block font-medium">Name</label>
         <input
           type="text"
           formControlName="name"
           id="name"
-          class="border w-full border-slate-400 p-2 rounded-md"
+          placeholder="Enter name"
+          class="border w-full border-slate-400 p-1 rounded-md"
         />
       </div>
       <div class="form-group w-[50%]">
@@ -21,13 +23,12 @@
           type="number"
           formControlName="price"
           id="name"
-          min="0,"
-          step="10"
-          class="border w-full border-slate-400 p-2 rounded-md"
+          placeholder="Enter price"
+          class="border w-full border-slate-400 p-1 rounded-md"
         />
       </div>
     </div>
-    <div class="row border-b-2 p-4">
+    <div class="row border-b-2 p-2">
       <div class="form-group w-[50%] flex gap-2">
         <label for="isActive" class="block font-medium">Active</label>
         <input
@@ -38,7 +39,7 @@
         />
       </div>
     </div>
-    <div class="card-footer flex justify-end gap-3 p-4">
+    <div class="card-footer flex justify-end gap-3 p-2">
       <button
         type="button"
         (click)="onCancel()"

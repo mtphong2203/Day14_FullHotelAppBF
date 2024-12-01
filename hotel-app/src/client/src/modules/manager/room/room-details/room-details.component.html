@@ -6,22 +6,23 @@
     <p class="text-green-500 text-2xl font-medium text-center">{{ message }}</p>
   </div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="row flex justify-between items-center gap-4 border-b-2 p-4">
+    <div class="row flex justify-between items-center gap-4 border-b-2 p-2">
       <div class="form-group w-[50%]">
-        <label for="number" class="block font-medium">Number</label>
+        <label for="number" class="block mb-1 font-medium">Number</label>
         <input
           type="text"
           formControlName="number"
           id="number"
-          class="border w-full border-slate-400 p-2 rounded-md"
+          placeholder="Enter number"
+          class="border w-full border-slate-400 p-1 rounded-md"
         />
       </div>
       <div class="form-group w-[50%]">
-        <label for="type" class="block font-medium">Type</label>
+        <label for="type" class="block mb-1 font-medium">Type</label>
         <select
           id="type"
           formControlName="type"
-          class="border w-full p-2 border-slate-400 rounded-md"
+          class="border w-full p-1 border-slate-400 rounded-md"
         >
           <option>Standard</option>
           <option>Suite</option>
@@ -29,16 +30,15 @@
         </select>
       </div>
     </div>
-    <div class="row flex justify-between items-center gap-4 border-b-2 p-4">
+    <div class="row flex justify-between items-center gap-4 border-b-2 p-2">
       <div class="form-group w-[50%]">
         <label for="capacity" class="block font-medium">Capacity</label>
         <input
           type="number"
           formControlName="capacity"
           id="capacity"
-          min="0"
-          step="1"
-          class="border w-full border-slate-400 p-2 rounded-md"
+          placeholder="Enter capacity"
+          class="border w-full border-slate-400 p-1 rounded-md"
         />
       </div>
       <div class="form-group w-[50%]">
@@ -47,13 +47,12 @@
           type="number"
           formControlName="price"
           id="price"
-          min="0"
-          step="10"
-          class="border w-full border-slate-400 p-2 rounded-md"
+          placeholder="Enter price"
+          class="border w-full border-slate-400 p-1 rounded-md"
         />
       </div>
     </div>
-    <div class="row border-b-2 p-4">
+    <div class="row border-b-2 p-2">
       <div class="form-group w-[50%] flex gap-2">
         <label for="isActive" class="block font-medium">Active</label>
         <input
@@ -64,7 +63,7 @@
         />
       </div>
     </div>
-    <div class="card-footer flex justify-end gap-3 p-4">
+    <div class="card-footer flex justify-end gap-3 p-2">
       <button
         type="button"
         (click)="onCancel()"
