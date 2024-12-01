@@ -61,7 +61,7 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<?> searchPage(@RequestParam(required = false) String keyword,
-            @RequestParam(required = false, defaultValue = "number") String sortBy,
+            @RequestParam(required = false, defaultValue = "username") String sortBy,
             @RequestParam(required = false, defaultValue = "asc") String order,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {

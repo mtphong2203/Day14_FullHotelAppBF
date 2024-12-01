@@ -52,7 +52,7 @@ public class RoleController {
 
     @GetMapping("/search")
     public ResponseEntity<?> searchPage(@RequestParam(required = false) String keyword,
-            @RequestParam(required = false, defaultValue = "number") String sortBy,
+            @RequestParam(required = false, defaultValue = "name") String sortBy,
             @RequestParam(required = false, defaultValue = "asc") String order,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size) {
@@ -76,7 +76,7 @@ public class RoleController {
         return ResponseEntity.ok(roleDTO);
     }
 
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<?> create(@Valid @RequestBody RoleCreateUpdateDTO roleDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -91,7 +91,7 @@ public class RoleController {
         return ResponseEntity.ok(masterDTO);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> update(@Valid @PathVariable UUID id, @RequestBody RoleCreateUpdateDTO roleDTO,
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -106,7 +106,7 @@ public class RoleController {
         return ResponseEntity.ok(masterDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
         boolean isDeleted = roleService.delete(id);
 
