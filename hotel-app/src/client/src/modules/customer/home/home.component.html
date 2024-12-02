@@ -1,24 +1,210 @@
-<div class="container mt-4">
-  <h1 class="text-center text-3xl font-medium">Home Page</h1>
-  <div class="content mt-6 flex justify-between">
-    <div class="title w-[50%]">
-      <h2 class="text-2xl font-medium mb-1">HotelApp</h2>
-      <p class="mb-4">
-        We've been working in this actives about 10 years. We have much
-        experience and customer. Welcome to my application
+<section class="home">
+  <div class="brand-home relative">
+    <img
+      [src]="brandHome"
+      class="w-full h-[600px] overflow-hidden object-fill"
+      alt=""
+    />
+    <div class="overlay"></div>
+  </div>
+
+  <section class="head absolute top-[40%] left-[50%] translate-x-[-50%] z-10">
+    <h2 class="text-6xl text-white font-medium mb-4">Amazing Hotel</h2>
+    <p class="text-white font-mono text-4xl mt-8 text-center">
+      Nơi để thuộc về
+    </p>
+  </section>
+
+  <div class="home-body w-[75%] m-auto mt-8">
+    <div class="room-booking">
+      <h2 class="text-5xl font-bold text-center">Description</h2>
+      <p class="mt-4 font-medium">
+        Chúng tôi có 82 phòng với nhiều loại phòng khác nhau, từ phòng Superior
+        view thành phố cho đến phòng Deluxe Family. Mỗi phòng đều được trang bị
+        đầy đủ tiện nghi và có ban công riêng. Khách sạn còn có nhà hàng, bar,
+        hồ bơi, spa, gym và karaoke để phục vụ nhu cầu giải trí của du khách
       </p>
-      <a
-        [routerLink]="['/about']"
-        class="p-2 bg-blue-500 rounded-md hover:bg-blue-600 text-white"
-        >More information</a
-      >
+      <p class="title text-3xl my-4 font-medium text-center">
+        <fa-icon [icon]="faMinus"></fa-icon>
+        Explore
+      </p>
+      <p class="ranking text-3xl font-bold mb-6 text-center">Room & Ranking</p>
+      <div class="rooms grid my-2 grid-cols-2 grid-rows-2 gap-4">
+        <div class="room-item flex justify-between p-4 rounded-md">
+          <div class="aside">
+            <h3 class="text-2xl font-light mb-2">Superior Room</h3>
+            <p class="my-1">
+              <span class="mr-6">
+                <fa-icon [icon]="faSquare" class="mr-1"></fa-icon>
+                23m2
+              </span>
+              <span class="mr-6">
+                <fa-icon [icon]="faRoom" class="mr-1"></fa-icon>
+                2 beds
+              </span>
+              <span class="mr-6">
+                <fa-icon [icon]="faBath" class="mr-1"></fa-icon>
+                1 bathroom
+              </span>
+            </p>
+            <p class="description text-slate-400 mb-4">
+              Phòng ngủ ấm cúng, tiện nghi và hợp túi tiền
+            </p>
+            <a [routerLink]="['/about']" class="nav-link">
+              Book
+              <fa-icon [icon]="faArrow"></fa-icon>
+            </a>
+          </div>
+          <img [src]="room01" class="w-48 h-40 rounded-md" alt="Room01" />
+        </div>
+        <div class="room-item flex justify-between p-4 rounded-md">
+          <div class="aside">
+            <h3 class="text-2xl font-light mb-2">Connecting Room</h3>
+            <p class="my-1">
+              <span class="mr-6">
+                <fa-icon [icon]="faSquare" class="mr-1"></fa-icon>
+                53m2
+              </span>
+              <span class="mr-6">
+                <fa-icon [icon]="faRoom" class="mr-1"></fa-icon>
+                3 beds
+              </span>
+              <span class="mr-6">
+                <fa-icon [icon]="faBath" class="mr-1"></fa-icon>
+                2 bathroom
+              </span>
+            </p>
+            <p class="description text-slate-400 mb-4">
+              Lựa chọn lý tưởng cho gia đình hoặc bạn bè
+            </p>
+            <a [routerLink]="['/about']" class="nav-link">
+              Book
+              <fa-icon [icon]="faArrow"></fa-icon>
+            </a>
+          </div>
+          <img [src]="room02" class="w-48 h-40 rounded-md" alt="Room02" />
+        </div>
+        <div class="room-item flex justify-between p-4 rounded-md">
+          <div class="aside">
+            <h3 class="text-2xl font-light mb-2">Deluxe family</h3>
+            <p class="my-1">
+              <span class="mr-6">
+                <fa-icon [icon]="faSquare" class="mr-1"></fa-icon>
+                32m2
+              </span>
+              <span class="mr-6">
+                <fa-icon [icon]="faRoom" class="mr-1"></fa-icon>
+                2 beds
+              </span>
+              <span class="mr-6">
+                <fa-icon [icon]="faBath" class="mr-1"></fa-icon>
+                1 bathroom
+              </span>
+            </p>
+            <p class="description text-slate-400 mb-4">
+              Lựa chọn hoàn hảo cho gia đình có trẻ nhỏ
+            </p>
+            <a [routerLink]="['/about']" class="nav-link">
+              Book
+              <fa-icon [icon]="faArrow"></fa-icon>
+            </a>
+          </div>
+          <img [src]="room03" class="w-48 h-40 rounded-md" alt="Room03" />
+        </div>
+        <div class="room-item flex justify-between p-4 rounded-md">
+          <div class="aside">
+            <h3 class="text-2xl font-light mb-2">Deluxe Room</h3>
+            <p class="my-1">
+              <span class="mr-6">
+                <fa-icon [icon]="faSquare" class="mr-1"></fa-icon>
+                25m2
+              </span>
+              <span class="mr-6">
+                <fa-icon [icon]="faRoom" class="mr-1"></fa-icon>
+                2 beds
+              </span>
+              <span class="mr-6">
+                <fa-icon [icon]="faBath" class="mr-1"></fa-icon>
+                1 bathroom
+              </span>
+            </p>
+            <p class="description text-slate-400 mb-4">
+              Tận hưởng khung cảnh núi non hùng vĩ
+            </p>
+            <a [routerLink]="['/about']" class="nav-link">
+              Book
+              <fa-icon [icon]="faArrow"></fa-icon>
+            </a>
+          </div>
+          <img [src]="room04" class="w-48 h-40 rounded-md" alt="Room04" />
+        </div>
+      </div>
     </div>
-    <div class="brand-home">
-      <img
-        [src]="brandHome"
-        class="rounded-full w-96 h-96 object-fill"
-        alt=""
-      />
+
+    <div class="news my-4">
+      <h2 class="text-3xl font-bold text-center">News & Events</h2>
+      <div class="events grid grid-rows-2 grid-cols-3">
+        <div class="event-item mt-12 w-[350px]">
+          <img [src]="event01" alt="Top 10 hotel" />
+          <p class="text-slate-500 my-2 flex justify-between">
+            <span>News</span>
+            <span>{{ 90 | formatDate }}</span>
+          </p>
+          <h3 class="title text-2xl font-medium hover:text-slate-500">
+            Top 10 khách sạn 5 sao Sapa cho kỳ nghỉ sang trọng, thư giãn
+          </h3>
+        </div>
+        <div class="event-item mt-12 w-[350px]">
+          <img [src]="event02" alt="Sapa" />
+          <p class="text-slate-500 my-2 flex justify-between">
+            <span>News</span>
+            <span>{{ 50 | formatDate }}</span>
+          </p>
+          <h3 class="title text-2xl font-medium hover:text-slate-500">
+            Nên đi Sapa vào tháng mấy? Gợi ý thời gian lý tưởng để khám Sapa
+          </h3>
+        </div>
+        <div class="event-item mt-12 w-[350px]">
+          <img [src]="event03" alt="Sapa Image" />
+          <p class="text-slate-500 my-2 flex justify-between">
+            <span>Những địa điểm nên đến ở SaPa</span>
+            <span>{{ 185 | formatDate }}</span>
+          </p>
+          <h3 class="title text-2xl font-medium hover:text-slate-500">
+            Quảng trường Sapa – Nơi giao thoa giữa truyền thống và hiện đại
+          </h3>
+        </div>
+        <div class="event-item mt-12 w-[350px]">
+          <img [src]="event04" alt="Breakfast" />
+          <p class="text-slate-500 my-2 flex justify-between">
+            <span>Những địa điểm nên đến ở SaPa</span>
+            <span>{{ 94 | formatDate }}</span>
+          </p>
+          <h3 class="title text-2xl font-medium hover:text-slate-500">
+            Ăn sáng ở Sapa – 10 Quán ăn sáng không thể bỏ qua tại Sapa
+          </h3>
+        </div>
+        <div class="event-item mt-12 w-[350px]">
+          <img [src]="event05" alt="Picture" />
+          <p class="text-slate-500 my-2 flex justify-between">
+            <span>Những địa điểm nên đến ở SaPa</span>
+            <span>{{ 38 | formatDate }}</span>
+          </p>
+          <h3 class="title text-2xl font-medium hover:text-slate-500">
+            Chụp ảnh Sapa – 12 Điểm check in không thể bỏ qua tại Sapa
+          </h3>
+        </div>
+        <div class="event-item mt-12 w-[350px]">
+          <img [src]="event06" alt="News" />
+          <p class="text-slate-500 my-2 flex justify-between">
+            <span>News</span>
+            <span>{{ 67 | formatDate }}</span>
+          </p>
+          <h3 class="title text-2xl font-medium hover:text-slate-500">
+            Giá vé cao tốc Hà Nội Lào Cai: Thông tin cập nhật 2023
+          </h3>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
