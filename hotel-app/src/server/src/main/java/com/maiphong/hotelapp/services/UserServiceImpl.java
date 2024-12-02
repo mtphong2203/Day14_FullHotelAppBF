@@ -85,12 +85,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User create can not null");
         }
 
-        User existUser = userRepository.findByUsername(userDTO.getUsername());
-
-        if (existUser != null && existUser.getId().equals(id)) {
-            throw new ResourceNotFoundException("User name is already exist!");
-        }
-
         User user = userRepository.findById(id).orElse(null);
 
         if (user == null) {

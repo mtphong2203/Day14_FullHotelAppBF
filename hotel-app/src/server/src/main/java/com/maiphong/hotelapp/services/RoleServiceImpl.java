@@ -79,12 +79,6 @@ public class RoleServiceImpl implements RoleService {
             throw new IllegalArgumentException("Role create is not null");
         }
 
-        var existingRole = roleRepository.findByName(roleDTO.getName());
-
-        if (existingRole != null && !existingRole.getId().equals(id)) {
-            throw new IllegalArgumentException("Role number already exists");
-        }
-
         Role role = roleRepository.findById(id).orElse(null);
 
         if (role == null) {
