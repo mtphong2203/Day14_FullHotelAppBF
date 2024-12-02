@@ -118,12 +118,6 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Order create can not null");
         }
 
-        Order existOrder = orderRepository.findByName(orderDTO.getName());
-
-        if (existOrder != null && existOrder.getId().equals(id)) {
-            throw new IllegalArgumentException("Order is already exist!");
-        }
-
         Order order = orderRepository.findById(id).orElse(null);
 
         if (order == null) {

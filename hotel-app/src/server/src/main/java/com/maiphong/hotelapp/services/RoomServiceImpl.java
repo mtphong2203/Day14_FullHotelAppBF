@@ -81,12 +81,6 @@ public class RoomServiceImpl implements RoomService {
             throw new IllegalArgumentException("Room create is not null");
         }
 
-        Room existRoom = roomRepository.findByNumber(roomDTO.getNumber());
-
-        if (existRoom != null && existRoom.getId().equals(id)) {
-            throw new IllegalArgumentException("Room is already exists!");
-        }
-
         Room room = roomRepository.findById(id).orElse(null);
 
         if (room == null) {

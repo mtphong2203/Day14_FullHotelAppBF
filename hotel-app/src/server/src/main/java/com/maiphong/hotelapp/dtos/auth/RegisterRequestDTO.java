@@ -2,6 +2,8 @@ package com.maiphong.hotelapp.dtos.auth;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.maiphong.hotelapp.dtos.MasterCreateUpdateDTO;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequestDTO {
+public class RegisterRequestDTO extends MasterCreateUpdateDTO {
     @NotBlank(message = "First Name is required")
     @Length(min = 2, max = 50, message = "First Name must be between 2 and 50 characters")
     private String firstName;

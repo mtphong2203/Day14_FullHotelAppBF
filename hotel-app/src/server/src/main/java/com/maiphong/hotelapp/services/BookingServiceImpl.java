@@ -73,6 +73,7 @@ public class BookingServiceImpl implements BookingService {
         if (bookingDTO == null) {
             throw new IllegalArgumentException("Can not null");
         }
+
         Booking booking = bookingRepository.findById(id).orElse(null);
 
         if (booking == null) {
