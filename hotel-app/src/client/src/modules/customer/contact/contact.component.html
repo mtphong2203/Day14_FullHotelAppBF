@@ -1,7 +1,11 @@
-<div class="container mt-4">
+<div class="container mt-20 w-[75%] m-auto">
   <h1 class="text-3xl text-center font-medium mb-2">Contact</h1>
-  <div class="contact">
-    <form class="form-contact" [formGroup]="contact" (ngSubmit)="onSubmit()">
+  <div class="contact flex justify-between items-center">
+    <form
+      class="form-contact w-[60%]"
+      [formGroup]="contact"
+      (ngSubmit)="onSubmit()"
+    >
       <div class="form-group mb-2">
         <label for="name" class="block mb-1">Name</label>
         <input
@@ -26,27 +30,41 @@
         <label for="message" class="block mb-1">Message</label>
         <textarea
           formControlName="message"
-          class="w-full rounded-md p-1 px-2 focus:outline-slate-200 border-2"
+          class="w-full rounded-md p-1 px-2 resize-none focus:outline-slate-200 border-2"
           id="message"
           placeholder="Enter your message"
         ></textarea>
       </div>
-      <div class="button flex justify-between mb-4">
+      <div class="button flex justify-start mb-4">
         <button type="submit" class="p-2 text-white bg-blue-500 rounded-md">
           Send
         </button>
-        <button
-          type="submit"
-          class="p-2 text-white bg-blue-500 rounded-md"
-          (click)="onCreate()"
-        >
-          Create
-        </button>
       </div>
     </form>
+    <div class="brand flex justify-end w-[40%]">
+      <img [src]="image" class="rounded-full w-[350px] h-[350px]" alt="" />
+    </div>
   </div>
-  <div *ngIf="isShow" class="date-contact flex gap-4 items-center">
-    <p class="title">HotelApp</p>
-    <p>Online {{ time | formatDate }} ago</p>
+  <div class="reach my-6">
+    <h2 class="text-center text-3xl font-medium mb-2">Find us</h2>
+    <p class="mb-2 font-medium">
+      Located at the edge of the Perfume River, 1 km from the Imperial City, 1.5
+      km from the Heavenly Lady Pagoda and 2 km from the city center
+    </p>
+    <p class="mb-2 flex gap-2">
+      <fa-icon [icon]="faPhone" class="text-slate-400"></fa-icon>
+      <span>Tel: + 84 873 590 902</span>
+    </p>
+    <p class="mb-2 flex gap-2">
+      <fa-icon [icon]="faEmail"></fa-icon>
+      <span>john1998&#64;gmail.com</span>
+    </p>
+    <p class="mb-2 flex gap-2">
+      <fa-icon [icon]="faLocation" class="text-red-400"></fa-icon>
+      <span>
+        Ancient Hue Garden Houses 104/47 Kim Long, Thành phố Huế, Thừa Thiên
+        Huế, Vietnam.
+      </span>
+    </p>
   </div>
 </div>
