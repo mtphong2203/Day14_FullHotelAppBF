@@ -1,43 +1,39 @@
-<header class="bg-slate-100 shadow-md">
+<header class="bg-slate-800 text-white shadow-md">
   <div class="container w-[75%] m-auto flex justify-between items-center">
-    <div class="header__brand">
-      <a [routerLink]="['/']" class="font-medium text-2xl">HotelApp</a>
-    </div>
+    <a [routerLink]="['/ ']">
+      <img [src]="brandHome" class="w-14 h-14 rounded-md" alt="" />
+    </a>
 
     <nav class="navbar">
       <ul class="nav-list flex">
         <li class="nav-item">
-          <a [routerLink]="['/']" class="nav-link p-2 hover:font-medium"
-            >Home</a
-          >
+          <a [routerLink]="['/']" class="nav-link hover:font-medium">Home</a>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/manager']" class="nav-link p-2 hover:font-medium"
-            >Management
+          <a [routerLink]="['/manager']" class="nav-link hover:font-medium">
+            Management
           </a>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/about']" class="nav-link p-2 hover:font-medium"
-            >About</a
-          >
+          <a [routerLink]="['/about']" class="nav-link hover:font-medium">
+            About
+          </a>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/contact']" class="nav-link p-2 hover:font-medium"
-            >Contact</a
-          >
+          <a [routerLink]="['/contact']" class="nav-link hover:font-medium">
+            Contact
+          </a>
         </li>
       </ul>
     </nav>
 
     <div class="profile flex">
-      <a [routerLink]="['/auth/login']" class="nav-link p-2 hover:font-medium"
-        >Login</a
-      >
-      <a
-        [routerLink]="['/auth/register']"
-        class="nav-link p-2 hover:font-medium"
-        >Register</a
-      >
+      <a [routerLink]="['/auth/login']" class="nav-link hover:font-medium">
+        Login
+      </a>
+      <a [routerLink]="['/auth/register']" class="nav-link hover:font-medium">
+        Register
+      </a>
     </div>
   </div>
 </header>

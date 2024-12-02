@@ -10,4 +10,6 @@ import { RouterModule } from '@angular/router';
 })
 export class HeaderComponent {
 
+  public brandHome: string = './assets/images/brand-home.png';
+
 }
