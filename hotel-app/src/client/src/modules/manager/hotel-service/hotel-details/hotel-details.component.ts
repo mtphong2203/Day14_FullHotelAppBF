@@ -43,7 +43,7 @@ export class HotelDetailsComponent implements OnChanges {
     this.form = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
       price: new FormControl('', Validators.required),
-      isActive: new FormControl(true),
+      active: new FormControl(true),
     });
   }
 
@@ -66,8 +66,7 @@ export class HotelDetailsComponent implements OnChanges {
       });
     } else {
       this.http.post(this.apiURL, data).subscribe((result: any) => {
-        console.log(result);
-
+        console.log(data);
         if (result != null) {
           this.cancel.emit();
         }

@@ -48,7 +48,7 @@ export class RoleDetailsComponent implements OnChanges {
     this.form = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.maxLength(255)]),
       description: new FormControl('', Validators.maxLength(500)),
-      isActive: new FormControl(true),
+      active: new FormControl(true),
     });
   }
 
@@ -70,7 +70,9 @@ export class RoleDetailsComponent implements OnChanges {
     } else {
       this.http.post(this.apiURL, data).subscribe((result) => {
         if (result) {
-          this.message = 'Create successfully';
+          console.log(result);
+
+          // this.message = 'Create successfully';
         } else {
           this.message = 'Fail to create';
         }

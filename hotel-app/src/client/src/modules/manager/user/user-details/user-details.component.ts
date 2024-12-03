@@ -54,7 +54,7 @@ export class UserDetailsComponent implements OnChanges {
       email: new FormControl('', Validators.required),
       phoneNumber: new FormControl('', [Validators.minLength(10)]),
       password: new FormControl('', Validators.required),
-      isActive: new FormControl(true),
+      active: new FormControl(true),
     });
   }
 

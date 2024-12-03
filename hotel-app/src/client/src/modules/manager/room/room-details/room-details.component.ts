@@ -49,7 +49,7 @@ export class RoomDetailsComponent implements OnChanges {
       type: new FormControl(null, Validators.required),
       capacity: new FormControl('', Validators.required),
       price: new FormControl('', Validators.required),
-      isActive: new FormControl(true),
+      active: new FormControl(true),
     });
   }
 

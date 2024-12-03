@@ -79,8 +79,8 @@ export class RoleListComponent implements OnInit {
       } else {
         this.response = 'Fail to delete';
       }
+      this.search();
     });
-    this.search();
   }
 
   // cancel form details
