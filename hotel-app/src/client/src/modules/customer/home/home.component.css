@@ -29,13 +29,6 @@ h2,
   border: 1px solid #333;
 }
 
-.nav-link {
-  padding: 0.3rem 0.5rem;
-  background: #000;
-  color: white;
-  border-radius: 0.5rem;
-}
-
 .event-item h3,
 img {
   cursor: pointer;

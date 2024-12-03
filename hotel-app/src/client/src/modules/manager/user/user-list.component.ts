@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus, faSearch, faEdit, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
-
 @Component({
   selector: 'app-user-list',
   standalone: true,

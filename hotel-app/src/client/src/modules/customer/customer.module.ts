@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { HomeComponent } from './home/home.component';
+import { CommonService } from '../services/common.service';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [],
+  providers: [CommonService],
   imports: [
     CommonModule, RouterModule.forChild(routes)
   ]
