@@ -1,0 +1,61 @@
+<div class="contain relative">
+  <img [src]="restaurantLogo" class="w-full h-[600px]" alt="Restaurant Logo" />
+  <div class="overlay"></div>
+</div>
+
+<section
+  class="header-title absolute top-[40%] left-[50%] translate-x-[-50%] z-10"
+>
+  <h1 class="text-7xl text-white font-medium">Restaurant</h1>
+</section>
+
+<div class="body w-[75%] m-auto mt-12">
+  <div class="serving w-[55%] m-auto">
+    <p class="text-center text-lg mb-8">
+      Amazing cung cấp cho bạn một nhà hàng tuyệt vời, nơi bạn có thể thưởng
+      thức ẩm thực địa phương và quốc tế với chất lượng và hương vị tuyệt hảo.
+    </p>
+    <div class="time-open flex justify-center gap-8 text-center">
+      <div class="item">
+        <h3 class="text-orange-400 text-2xl">Day open</h3>
+        <span class="text-lg">Monday - Sunday</span>
+      </div>
+      <div class="item">
+        <h3 class="text-orange-400 text-2xl">Time open</h3>
+        <span class="text-lg">06:00a.m - 22:30p.m</span>
+      </div>
+      <div class="item">
+        <h3 class="text-orange-400 text-2xl">Price</h3>
+        <span class="text-lg">$50 - $450</span>
+      </div>
+    </div>
+
+    <div class="booking my-6 flex justify-center">
+      <a
+        [routerLink]="['/services']"
+        class="p-2 rounded-md text-white bg-orange-700"
+        >Booking
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="food w-[75%] m-auto mb-8">
+  <h3 class="text-center text-3xl font-medium mb-6">Món ăn đặc sắc</h3>
+  <div class="breakfast">
+    <div class="title mb-4 text-lg flex justify-between">
+      <p class="ml-12">
+        <span class="font-bold text-2xl">Breakfast</span> 7:30 AM - 11:00 AM
+      </p>
+      <p><span class="font-bold text-2xl">Lunch</span> 12:00 PM - 2:30 PM</p>
+      <p class="mr-12">
+        <span class="font-bold text-2xl">Dinner</span> 6:00 PM - 11:00 PM
+      </p>
+    </div>
+    <div class="grid grid-cols-3 grid-rows-4 gap-6">
+      <ng-container *ngFor="let item of foods">
+        <app-food-details [foodItem]="item"></app-food-details>
+      </ng-container>
+    </div>
+  </div>
+</div>

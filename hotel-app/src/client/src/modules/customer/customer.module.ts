@@ -5,8 +5,18 @@ import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { HomeComponent } from './home/home.component';
 import { CommonService } from '../services/common.service';
+import { RestaurantComponent } from './restaurant/restaurant.component';
+import { ServiceComponent } from './service/service.component';
 
 const routes: Routes = [
+  {
+    path: 'restaurant',
+    component: RestaurantComponent
+  },
+  {
+    path: 'services',
+    component: ServiceComponent
+  },
   {
     path: 'about',
     component: AboutComponent
