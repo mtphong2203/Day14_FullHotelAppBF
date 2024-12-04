@@ -1,0 +1,204 @@
+<div class="relative w-full">
+  <img [src]="serviceLogo" class="w-full h-[400px]" alt="Service Logo" />
+  <div class="overlay"></div>
+  <h1
+    class="absolute text-6xl text-white z-10 top-[50%] left-[50%] translate-x-[-50%]"
+  >
+    Service
+  </h1>
+</div>
+
+<div class="head-title w-[60%] m-auto mt-8 text-center text-lg">
+  <p>
+    Tại Amazing Hotel Sapa, chúng tôi không chỉ mang đến cho bạn những phòng
+    nghỉ sang trọng và tiện nghi, mà còn cung cấp cho bạn nhiều dịch vụ đa dạng
+    và chất lượng, để làm cho kỳ nghỉ của bạn thêm trọn vẹn và thú vị
+  </p>
+</div>
+
+<div class="service-list w-[75%] m-auto mt-16">
+  <div class="service-item flex items-center mb-20 gap-16">
+    <img [src]="service01" class="w-[500px] h-96" alt="Service01" />
+    <div class="detail">
+      <h2 class="text-2xl">
+        <fa-icon [icon]="faMinus" class="mr-2"></fa-icon>Eat&Drink
+      </h2>
+      <p class="text-4xl font-medium my-2">Restaurant</p>
+      <p class="text-lg">
+        Nơi bạn có thể thưởng thức ẩm thực địa phương và quốc tế với chất lượng
+        và hương vị tuyệt hảo. Nhà hàng của chúng tôi có không gian rộng rãi và
+        thoáng mát, với tầm nhìn hướng ra núi non hùng vĩ của Sapa
+      </p>
+      <p class="mt-2 mb-6 font-semibold">
+        <fa-icon [icon]="faClock" class="mr-2"></fa-icon> Open: 7:00pm - 11:00pm
+      </p>
+      <a
+        [routerLink]="['/restaurant']"
+        class="p-2 border border-black hover:bg-orange-700 hover:text-white rounded-md"
+        >More Information
+      </a>
+    </div>
+  </div>
+  <div class="service-item flex flex-row-reverse items-center mb-20 gap-16">
+    <img [src]="service02" class="w-[500px] h-96" alt="Service01" />
+    <div class="detail">
+      <h2 class="text-2xl">
+        <fa-icon [icon]="faMinus" class="mr-2"></fa-icon>Convene Here
+      </h2>
+      <p class="text-4xl font-medium my-2">Meeting Room</p>
+      <p class="text-lg">
+        Ngoài những phòng nghỉ ấm cúng và tiện nghi, Amazing Hotel Sapa còn mang
+        đến cho bạn những phòng họp tuyệt vời, nơi bạn có thể thực hiện các sự
+        kiện và hội nghị một cách dễ dàng và hiệu quả. Chúng tôi có 3 phòng họp
+        với không gian rộng rãi và thoáng mát, có thể chứa từ 20 đến 200 người.
+        Mỗi phòng họp đều có đầy đủ các thiết bị cần thiết như âm thanh, ánh
+        sáng, màn chiếu và wifi.
+      </p>
+      <p class="mt-2 mb-6 font-semibold">
+        <fa-icon [icon]="faClock" class="mr-2"></fa-icon> Open: 12:00am -
+        21:00pm
+      </p>
+      <a
+        [routerLink]="['/restaurant']"
+        class="p-2 border border-black hover:bg-orange-700 hover:text-white rounded-md"
+        >More Information
+      </a>
+    </div>
+  </div>
+  <div class="service-item flex items-center mb-20 gap-16">
+    <img [src]="service03" class="w-[500px] h-96" alt="Service01" />
+    <div class="detail">
+      <h2 class="text-2xl">
+        <fa-icon [icon]="faMinus" class="mr-2"></fa-icon>Beauty
+      </h2>
+      <p class="text-4xl font-medium my-2">L'Amour Spa</p>
+      <p class="text-lg">
+        Cung cấp các liệu trình nhẹ nhàng và các gói spa sang trọng kết hợp các
+        liệu pháp mát-xa, chăm sóc da mặt và trị liệu toàn thân. Mỗi trải nghiệm
+        sẽ được tùy chỉnh theo mong muốn của khách hàng để mang lại cho du khách
+        trải nghiệm hoàn hảo cho dù đó là một buổi massage nhanh hoặc liệu trình
+        với thời gian dài.
+      </p>
+      <p class="my-2 font-semibold">
+        <fa-icon [icon]="faClock" class="mr-2"></fa-icon> Open: 12:00am -
+        21:00pm
+      </p>
+      <p class="text-2xl font-extralight mt-2">Tiện ích Spa</p>
+      <ul class="span ml-6 my-4">
+        <li class="text-gray-700">Bốn phòng trị liệu đơn</li>
+        <li class="text-gray-700">
+          Hai phòng trị liệu sang trọng dành cho cặp đôi
+        </li>
+        <li class="text-gray-700">Chăm sóc và làm móng</li>
+        <li class="text-gray-700">
+          Khu vực thay đồ dành cho nữ với phòng tắm và phòng xông hơi
+        </li>
+        <li class="text-gray-700">
+          Khu vực thay đồ dành cho nam với phòng tắm và phòng tắm hơi
+        </li>
+      </ul>
+      <p class="text-lg">
+        <span class="font-extrabold">Vị trí:</span> Tầng hầm B3
+      </p>
+    </div>
+  </div>
+  <div class="service-item flex flex-row-reverse items-center mb-20 gap-16">
+    <img [src]="service04" class="w-[500px] h-96" alt="Service01" />
+    <div class="detail">
+      <h2 class="text-2xl">
+        <fa-icon [icon]="faMinus" class="mr-2"></fa-icon>Beauty
+      </h2>
+      <p class="text-4xl font-medium my-2">Lavender Spa</p>
+      <p class="text-lg">
+        Lavender Spa cung cấp các trải nghiệm Spa độc đáo với các phương pháp
+        trị liệu kết hợp hài hòa giữa tinh túy của kỹ thuật phương Đông và thảo
+        dược truyền thống của Việt Nam. Mỗi một dịch vụ riêng biệt của chúng tôi
+        nhằm mang đến cho bạn những trải nghiệm và cảm nhận tuyệt vời nhất mà
+        bạn chưa bao giờ tận hưởng trước đây
+      </p>
+      <p class="my-2 font-semibold">
+        <fa-icon [icon]="faClock" class="mr-2"></fa-icon> Open: 9:00am - 21:00pm
+      </p>
+      <p class="text-lg">
+        <span class="font-extrabold">Vị trí:</span> Tầng hầm B3
+      </p>
+    </div>
+  </div>
+  <div class="service-item flex items-center mb-20 gap-16">
+    <img [src]="service05" class="w-[500px] h-96" alt="Service01" />
+    <div class="detail">
+      <h2 class="text-2xl">
+        <fa-icon [icon]="faMinus" class="mr-2"></fa-icon>Actives
+      </h2>
+      <p class="text-4xl font-medium my-2">Swmming</p>
+      <p class="text-lg">
+        Hồ bơi bốn mùa với chiều dài 15 mét nằm trên tầng thượng của khách sạn
+        là nơi hoàn hảo để bạn có những giây phút bơi lội nhẹ nhàng hoặc nhâm
+        nhi ly rượu vang trong khi ngâm mình dưới nước. Được bao quanh bởi những
+        ngọn núi xanh tươi, với tầm nhìn trải dài ra thung lũng Mường Hoa, tạo
+        cho bể bơi một khung cảnh thanh bình và yên tĩnh
+      </p>
+      <p class="my-2 font-semibold">
+        <fa-icon [icon]="faClock" class="mr-2"></fa-icon> Open: 7:30am - 22:00pm
+      </p>
+      <p class="text-lg">
+        <span class="font-extrabold">Vị trí:</span> Tầng thượng
+      </p>
+    </div>
+  </div>
+  <div class="service-item flex flex-row-reverse items-center mb-20 gap-16">
+    <img [src]="service07" class="w-[500px] h-96" alt="Service01" />
+    <div class="detail">
+      <h2 class="text-2xl">
+        <fa-icon [icon]="faMinus" class="mr-2"></fa-icon>Tours
+      </h2>
+      <p class="text-4xl font-medium my-2">Tour Service</p>
+      <p class="text-lg">
+        Để tạo ra những trải nghiệm mới và hoàn hảo cho khách du lịch khi đến
+        với Sapa, chúng tôi cung cấp dịch vụ tour, nơi mà bạn có thể đặt các
+        tour du lịch khám phá các bản và thung lũng và thung lũng của Sapa.
+      </p>
+      <p class="text-lg my-2">
+        Hãy khám phá trái tim và tâm hồn của Tây Bắc Việt Nam tại một trong
+        những khu vực đa sắc tộc nhất trên thế giới.
+      </p>
+
+      <div class="accordion">
+        <div class="tour shadow-md">
+          <div class="navigate" (click)="onOpen()">
+            <h3 class="text-xl font-medium">Gợi ý Tour</h3>
+            <fa-icon [icon]="isShow ? faMinus : faPlus" class="text-xl">
+            </fa-icon>
+          </div>
+          <ul class="list px-10" [ngClass]="{ open: isShow }">
+            <li>Sapa - Cát Cát - Sín Chải</li>
+            <li>Sapa - Lao Chải - Tả Van</li>
+            <li>Sapa - Bản Khoang - Tả Giàng Phìn - Sapa</li>
+            <li>Núi F-nsipan 2 ngày 1 đêm</li>
+            <li>Sapa - Cát Cát - Hàm Rồng</li>
+            <li>Sapa - Thác Bạc - Thác tình yêu - Cổng trời</li>
+          </ul>
+        </div>
+
+        <div class="book-tour mt-4 shadow-md">
+          <div
+            class="navigate flex justify-between items-center"
+            (click)="onShow()"
+          >
+            <h3 class="text-xl font-medium">Liên hệ đặt tour</h3>
+            <fa-icon [icon]="isTour ? faMinus : faPlus" class="text-xl">
+            </fa-icon>
+          </div>
+          <div class="list px-6" [ngClass]="{ open: isTour }">
+            <a href="mailto:info@amazinghotel.com" class="block text-lg"
+              >Email: info&#64;amazinghotel.com.vn
+            </a>
+            <a href="tel: +856 748 7865" class="my-2 block text-lg"
+              >Hotline: +84 5674 876
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
