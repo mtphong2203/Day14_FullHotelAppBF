@@ -1,0 +1,10 @@
+<div class="food flex gap-2 border border-slate-400 rounded-lg">
+  <img [src]="foodItem.images" class="w-40 rounded-md border-r-2 h-36" alt="" />
+  <div class="detail p-2">
+    <p class="title text-3xl mb-2 font-medium">{{ foodItem.title }}</p>
+    <span class="price border-b-2 text-red-400 text-2xl">
+      {{ foodItem.price }}
+    </span>
+    <p class="description mt-3 text-gray-300">{{ foodItem.description }}</p>
+  </div>
+</div>
