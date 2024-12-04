@@ -1,4 +1,19 @@
 .nav-link {
-  padding: 0.5rem 0.7rem;
-  font-size: 1.25rem;
+  padding: 0.8rem;
+  font-size: 1.4rem;
+}
+
+.nav-link:hover {
+  font-weight: 600;
+}
+
+.sub-nav {
+  display: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }

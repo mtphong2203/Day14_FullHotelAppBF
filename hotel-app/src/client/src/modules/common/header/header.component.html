@@ -1,4 +1,4 @@
-<header class="bg-slate-400 text-white shadow-md">
+<header class="bg-slate-400 text-white font-extralight shadow-md relative">
   <div class="container w-[75%] m-auto flex justify-between items-center">
     <a [routerLink]="['/ ']">
       <img [src]="brandHome" class="w-14 h-14 rounded-md" alt="" />
@@ -7,48 +7,61 @@
     <nav class="navbar">
       <ul class="nav-list flex">
         <li class="nav-item">
-          <a [routerLink]="['/']" class="nav-link hover:font-medium">Home</a>
+          <a [routerLink]="['/']" class="nav-link">Home</a>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/manager']" class="nav-link hover:font-medium">
-            Management
-          </a>
+          <a [routerLink]="['/manager']" class="nav-link"> Management </a>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/room-suite']" class="nav-link hover:font-medium">
-            Room&Suite
-          </a>
+          <a [routerLink]="['/room-suite']" class="nav-link"> Room&Suite </a>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/restaurant']" class="nav-link hover:font-medium">
-            Restaurant
-          </a>
+          <a [routerLink]="['/restaurant']" class="nav-link"> Restaurant </a>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/services']" class="nav-link hover:font-medium">
-            Services
-          </a>
+          <a [routerLink]="['/services']" class="nav-link"> Services </a>
+        </li>
+        <li
+          class="nav-item"
+          (mouseenter)="onHover(true)"
+          (mouseleave)="onHover(false)"
+        >
+          <a [routerLink]="['/news']" class="nav-link">
+            News
+            <fa-icon [icon]="isHovered ? faUp : faDown" class="m-1"></fa-icon
+          ></a>
+
+          <ul
+            class="sub-nav absolute top-[100%] bg-gray-300 w-[200px] h-[200px] shadow-md py-2"
+            [ngClass]="{ show: isHovered }"
+          >
+            <li class="nav-item mb-3">
+              <a [routerLink]="['/about']" class="nav-link"> About </a>
+            </li>
+            <li class="nav-item mb-3">
+              <a [routerLink]="['/locations']" class="nav-link">
+                Hot Locations
+              </a>
+            </li>
+            <li class="nav-item mb-3">
+              <a [routerLink]="['/discount']" class="nav-link"> Discount </a>
+            </li>
+            <li class="nav-item mb-3">
+              <a [routerLink]="['/hot-service']" class="nav-link">
+                Hot Services
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="nav-item">
-          <a [routerLink]="['/about']" class="nav-link hover:font-medium">
-            About
-          </a>
-        </li>
-        <li class="nav-item">
-          <a [routerLink]="['/contact']" class="nav-link hover:font-medium">
-            Contact
-          </a>
+          <a [routerLink]="['/contact']" class="nav-link"> Contact </a>
         </li>
       </ul>
     </nav>
 
     <div class="profile flex">
-      <a [routerLink]="['/auth/login']" class="nav-link hover:font-medium">
-        Login
-      </a>
-      <a [routerLink]="['/auth/register']" class="nav-link hover:font-medium">
-        Register
-      </a>
+      <a [routerLink]="['/auth/login']" class="nav-link"> Login </a>
+      <a [routerLink]="['/auth/register']" class="nav-link"> Register </a>
     </div>
   </div>
 </header>
