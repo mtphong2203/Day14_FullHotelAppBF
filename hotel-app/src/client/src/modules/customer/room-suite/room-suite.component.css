@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&family=Lora:ital,wght@0,400..700;1,400..700&family=Protest+Revolution&display=swap");
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+p,
+h2,
+h3 {
+  font-family: "Lora", serif;
+  font-optical-sizing: auto;
+}

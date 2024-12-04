@@ -1,0 +1,44 @@
+<div class="head relative">
+  <img [src]="logo" class="w-full h-[500px]" alt="" />
+  <div class="overlay"></div>
+  <h2
+    class="absolute top-[40%] left-[50%] translate-x-[-50%] text-white z-10 text-6xl"
+  >
+    Room & Suite
+  </h2>
+</div>
+
+<div class="body my-12 w-[75%] m-auto">
+  <p class="text-center text-lg">
+    Tại Amazing Hotel Sapa, chúng tôi mang đến cho bạn những phòng nghỉ sang
+    trọng, tiện nghi và ấm cúng, với tầm nhìn hướng ra núi non hùng vĩ của Sapa.
+    Bạn có thể lựa chọn từ nhiều loại phòng khác nhau, phù hợp với nhu cầu và sở
+    thích của bạn. Mỗi phòng đều được trang bị đầy đủ tiện nghi và có ban công
+    riêng, cho bạn cảm giác thoải mái và thư thái. Hãy để chúng tôi chăm sóc bạn
+    trong kỳ nghỉ của bạn tại Sapa
+  </p>
+
+  <div class="rooms grid my-2 grid-cols-2 grid-rows-2 gap-6 mt-8">
+    <ng-container *ngFor="let item of rooms">
+      <app-room [roomItem]="item"></app-room>
+    </ng-container>
+  </div>
+  <div class="rooms grid my-2 grid-cols-2 gap-6 mt-8">
+    <ng-container *ngFor="let item of extra">
+      <app-room [roomItem]="item"></app-room>
+    </ng-container>
+  </div>
+  <div class="extra my-6">
+    <p class="text-center text-lg">
+      We have some extra rooms just serving for president and vip customer,
+      these are 4 rooms below you can think about and choice whichever rooms you
+      want
+    </p>
+  </div>
+  <h3 class="text-3xl text-center font-medium">VIP ROOMS</h3>
+  <div class="rooms grid my-2 grid-cols-2 grid-rows-2 gap-8 mt-8">
+    <ng-container *ngFor="let item of rooms">
+      <app-room [roomItem]="item"></app-room>
+    </ng-container>
+  </div>
+</div>

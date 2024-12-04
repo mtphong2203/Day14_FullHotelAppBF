@@ -7,8 +7,13 @@ import { HomeComponent } from './home/home.component';
 import { CommonService } from '../services/common.service';
 import { RestaurantComponent } from './restaurant/restaurant.component';
 import { ServiceComponent } from './service/service.component';
+import { RoomSuiteComponent } from './room-suite/room-suite.component';
 
 const routes: Routes = [
+  {
+    path: 'room-suite',
+    component: RoomSuiteComponent
+  },
   {
     path: 'restaurant',
     component: RestaurantComponent
