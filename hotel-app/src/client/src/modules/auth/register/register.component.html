@@ -1,0 +1,101 @@
+<div
+  class="form w-[500px] h-[550px] border border-slate-400 bg-gray-500 rounded-lg p-3"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="title flex justify-center my-4 items-center gap-2">
+      <h2 class="text-3xl">Register</h2>
+      <fa-icon [icon]="faRegister"></fa-icon>
+    </div>
+
+    <div class="row flex justify-between gap-4">
+      <div class="form-group w-[50%]">
+        <label for="firsName">FirstName</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          id="firsName"
+          placeholder="Enter first name"
+        />
+      </div>
+      <div class="form-group w-[50%]">
+        <label for="firsName">LastName</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          id="firsName"
+          placeholder="Enter last name"
+        />
+      </div>
+    </div>
+    <div class="row flex justify-between gap-4">
+      <div class="form-group w-[50%]">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          formControlName="username"
+          id="username"
+          placeholder="Enter user name"
+        />
+      </div>
+      <div class="form-group w-[50%]">
+        <label for="phoneNumber">PhoneNumber</label>
+        <input
+          type="text"
+          formControlName="phoneNumber"
+          id="phoneNumber"
+          placeholder="Enter phone number"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="text"
+          formControlName="email"
+          id="email"
+          placeholder="Enter email"
+        />
+      </div>
+    </div>
+    <div class="row flex justify-between gap-4">
+      <div class="form-group w-[50%]">
+        <label for="password">Password</label>
+        <input
+          type="text"
+          formControlName="password"
+          id="password"
+          placeholder="Enter password"
+        />
+      </div>
+      <div class="form-group w-[50%]">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="text"
+          formControlName="confirmPassword"
+          id="confirmPassword"
+          placeholder="Confirm password"
+        />
+      </div>
+    </div>
+    <div class="navigate mt-4 flex items-center">
+      <button
+        type="button"
+        class="w-[50%] shadow-lg p-2 rounded-md hover:font-bold text-lg"
+      >
+        <a [routerLink]="['/']">Home</a>
+      </button>
+      <button
+        type="submit"
+        class="w-[50%] p-2 rounded-md text-lg hover:font-bold bg-blue-500 hover:bg-blue-700"
+      >
+        Register
+      </button>
+    </div>
+    <div class="create-account mt-6 text-center">
+      <a [routerLink]="['/auth/login']" class="block text-lg hover:font-bold"
+        >Already have an account?Login now
+      </a>
+    </div>
+  </form>
+</div>

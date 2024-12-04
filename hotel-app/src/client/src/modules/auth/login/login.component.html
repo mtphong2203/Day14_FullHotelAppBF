@@ -1,0 +1,63 @@
+<div
+  class="form w-[380px] h-[400px] p-3 border boder-slate-400 bg-gray-500 rounded-lg"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="title mt-6 flex justify-center items-center gap-2">
+      <h1 class="text-2xl font-medium">Login</h1>
+      <fa-icon [icon]="faUser"></fa-icon>
+    </div>
+    <div class="form-group mb-2">
+      <label for="username" class="font-extralight text-lg">Username</label>
+      <input
+        type="text"
+        formControlName="username"
+        id="username"
+        placeholder="Enter user name"
+        class="w-full rounded-lg p-1 border border-slate-400"
+      />
+    </div>
+    <div class="form-group mb-4">
+      <label for="password" class="font-extralight text-lg">Password</label>
+      <input
+        type="text"
+        formControlName="password"
+        id="password"
+        placeholder="Enter password"
+        class="w-full rounded-lg p-1 border border-slate-400"
+      />
+    </div>
+    <div class="form-group flex items-center justify-between">
+      <div class="aside flex items-center gap-2">
+        <input
+          type="checkbox"
+          class="scale-125"
+          formControlName="active"
+          id="active"
+        />
+        <label for="active" class="text-lg">Active</label>
+      </div>
+      <a [routerLink]="['/auth/register']" class="text-lg hover:font-medium"
+        >Forgot password?
+      </a>
+    </div>
+    <div class="navigate mt-4 flex items-center">
+      <button
+        type="button"
+        class="w-[50%] shadow-lg p-2 rounded-md hover:font-bold text-lg"
+      >
+        <a [routerLink]="['/']">Home</a>
+      </button>
+      <button
+        type="submit"
+        class="w-[50%] p-2 rounded-md text-lg hover:font-bold bg-blue-500 hover:bg-blue-700"
+      >
+        Login
+      </button>
+    </div>
+    <div class="create-account mt-8 text-center">
+      <a [routerLink]="['/auth/register']" class="block text-lg hover:font-bold"
+        >Don't have any account?Register now
+      </a>
+    </div>
+  </form>
+</div>
