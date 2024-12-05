@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSearch, IconDefinition, faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, IconDefinition, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { RoomDetailsComponent } from "./room-details/room-details.component";
-import { faAngleDoubleRight, faAngleDoubleLeft, faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { TableComponent } from "../../../core/components/table/table.component";
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [FontAwesomeModule, ReactiveFormsModule, CommonModule, RoomDetailsComponent],
+  imports: [FontAwesomeModule, ReactiveFormsModule, CommonModule, RoomDetailsComponent, TableComponent],
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css'
 })
@@ -27,7 +27,6 @@ export class RoomListComponent implements OnInit {
   public pageSize: number = 0;
   public pageNumber: number = 0;
 
-  public pageLimit: number = 2;
 
   // boolean
   public isShow: boolean = false;
@@ -35,18 +34,22 @@ export class RoomListComponent implements OnInit {
 
   public pageSizes: number[] = [10, 20, 30, 40, 50];
 
+  public columns: any[] = [
+    { name: 'number', title: 'Number' },
+    { name: 'type', title: 'Type' },
+    { name: 'capacity', title: 'Capacity' },
+    { name: 'price', title: 'Price' },
+    { name: 'active', title: 'Active' },
+  ]
+
   // edit object
   public editSelect: any;
 
   // icon
   public faSearch: IconDefinition = faSearch;
   public faPlus: IconDefinition = faPlus;
-  public faEdit: IconDefinition = faEdit;
-  public faTrash: IconDefinition = faTrash;
-  public faAngleRight: IconDefinition = faAngleRight;
-  public faAngleDoubleRight: IconDefinition = faAngleDoubleRight;
-  public faAngleLeft: IconDefinition = faAngleLeft;
-  public faAngleDoubleLeft: IconDefinition = faAngleDoubleLeft;
+
+
 
   constructor(private http: HttpClient) { }
   ngOnInit(): void {
@@ -92,13 +95,13 @@ export class RoomListComponent implements OnInit {
     this.search();
   }
 
-  public onEdit(id: string): void {
+  public onEdit(id: any): void {
     this.isShow = true;
     this.editSelect = this.dataApi.find((item: any) => item.id === id);
     this.isEdit = true;
   }
 
-  public onDelete(id: string): void {
+  public onDelete(id: any): void {
     this.apiURL = `http://localhost:8080/api/v1/rooms`;
     this.http.delete(`${this.apiURL}/${id}`).subscribe((result: any) => {
       if (result) {
@@ -117,18 +120,12 @@ export class RoomListComponent implements OnInit {
     this.search();
   }
 
-  // get total page
-  public getPageList(): number[] {
-    const start: number = Math.max(0, this.pageNumber - this.pageLimit);
-    const end: number = Math.min(this.totalPages - 1, this.pageNumber + this.pageLimit);
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }
-
-  public onChangePageNumber(pageNumber: number): void {
+  public onChangePageNumber(pageNumber: any): void {
     if (this.currentPage < 0 || this.currentPage >= this.totalPages) {
       return;
     }
     this.currentPage = pageNumber;
     this.search();
   }
+
 }
