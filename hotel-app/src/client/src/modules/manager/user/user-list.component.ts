@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [UserDetailsComponent, ReactiveFormsModule, CommonModule, FontAwesomeModule],
+  imports: [CommonModule, UserDetailsComponent, ReactiveFormsModule, FontAwesomeModule],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
@@ -67,7 +67,7 @@ export class UserListComponent implements OnInit {
   public onEdit(id: string): void {
     this.isShow = true;
     this.isEdit = true;
-    this.selectedItem = this.dataApi.find((item) => item.id === id);
+    this.selectedItem = this.dataApi.find((item: any) => item.id === id);
   }
 
   // delete object

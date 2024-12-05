@@ -5,6 +5,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSearch, IconDefinition, faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { RoomDetailsComponent } from "./room-details/room-details.component";
+import { faAngleDoubleRight, faAngleDoubleLeft, faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-room-list',
   standalone: true,
@@ -16,12 +17,23 @@ export class RoomListComponent implements OnInit {
 
   // form control and api
   public searchForm!: FormGroup;
-  public apiURL = 'http://localhost:8080/api/v1/rooms';
-  public dataApi: any[] = [];
+  public apiURL = 'http://localhost:8080/api/v1/rooms/search';
+  public dataApi: any;
+
+  public currentPage: number = 0;
+  public currentPageSize: number = 10;
+  public totalPages: number = 0;
+  public totalElements: number = 0;
+  public pageSize: number = 0;
+  public pageNumber: number = 0;
+
+  public pageLimit: number = 2;
 
   // boolean
   public isShow: boolean = false;
   public isEdit: boolean = false;
+
+  public pageSizes: number[] = [10, 20, 30, 40, 50];
 
   // edit object
   public editSelect: any;
@@ -31,6 +43,10 @@ export class RoomListComponent implements OnInit {
   public faPlus: IconDefinition = faPlus;
   public faEdit: IconDefinition = faEdit;
   public faTrash: IconDefinition = faTrash;
+  public faAngleRight: IconDefinition = faAngleRight;
+  public faAngleDoubleRight: IconDefinition = faAngleDoubleRight;
+  public faAngleLeft: IconDefinition = faAngleLeft;
+  public faAngleDoubleLeft: IconDefinition = faAngleDoubleLeft;
 
   constructor(private http: HttpClient) { }
   ngOnInit(): void {
@@ -45,8 +61,13 @@ export class RoomListComponent implements OnInit {
   }
 
   private search(): void {
+    this.apiURL = `http://localhost:8080/api/v1/rooms/search?page=${this.currentPage}&size=${this.currentPageSize}`;
     this.http.get(this.apiURL).subscribe((data: any) => {
-      this.dataApi = data;
+      this.dataApi = data._embedded.roomMasterDTOList;
+      this.totalPages = data.page.totalPages;
+      this.totalElements = data.page.totalElements;
+      this.pageSize = data.page.size;
+      this.pageNumber = data.page.number;
     });
   }
 
@@ -54,7 +75,7 @@ export class RoomListComponent implements OnInit {
     if (this.searchForm.invalid) {
       return;
     }
-    this.apiURL = `http://localhost:8080/api/v1/rooms/searchByNumber?keyword=${this.searchForm.value.keyword}`;
+    this.apiURL = `http://localhost:8080/api/v1/rooms/search?keyword=${this.searchForm.value.keyword}`;
     this.search();
   }
 
@@ -73,11 +94,12 @@ export class RoomListComponent implements OnInit {
 
   public onEdit(id: string): void {
     this.isShow = true;
-    this.editSelect = this.dataApi.find((item) => item.id === id);
+    this.editSelect = this.dataApi.find((item: any) => item.id === id);
     this.isEdit = true;
   }
 
   public onDelete(id: string): void {
+    this.apiURL = `http://localhost:8080/api/v1/rooms`;
     this.http.delete(`${this.apiURL}/${id}`).subscribe((result: any) => {
       if (result) {
         console.log('Deleted Success');
@@ -88,4 +110,25 @@ export class RoomListComponent implements OnInit {
     });
   }
 
+  // pagination
+  // change size
+  public onChangeSize(event: any): void {
+    this.currentPageSize = event.target.value;
+    this.search();
+  }
+
+  // get total page
+  public getPageList(): number[] {
+    const start: number = Math.max(0, this.pageNumber - this.pageLimit);
+    const end: number = Math.min(this.totalPages - 1, this.pageNumber + this.pageLimit);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
+  public onChangePageNumber(pageNumber: number): void {
+    if (this.currentPage < 0 || this.currentPage >= this.totalPages) {
+      return;
+    }
+    this.currentPage = pageNumber;
+    this.search();
+  }
 }

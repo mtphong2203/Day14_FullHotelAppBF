@@ -49,31 +49,37 @@ export class CommonService {
       {
         images: './assets/images/event-1.jpg',
         title: 'News',
+        link: '/news',
         description: 'Top 10 khách sạn 5 sao Sapa cho kỳ nghỉ sang trọng, thư giãn',
       },
       {
         images: './assets/images/event-2.jpg',
         title: 'News',
+        link: '/news',
         description: 'Nên đi Sapa vào tháng mấy? Gợi ý thời gian lý tưởng để khám Sapa',
       },
       {
         images: './assets/images/event-3.jpg',
         title: 'Những địa điểm nên đến ở SaPa',
+        link: '/locations',
         description: 'Quảng trường Sapa – Nơi giao thoa giữa truyền thống và hiện đại',
       },
       {
         images: './assets/images/event-4.jpg',
         title: 'Những địa điểm nên đến ở SaPa',
+        link: '/locations',
         description: 'Ăn sáng ở Sapa – 10 Quán ăn sáng không thể bỏ qua tại Sapa',
       },
       {
         images: './assets/images/event-5.jpg',
         title: 'Những địa điểm nên đến ở SaPa',
+        link: '/locations',
         description: 'Chụp ảnh Sapa – 12 Điểm check in không thể bỏ qua tại Sapa',
       },
       {
         images: './assets/images/event-6.jpg',
         title: 'News',
+        link: '/news',
         description: 'Giá vé cao tốc Hà Nội Lào Cai: Thông tin cập nhật 2023',
       },
     ]

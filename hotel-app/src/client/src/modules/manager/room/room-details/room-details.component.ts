@@ -26,6 +26,12 @@ export class RoomDetailsComponent implements OnChanges {
   //response
   public message: string = '';
 
+  public roomType: any[] = [
+    { id: "Standard", name: 'Standard' },
+    { id: 'Deluxe', name: 'Deluxe' },
+    { id: 'Suite', name: 'Suite' },
+  ];
+
   // icon
   public faCancel: IconDefinition = faCancel;
   public faRefresh: IconDefinition = faRefresh;

@@ -1,10 +1,15 @@
 <div class="event-item mt-12 w-[350px]">
-  <img [src]="eventItem.images" alt="Top 10 hotel" />
+  <a [routerLink]="['/locations']">
+    <img [src]="eventItem.images" alt="Top 10 hotel" />
+  </a>
   <p class="text-slate-500 my-2 flex justify-between">
-    <span>{{ eventItem.title }}</span>
+    <a [routerLink]="eventItem.link">{{ eventItem.title }}</a>
     <span>{{ 90 | formatDate }}</span>
   </p>
-  <h3 class="title text-2xl font-medium hover:text-slate-500">
+  <a
+    [routerLink]="['/locations']"
+    class="title text-2xl font-medium hover:text-slate-500"
+  >
     {{ eventItem.description }}
-  </h3>
+  </a>
 </div>
