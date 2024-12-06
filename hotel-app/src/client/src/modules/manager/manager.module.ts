@@ -6,6 +6,11 @@ import { HotelServiceListComponent } from './hotel-service/hotel-service-list.co
 import { BookingListComponent } from './booking/booking-list.component';
 import { UserListComponent } from './user/user-list.component';
 import { RoleListComponent } from './role/role-list.component';
+import { OrderService } from '../../services/order/order.service';
+import { ORDER_SERVICE, ROLE_SERVICE, ROOM_SERVICE, USER_SERVICE } from '../../constants/injection.constant';
+import { RoomService } from '../../services/room/room.service';
+import { UserService } from '../../services/user/user.service';
+import { RoleService } from '../../services/role/role.service';
 
 const routes: Routes = [
   {
@@ -37,6 +42,24 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [],
+  providers: [
+    {
+      provide: ORDER_SERVICE,
+      useClass: OrderService
+    },
+    {
+      provide: ROOM_SERVICE,
+      useClass: RoomService
+    },
+    {
+      provide: USER_SERVICE,
+      useClass: UserService
+    },
+    {
+      provide: ROLE_SERVICE,
+      useClass: RoleService
+    },
+  ],
   imports: [
     CommonModule, RouterModule.forChild(routes)
   ]
