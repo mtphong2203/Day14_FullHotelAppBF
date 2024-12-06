@@ -8,7 +8,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let item of data; let i = index" class="*:border-2 *:p-2">
-      <td>{{ i + 1 }}</td>
+      <td>{{ i + pageInfo?.number * pageInfo?.size + 1 }}</td>
       <td *ngFor="let column of columns">{{ item[column.name] }}</td>
       <td>
         <div class="action flex gap-3 justify-center">
@@ -27,10 +27,10 @@
 <div class="pagination flex justify-between items-center border-b-2 py-2">
   <!-- Page Size  -->
   <div class="page-size">
-    <label for="pageSize">Page Size</label>
+    <label for="page-size">Page Size</label>
     <select
       (change)="onChangeSize($event)"
-      id="pageSize"
+      id="page-size"
       class="border-2 cursor-pointer ml-1 p-1 rounded-md"
     >
       <option *ngFor="let size of pageSizes" [value]="size">
@@ -80,7 +80,7 @@
           title="Page Item"
           [ngClass]="{
             'bg-blue-500 text-white pointer-events-none':
-              currentPage == totalPages - 1
+              currentPage == pageInfo?.totalPages - 1
           }"
           class="border border-slate-400 px-2 rounded-full hover:bg-blue-500 hover:text-white"
           (click)="onChangePageNumber(currentPage + 1)"
@@ -93,10 +93,10 @@
           title="Page Item"
           [ngClass]="{
             'bg-blue-500 text-white pointer-events-none':
-              currentPage == totalPages - 1
+              currentPage == pageInfo?.totalPages - 1
           }"
           class="border border-slate-400 px-2 rounded-full hover:bg-blue-500 hover:text-white"
-          (click)="onChangePageNumber(totalPages - 1)"
+          (click)="onChangePageNumber(pageInfo?.totalPages - 1)"
         >
           <fa-icon [icon]="faAngleDoubleRight"></fa-icon>
         </button>
@@ -105,15 +105,15 @@
   </div>
   <!-- Page detail -->
   <div class="page-detail">
-    <span>{{ pageSize * pageNumber + 1 }} - </span>
+    <span>{{ pageInfo?.size * pageInfo?.number + 1 }} - </span>
     <span
       >{{
-        (pageNumber + 1) * pageSize > totalElements
-          ? totalElements
-          : (pageNumber + 1) * pageSize
+        (pageInfo?.number + 1) * pageInfo?.size > pageInfo?.totalElements
+          ? pageInfo?.totalElements
+          : (pageInfo?.number + 1) * pageInfo?.size
       }}
       of
     </span>
-    <span>{{ totalElements }}</span>
+    <span>{{ pageInfo?.totalElements }}</span>
   </div>
 </div>

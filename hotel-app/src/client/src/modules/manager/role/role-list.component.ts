@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus, faSearch, faEdit, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
+import { TableComponent } from "../../../core/components/table/table.component";
 
 @Component({
   selector: 'app-role-list',
   standalone: true,
-  imports: [RoleDetailsComponent, ReactiveFormsModule, CommonModule, FontAwesomeModule],
+  imports: [RoleDetailsComponent, ReactiveFormsModule, CommonModule, FontAwesomeModule, TableComponent],
   templateUrl: './role-list.component.html',
   styleUrl: './role-list.component.css'
 })
@@ -17,8 +18,22 @@ export class RoleListComponent implements OnInit {
 
   // form and api control
   public searchForm!: FormGroup;
-  public apiURL: string = 'http://localhost:8080/api/v1/roles';
+  public apiURL: string = 'http://localhost:8080/api/v1/roles/search';
   public dataApi: any[] = [];
+
+  // pagination
+  public pageSizes: number[] = [5, 10, 15, 20, 25, 30];
+  public currentPage: number = 0;
+  public currentPageSize: number = 5;
+  public pageInfo: any;
+  public start: number = 0;
+  public end: number = 0;
+
+  public columns: any[] = [
+    { name: 'name', title: 'Name' },
+    { name: 'description', title: 'Description' },
+    { name: 'active', title: 'Active' },
+  ]
 
   public selectedItem: any;
   public response: string = '';
@@ -47,14 +62,18 @@ export class RoleListComponent implements OnInit {
   }
 
   private search(): void {
+    this.apiURL = `http://localhost:8080/api/v1/roles/search?keyword=${this.searchForm.value.keyword}&size=${this.currentPageSize}&page=${this.currentPage}`;
     this.http.get(this.apiURL).subscribe((data: any) => {
-      this.dataApi = data;
-    })
+      this.dataApi = data._embedded.roleMasterDTOList;
+      this.pageInfo = data.page;
+    });
   }
 
   // for search
   public onSubmit(): void {
-    this.apiURL = `http://localhost:8080/api/v1/roles/searchByName?keyword=${this.searchForm.value.keyword}`;
+    if (this.searchForm.invalid) {
+      return;
+    }
     this.search();
   }
 
@@ -65,14 +84,14 @@ export class RoleListComponent implements OnInit {
   }
 
   // edit
-  public onEdit(id: string): void {
+  public onEdit(id: any): void {
     this.isShow = true;
     this.isEdit = true;
     this.selectedItem = this.dataApi.find((item) => item.id === id);
   }
 
   // delete
-  public onDelete(id: string): void {
+  public onDelete(id: any): void {
     this.http.delete(`${this.apiURL}/${id}`).subscribe((result) => {
       if (result) {
         this.response = 'Delete successfully!';
@@ -92,4 +111,17 @@ export class RoleListComponent implements OnInit {
   public onResponse(): void {
     this.search();
   }
+
+  // pagination
+  public onChangeSize(item: any): void {
+    this.currentPageSize = item.target.value;
+    this.currentPage = 0;
+    this.search();
+  }
+
+  public onChangePageNumber(item: any): void {
+    this.currentPage = item;
+    this.search();
+  }
+
 }

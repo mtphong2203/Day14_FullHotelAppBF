@@ -42,36 +42,18 @@
   </div>
   <!-- list -->
   <div class="list mt-4">
-    <table class="w-full border-collapse rounded-md text-center">
-      <thead>
-        <tr class="*:border-2 p-2">
-          <th>No</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of dataApi; let i = index"
-          class="*:border-2 *:p-2"
-        >
-          <td>{{ i }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.price }}</td>
-          <td>
-            <div class="action flex gap-3 justify-center">
-              <button type="submit" title="Edit" (click)="onEdit(item.id)">
-                <fa-icon [icon]="faEdit" class="text-green-500"></fa-icon>
-              </button>
-              <button type="submit" title="Delete" (click)="onDelete(item.id)">
-                <fa-icon [icon]="faTrash" class="text-red-500"></fa-icon>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <app-table
+      [data]="dataApi"
+      [columns]="columns"
+      [pageSizes]="pageSizes"
+      [currentPage]="currentPage"
+      [pageInfo]="pageInfo"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+      (changeSize)="onChangeSize($event)"
+      (changePageNumber)="onChangePageNumber($event)"
+    >
+    </app-table>
   </div>
   <!-- details -->
   <div class="details mt-4">

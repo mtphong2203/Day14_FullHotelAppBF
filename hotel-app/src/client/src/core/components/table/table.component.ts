@@ -16,10 +16,7 @@ export class TableComponent {
   @Input('columns') columns: any[] = [];
   @Input('pageSizes') pageSizes: number[] = [];
   @Input('currentPage') currentPage: any;
-  @Input('totalPages') totalPages: any;
-  @Input('pageNumber') pageNumber: any;
-  @Input('pageSize') pageSize: any;
-  @Input('totalElements') totalElements: any;
+  @Input('pageInfo') pageInfo: any;
 
   public pageLimit: number = 2;
 
@@ -49,8 +46,8 @@ export class TableComponent {
 
   // get total page
   public getPageList(): number[] {
-    const start: number = Math.max(0, this.pageNumber - this.pageLimit);
-    const end: number = Math.min(this.totalPages - 1, this.pageNumber + this.pageLimit);
+    const start: number = Math.max(0, this.pageInfo?.number - this.pageLimit);
+    const end: number = Math.min(this.pageInfo?.totalPages - 1, this.pageInfo?.number + this?.pageLimit);
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 

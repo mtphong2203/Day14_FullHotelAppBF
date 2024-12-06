@@ -22,10 +22,7 @@ export class RoomListComponent implements OnInit {
 
   public currentPage: number = 0;
   public currentPageSize: number = 10;
-  public totalPages: number = 0;
-  public totalElements: number = 0;
-  public pageSize: number = 0;
-  public pageNumber: number = 0;
+  public pageInfo: any;
 
 
   // boolean
@@ -64,13 +61,10 @@ export class RoomListComponent implements OnInit {
   }
 
   private search(): void {
-    this.apiURL = `http://localhost:8080/api/v1/rooms/search?page=${this.currentPage}&size=${this.currentPageSize}`;
+    this.apiURL = `http://localhost:8080/api/v1/rooms/search?keyword=${this.searchForm.value.keyword}&page=${this.currentPage}&size=${this.currentPageSize}`;
     this.http.get(this.apiURL).subscribe((data: any) => {
       this.dataApi = data._embedded.roomMasterDTOList;
-      this.totalPages = data.page.totalPages;
-      this.totalElements = data.page.totalElements;
-      this.pageSize = data.page.size;
-      this.pageNumber = data.page.number;
+      this.pageInfo = data.page;
     });
   }
 
@@ -78,7 +72,6 @@ export class RoomListComponent implements OnInit {
     if (this.searchForm.invalid) {
       return;
     }
-    this.apiURL = `http://localhost:8080/api/v1/rooms/search?keyword=${this.searchForm.value.keyword}`;
     this.search();
   }
 
@@ -117,11 +110,12 @@ export class RoomListComponent implements OnInit {
   // change size
   public onChangeSize(event: any): void {
     this.currentPageSize = event.target.value;
+    this.currentPage = 0;
     this.search();
   }
 
   public onChangePageNumber(pageNumber: any): void {
-    if (this.currentPage < 0 || this.currentPage >= this.totalPages) {
+    if (this.currentPage < 0 || this.currentPage >= this.pageInfo?.totalPages) {
       return;
     }
     this.currentPage = pageNumber;
