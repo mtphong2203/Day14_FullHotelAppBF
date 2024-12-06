@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { UserDetailsComponent } from "./user-details/user-details.component";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus, faSearch, faEdit, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { HttpClient } from '@angular/common/http';
 import { TableComponent } from "../../../core/components/table/table.component";
+import { USER_SERVICE } from '../../../constants/injection.constant';
+import { IUserService } from '../../../services/user/user.interface';
 @Component({
   selector: 'app-user-list',
   standalone: true,
@@ -19,7 +20,6 @@ export class UserListComponent implements OnInit {
 
   // form and api control
   public searchForm!: FormGroup;
-  public apiURL: string = 'http://localhost:8080/api/v1/users/search';
   public dataApi: any[] = [];
 
   // response
@@ -50,7 +50,7 @@ export class UserListComponent implements OnInit {
   public faEdit: IconDefinition = faEdit;
   public faTrash: IconDefinition = faTrash;
 
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(USER_SERVICE) private userService: IUserService) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -64,8 +64,12 @@ export class UserListComponent implements OnInit {
   }
 
   private search(): void {
-    this.apiURL = `http://localhost:8080/api/v1/users/search?keyword=${this.searchForm.value.keyword}&page=${this.currentPage}&size=${this.currentPageSize}`;
-    this.http.get(this.apiURL).subscribe((data: any) => {
+    const params = {
+      keyword: this.searchForm.value.keyword,
+      page: this.currentPage,
+      size: this.currentPageSize
+    }
+    this.userService.search(params).subscribe((data: any) => {
       this.dataApi = data._embedded.userMasterDTOList;
       this.pageInfo = data.page;
     });
@@ -89,7 +93,7 @@ export class UserListComponent implements OnInit {
 
   // delete object
   public onDelete(id: any): void {
-    this.http.delete(`http://localhost:8080/api/v1/users/${id}`).subscribe((result) => {
+    this.userService.delete(id).subscribe((result) => {
       if (result) {
         this.response = 'Delete Successfully!';
       } else {

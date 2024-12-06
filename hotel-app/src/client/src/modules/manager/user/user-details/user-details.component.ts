@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { USER_SERVICE } from '../../../../constants/injection.constant';
+import { IUserService } from '../../../../services/user/user.interface';
 
 @Component({
   selector: 'app-user-details',
@@ -33,7 +35,7 @@ export class UserDetailsComponent implements OnChanges {
   public faRefresh: IconDefinition = faRefresh;
   public faSave: IconDefinition = faSave;
 
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(USER_SERVICE) private userService: IUserService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
@@ -61,7 +63,7 @@ export class UserDetailsComponent implements OnChanges {
   public onSubmit(): void {
     const data = this.form.value;
     if (this.isEdit) {
-      this.http.put(`${this.apiURL}/${this.selectedItem.id}`, data).subscribe((result) => {
+      this.userService.update(this.selectedItem.id, data).subscribe((result) => {
         if (result) {
           this.message = 'Update successfully!';
         } else {
@@ -70,8 +72,7 @@ export class UserDetailsComponent implements OnChanges {
         this.resetForm.emit();
       });
     } else {
-      this.validateForm();
-      this.http.post(this.apiURL, data).subscribe((result) => {
+      this.userService.create(data).subscribe((result) => {
         if (result) {
           this.message = 'Create successfully!';
         } else {
@@ -82,15 +83,15 @@ export class UserDetailsComponent implements OnChanges {
     }
   }
 
-  private validateForm(): void {
-    if (this.dataApi.find((item: any) => item.username == this.form.value.username)) {
-      this.message = 'Username already exist!';
-    } else if (this.dataApi.find((item: any) => item.email == this.form.value.email)) {
-      this.message = 'Email already exist!';
-    } else if (this.dataApi.find((item: any) => item.phoneNumber == this.form.value.phoneNumber)) {
-      this.message = 'Phone number already exist!';
-    }
-  }
+  // private validateForm(): void {
+  //   if (this.dataApi.find((item: any) => item.username == this.form.value.username)) {
+  //     this.message = 'Username already exist!';
+  //   } else if (this.dataApi.find((item: any) => item.email == this.form.value.email)) {
+  //     this.message = 'Email already exist!';
+  //   } else if (this.dataApi.find((item: any) => item.phoneNumber == this.form.value.phoneNumber)) {
+  //     this.message = 'Phone number already exist!';
+  //   }
+  // }
 
   private onReset(): void {
     this.resetForm.emit();
