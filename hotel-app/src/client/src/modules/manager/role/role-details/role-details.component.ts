@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { ROLE_SERVICE } from '../../../../constants/injection.constant';
+import { IRoleService } from '../../../../services/role/role.interface';
 
 @Component({
   selector: 'app-role-details',
@@ -15,7 +16,6 @@ export class RoleDetailsComponent implements OnChanges {
 
   // form and api control
   public form!: FormGroup;
-  public apiURL: string = 'http://localhost:8080/api/v1/roles';
 
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() response: EventEmitter<any> = new EventEmitter<any>();
@@ -31,7 +31,7 @@ export class RoleDetailsComponent implements OnChanges {
   public faRefresh: IconDefinition = faRefresh;
   public faSave: IconDefinition = faSave;
 
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(ROLE_SERVICE) private roleService: IRoleService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
@@ -56,10 +56,9 @@ export class RoleDetailsComponent implements OnChanges {
     if (this.form.invalid) {
       return;
     }
-    this.validateForm();
     const data = this.form.value;
     if (this.isEdit) {
-      this.http.put(`${this.apiURL}/${this.selectedItem.id}`, data).subscribe((result) => {
+      this.roleService.update(this.selectedItem.id, data).subscribe((result) => {
         if (result) {
           this.message = 'Update successfully';
         } else {
@@ -68,7 +67,7 @@ export class RoleDetailsComponent implements OnChanges {
         this.response.emit();
       });
     } else {
-      this.http.post(this.apiURL, data).subscribe((result) => {
+      this.roleService.create(data).subscribe((result) => {
         if (result) {
           console.log(result);
 
@@ -78,12 +77,6 @@ export class RoleDetailsComponent implements OnChanges {
         }
         this.response.emit();
       });
-    }
-  }
-
-  private validateForm(): void {
-    if (this.dataApi.find((item: any) => item.name == this.form.value.name)) {
-      this.message = 'Name is already exist!';
     }
   }
 

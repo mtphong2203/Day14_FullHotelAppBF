@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { RoleDetailsComponent } from "./role-details/role-details.component";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus, faSearch, faEdit, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { HttpClient } from '@angular/common/http';
 import { TableComponent } from "../../../core/components/table/table.component";
+import { ROLE_SERVICE } from '../../../constants/injection.constant';
+import { IRoleService } from '../../../services/role/role.interface';
 
 @Component({
   selector: 'app-role-list',
@@ -18,7 +19,6 @@ export class RoleListComponent implements OnInit {
 
   // form and api control
   public searchForm!: FormGroup;
-  public apiURL: string = 'http://localhost:8080/api/v1/roles/search';
   public dataApi: any[] = [];
 
   // pagination
@@ -48,7 +48,7 @@ export class RoleListComponent implements OnInit {
   public faEdit: IconDefinition = faEdit;
   public faTrash: IconDefinition = faTrash;
 
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(ROLE_SERVICE) private roleService: IRoleService) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -62,8 +62,12 @@ export class RoleListComponent implements OnInit {
   }
 
   private search(): void {
-    this.apiURL = `http://localhost:8080/api/v1/roles/search?keyword=${this.searchForm.value.keyword}&size=${this.currentPageSize}&page=${this.currentPage}`;
-    this.http.get(this.apiURL).subscribe((data: any) => {
+    const params = {
+      keyword: this.searchForm.value.keyword,
+      page: this.currentPage,
+      size: this.currentPageSize
+    }
+    this.roleService.search(params).subscribe((data: any) => {
       this.dataApi = data._embedded.roleMasterDTOList;
       this.pageInfo = data.page;
     });
@@ -92,8 +96,7 @@ export class RoleListComponent implements OnInit {
 
   // delete
   public onDelete(id: any): void {
-    this.apiURL = 'http://localhost:8080/api/v1/roles';
-    this.http.delete(`${this.apiURL}/${id}`).subscribe((result) => {
+    this.roleService.delete(id).subscribe((result) => {
       if (result) {
         this.response = 'Delete successfully!';
         this.search();
