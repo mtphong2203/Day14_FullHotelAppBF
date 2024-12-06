@@ -1,8 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { ORDER_SERVICE } from '../../../../constants/injection.constant';
+import { IOrderService } from '../../../../services/order/order.interface';
 @Component({
   selector: 'app-hotel-details',
   standalone: true,
@@ -16,11 +18,9 @@ export class HotelDetailsComponent implements OnChanges {
   @Input('isEdit') isEditMode: any;
   @Input('dataApi') dataApi: any;
 
-  private apiURL: string = 'http://localhost:8080/api/v1/orders';
-
   public message: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(ORDER_SERVICE) private orderService: IOrderService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
@@ -52,11 +52,10 @@ export class HotelDetailsComponent implements OnChanges {
       return;
     }
 
-    this.validateForm();
     const data = this.form.value;
 
     if (this.isEditMode) {
-      this.http.put(`${this.apiURL}/${this.selectedItem.id}`, data).subscribe((result: any) => {
+      this.orderService.update(this.selectedItem.id, data).subscribe((result: any) => {
         if (result) {
           this.message = 'Update successfully!';
           this.cancel.emit();
@@ -65,20 +64,12 @@ export class HotelDetailsComponent implements OnChanges {
         }
       });
     } else {
-      this.http.post(this.apiURL, data).subscribe((result: any) => {
+      this.orderService.create(data).subscribe((result: any) => {
         console.log(data);
         if (result != null) {
           this.cancel.emit();
         }
       });
-    }
-  }
-
-  private validateForm(): void {
-    if (this.dataApi.find((item: any) => item.name == this.form.value.name)) {
-      this.message = 'Name is already exist!';
-    } else if (this.form.value.price < 0) {
-      this.message = 'Price must greater than 0';
     }
   }
 

@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus, faSearch, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { HotelDetailsComponent } from './hotel-details/hotel-details.component';
 import { HttpClient } from '@angular/common/http';
 import { TableComponent } from "../../../core/components/table/table.component";
+import { IOrderService } from '../../../services/order/order.interface';
+import { ORDER_SERVICE } from '../../../constants/injection.constant';
 
 @Component({
   selector: 'app-hotel-service-list',
@@ -21,10 +23,6 @@ export class HotelServiceListComponent implements OnInit {
 
   public currentPage: number = 0;
   public currentPageSize: number = 10;
-  // public totalPages: number = 0;
-  // public totalElements: number = 0;
-  // public pageSize: number = 0;
-  // public pageNumber: number = 0;
   public pageInfo: any;
 
   public faPlus = faPlus;
@@ -36,7 +34,6 @@ export class HotelServiceListComponent implements OnInit {
   public keyword: string = '';
   public searchForm!: FormGroup;
   public dataApi: any[] = [];
-  private apiURL: string = 'http://localhost:8080/api/v1/orders/search';
 
   public columns: any[] = [
     { name: 'name', title: 'Name' },
@@ -46,7 +43,9 @@ export class HotelServiceListComponent implements OnInit {
 
   public pageSizes: number[] = [2, 5, 10, 20, 30, 40, 50];
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    @Inject(ORDER_SERVICE) private orderService: IOrderService,
+  ) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -60,13 +59,13 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   private search(): void {
-    this.apiURL = `http://localhost:8080/api/v1/orders/search?keyword=${this.searchForm.value.keyword}&page=${this.currentPage}&size=${this.currentPageSize}`;
-    this.http.get(this.apiURL).subscribe((data: any) => {
+    const params = {
+      keyword: this.searchForm.value.keyword,
+      page: this.currentPage,
+      size: this.currentPageSize
+    }
+    this.orderService.search(params).subscribe((data: any) => {
       this.dataApi = data._embedded.orderMasterDTOList;
-      // this.totalPages = data.page.totalPages;
-      // this.totalElements = data.page.totalElements;
-      // this.pageSize = data.page.size;
-      // this.pageNumber = data.page.number;
       this.pageInfo = data.page;
     });
   }
@@ -90,8 +89,7 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   public onDelete(id: any): void {
-    this.apiURL = 'http://localhost:8080/api/v1/orders';
-    this.http.delete(`${this.apiURL}/${id}`).subscribe((result: any) => {
+    this.orderService.delete(id).subscribe((result: any) => {
       if (result) {
         console.log("Delete success");
       } else {
