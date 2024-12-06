@@ -10,8 +10,6 @@ import { ServiceComponent } from './service/service.component';
 import { RoomSuiteComponent } from './room-suite/room-suite.component';
 import { NewsComponent } from './news/news.component';
 import { LocationComponent } from './location/location.component';
-import { DiscountComponent } from './discount/discount.component';
-import { HotServiceComponent } from './hot-service/hot-service.component';
 
 const routes: Routes = [
   {
@@ -21,14 +19,6 @@ const routes: Routes = [
   {
     path: 'locations',
     component: LocationComponent
-  },
-  {
-    path: 'discount',
-    component: DiscountComponent
-  },
-  {
-    path: 'hot-service',
-    component: HotServiceComponent
   },
   {
     path: 'room-suite',

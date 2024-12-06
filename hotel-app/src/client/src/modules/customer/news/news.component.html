@@ -1,1 +1,15 @@
-<p>news works!</p>
+<div class="logo relative">
+  <img [src]="newSapa" class="w-full h-[450px]" alt="LogoSapa" />
+  <div class="overlay"></div>
+  <h2
+    class="text-6xl absolute top-[45%] left-[50%] translate-x-[-50%] text-white z-10"
+  >
+    News
+  </h2>
+</div>
+
+<div class="w-[75%] m-auto mt-6">
+  <ng-container *ngFor="let item of data">
+    <app-site [siteItem]="item"></app-site>
+  </ng-container>
+</div>

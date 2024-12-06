@@ -1,1 +1,9 @@
-<p>location works!</p>
+<h1 class="mt-20 text-center text-5xl font-medium">
+  Những địa điểm nên đến ở SaPa
+</h1>
+
+<div class="contain w-[75%] m-auto mt-8">
+  <ng-container *ngFor="let item of location">
+    <app-site [siteItem]="item"></app-site>
+  </ng-container>
+</div>

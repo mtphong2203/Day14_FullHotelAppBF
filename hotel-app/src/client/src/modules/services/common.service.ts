@@ -161,4 +161,104 @@ export class CommonService {
       },
     ]
   }
+
+  getLocation() {
+    return [
+      {
+        title: 'Top 10 khách sạn 5 sao Sapa cho kỳ nghỉ sang trọng, thư giãn',
+        description: 'Sapa là một trong những điểm đến du lịch nổi tiếng của Việt Nam, thu hút hàng triệu du khách trong và ngoài nước mỗi năm. Sapa không chỉ có...',
+        image: './assets/images/location-1.jpg',
+      },
+      {
+        title: 'Nên đi Sapa vào tháng mấy? Gợi ý thời gian lý tưởng để khám Sapa',
+        description: 'Sapa là một trong những điểm đến du lịch hấp dẫn nhất ở miền Bắc Việt Nam, với khí hậu mát mẻ quanh năm, cảnh quan thiên nhiên tuyệt đẹp,...',
+        image: './assets/images/location-2.jpg',
+      },
+      {
+        title: 'Quảng trường Sapa – Nơi giao thoa giữa truyền thống và hiện đại',
+        description: 'Sapa là một trong những địa điểm du lịch nổi tiếng của Việt Nam, thu hút hàng triệu lượt khách trong và ngoài nước mỗi năm. Nếu bạn đã có...',
+        image: './assets/images/location-3.jpg',
+      },
+      {
+        title: 'Ăn sáng ở Sapa – 10 Quán ăn sáng không thể bỏ qua tại Sapa',
+        description: 'Sapa là một trong những điểm đến du lịch hấp dẫn nhất của Việt Nam, với khung cảnh thiên nhiên tuyệt đẹp, nền văn hóa đa dạng và nhiều trải...',
+        image: './assets/images/location-4.jpg',
+      },
+      {
+        title: 'Chụp ảnh Sapa – 12 Điểm check in không thể bỏ qua tại Sapa',
+        description: 'Sapa là một điểm đến lý tưởng cho những ai yêu thích chụp ảnh và khám phá thiên nhiên. Sapa có nhiều địa điểm chụp ảnh đẹp và đa dạng,...',
+        image: './assets/images/location-5.jpg',
+      },
+      {
+        title: 'Giá vé cao tốc Hà Nội Lào Cai: Thông tin cập nhật 2024',
+        description: 'Bạn đang có kế hoạch đi du lịch Lào Cai, Sa Pa hay các tỉnh phía Bắc? Bạn muốn biết giá vé cao tốc Hà Nội Lào Cai để lên...',
+        image: './assets/images/location-6.jpg',
+      },
+      {
+        title: 'Nghỉ lễ 2 9 nên đi đâu chơi? Gợi ý 10 địa điểm du lịch hấp dẫn tại Việt Nam',
+        description: 'Nghỉ lễ 2/9 là dịp lý tưởng để bạn và gia đình, bạn bè thư giãn, khám phá những vùng đất mới mẻ và tận hưởng những trải nghiệm thú...',
+        image: './assets/images/location-7.jpg',
+      },
+      {
+        title: 'Thung lũng hoa hồng Sapa – Điểm đến mơ mộng cho du khách',
+        description: 'Sapa là một trong những điểm đến hấp dẫn nhất của du lịch Việt Nam, với khí hậu mát mẻ quanh năm, cảnh sắc thiên nhiên tuyệt đẹp và nền...',
+        image: './assets/images/location-8.jpg',
+      },
+      {
+        title: 'Săn mây Sapa – Trải nghiệm du lịch độc đáo và ấn tượng',
+        description: 'Sapa là một trong những điểm đến hấp dẫn nhất của du khách trong và ngoài nước khi muốn tìm kiếm một nơi nghỉ dưỡng thư giãn, khám phá vẻ...',
+        image: './assets/images/location-9.jpg',
+      },
+      {
+        title: 'Bến xe Sapa – Điểm trung chuyển cho du khách đến với Lào Cai',
+        description: 'Bến xe Sapa là một trong những điểm nối quan trọng cho du khách khi muốn đến với Lào Cai, một tỉnh nằm ở phía Tây Bắc Việt Nam, nổi...',
+        image: './assets/images/location-10.jpg',
+      },
+    ]
+  }
+
+  hotLocation() {
+    return [
+      {
+        title: 'Top 10 khách sạn 5 sao Sapa cho kỳ nghỉ sang trọng, thư giãn',
+        description: 'Sapa là một trong những điểm đến du lịch nổi tiếng của Việt Nam, thu hút hàng triệu du khách trong và ngoài nước mỗi năm. Sapa không chỉ có...',
+        image: './assets/images/location-1.jpg',
+      },
+      {
+        title: 'Nên đi Sapa vào tháng mấy? Gợi ý thời gian lý tưởng để khám Sapa',
+        description: 'Sapa là một trong những điểm đến du lịch hấp dẫn nhất ở miền Bắc Việt Nam, với khí hậu mát mẻ quanh năm, cảnh quan thiên nhiên tuyệt đẹp,...',
+        image: './assets/images/location-2.jpg',
+      },
+      {
+        title: 'Quảng trường Sapa – Nơi giao thoa giữa truyền thống và hiện đại',
+        description: 'Sapa là một trong những địa điểm du lịch nổi tiếng của Việt Nam, thu hút hàng triệu lượt khách trong và ngoài nước mỗi năm. Nếu bạn đã có...',
+        image: './assets/images/location-3.jpg',
+      },
+      {
+        title: 'Ăn sáng ở Sapa – 10 Quán ăn sáng không thể bỏ qua tại Sapa',
+        description: 'Sapa là một trong những điểm đến du lịch hấp dẫn nhất của Việt Nam, với khung cảnh thiên nhiên tuyệt đẹp, nền văn hóa đa dạng và nhiều trải...',
+        image: './assets/images/location-4.jpg',
+      },
+      {
+        title: 'Chụp ảnh Sapa – 12 Điểm check in không thể bỏ qua tại Sapa',
+        description: 'Sapa là một điểm đến lý tưởng cho những ai yêu thích chụp ảnh và khám phá thiên nhiên. Sapa có nhiều địa điểm chụp ảnh đẹp và đa dạng,...',
+        image: './assets/images/location-5.jpg',
+      },
+      {
+        title: 'Review nhà hàng Ô Quý Hồ: Tâm điểm của ẩm thực đặc sản Sapa',
+        description: 'Bạn đang tìm kiếm địa chỉ ăn ngon khi đến Sapa? Vậy thì yên tâm, nơi đây không thiếu những nhà hàng, quán ăn đặc sắc, thể hiện được hương...',
+        image: './assets/images/location-11.jpg',
+      },
+      {
+        title: '“Vượt biên” tại Hà Khẩu Lào Cai để khám phá nước bạn có gì?',
+        description: 'Du lịch Hà Khẩu, “vượt biên” sang nước bạn khám phá có dễ dàng không? Sau khi đặt chân đến Hà Khẩu Lào Cai chúng ta sẽ ăn gì, chơi...',
+        image: './assets/images/location-12.jpg',
+      },
+      {
+        title: 'Thác tình yêu Sapa: Vẻ đẹp kỳ vĩ, nguyên sơ của Tây Bắc',
+        description: 'Sapa với thiên nhiên hùng vĩ, thơ mộng, do đó có rất nhiều điểm du lịch đặc trưng như các cung đèo, rừng xanh và cả các thác nước.',
+        image: './assets/images/location-13.jpg',
+      },
+    ]
+  }
 }
