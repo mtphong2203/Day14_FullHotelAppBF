@@ -92,13 +92,14 @@ export class RoleListComponent implements OnInit {
 
   // delete
   public onDelete(id: any): void {
+    this.apiURL = 'http://localhost:8080/api/v1/roles';
     this.http.delete(`${this.apiURL}/${id}`).subscribe((result) => {
       if (result) {
         this.response = 'Delete successfully!';
+        this.search();
       } else {
         this.response = 'Fail to delete';
       }
-      this.search();
     });
   }
 
@@ -120,6 +121,9 @@ export class RoleListComponent implements OnInit {
   }
 
   public onChangePageNumber(item: any): void {
+    if (this.currentPage < 0 || this.currentPage - 1 > this.pageInfo?.totalPages) {
+      return;
+    }
     this.currentPage = item;
     this.search();
   }

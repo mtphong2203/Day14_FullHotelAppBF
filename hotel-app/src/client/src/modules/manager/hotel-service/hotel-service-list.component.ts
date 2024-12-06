@@ -90,6 +90,7 @@ export class HotelServiceListComponent implements OnInit {
   }
 
   public onDelete(id: any): void {
+    this.apiURL = 'http://localhost:8080/api/v1/orders';
     this.http.delete(`${this.apiURL}/${id}`).subscribe((result: any) => {
       if (result) {
         console.log("Delete success");
