@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { ROOM_SERVICE } from '../../../../constants/injection.constant';
+import { IRoomService } from '../../../../services/room/room.interface';
 @Component({
   selector: 'app-room-details',
   standalone: true,
@@ -21,7 +23,6 @@ export class RoomDetailsComponent implements OnChanges {
 
   // form control and api
   public form!: FormGroup;
-  public apiURL = 'http://localhost:8080/api/v1/rooms';
 
   //response
   public message: string = '';
@@ -37,7 +38,7 @@ export class RoomDetailsComponent implements OnChanges {
   public faRefresh: IconDefinition = faRefresh;
   public faSave: IconDefinition = faSave;
 
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(ROOM_SERVICE) private roomService: IRoomService) { }
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
     this.patchData();
@@ -63,11 +64,9 @@ export class RoomDetailsComponent implements OnChanges {
     if (this.form.invalid) {
       return;
     }
-    this.validateForm();
-
     const data = this.form.value;
     if (this.isEdit) {
-      this.http.put(`${this.apiURL}/${this.editSelectItem.id}`, data).subscribe((result: any) => {
+      this.roomService.update(this.editSelectItem.id, data).subscribe((result: any) => {
         if (result) {
           this.message = 'Update success!';
         } else {
@@ -76,7 +75,7 @@ export class RoomDetailsComponent implements OnChanges {
         this.onReset();
       });
     } else {
-      this.http.post(this.apiURL, data).subscribe((result: any) => {
+      this.roomService.create(data).subscribe((result: any) => {
         if (result) {
           this.message = 'Create success!';
         } else {
@@ -87,15 +86,6 @@ export class RoomDetailsComponent implements OnChanges {
     }
   }
 
-  private validateForm(): void {
-    if (this.dataApi.find((item: any) => item.number == this.form.value.number)) {
-      this.message = 'Number is already exist!';
-    } else if (this.form.value.capacity < 0) {
-      this.message = 'Capacity must greater or equal zero';
-    } else if (this.form.value.price < 0) {
-      this.message = 'Price must greater or equal zero';
-    }
-  }
   private onReset(): void {
     this.reSearch.emit();
     this.form.reset();

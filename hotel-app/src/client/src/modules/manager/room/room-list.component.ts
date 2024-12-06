@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSearch, IconDefinition, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { RoomDetailsComponent } from "./room-details/room-details.component";
 import { TableComponent } from "../../../core/components/table/table.component";
+import { ROOM_SERVICE } from '../../../constants/injection.constant';
+import { IRoomService } from '../../../services/room/room.interface';
 @Component({
   selector: 'app-room-list',
   standalone: true,
@@ -17,7 +18,6 @@ export class RoomListComponent implements OnInit {
 
   // form control and api
   public searchForm!: FormGroup;
-  public apiURL = 'http://localhost:8080/api/v1/rooms/search';
   public dataApi: any;
 
   public currentPage: number = 0;
@@ -48,7 +48,7 @@ export class RoomListComponent implements OnInit {
 
 
 
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(ROOM_SERVICE) private roomService: IRoomService) { }
   ngOnInit(): void {
     this.createForm();
     this.search();
@@ -61,8 +61,12 @@ export class RoomListComponent implements OnInit {
   }
 
   private search(): void {
-    this.apiURL = `http://localhost:8080/api/v1/rooms/search?keyword=${this.searchForm.value.keyword}&page=${this.currentPage}&size=${this.currentPageSize}`;
-    this.http.get(this.apiURL).subscribe((data: any) => {
+    const params = {
+      keyword: this.searchForm.value.keyword,
+      page: this.currentPage,
+      size: this.currentPageSize,
+    }
+    this.roomService.search(params).subscribe((data: any) => {
       this.dataApi = data._embedded.roomMasterDTOList;
       this.pageInfo = data.page;
     });
@@ -95,14 +99,13 @@ export class RoomListComponent implements OnInit {
   }
 
   public onDelete(id: any): void {
-    this.apiURL = `http://localhost:8080/api/v1/rooms`;
-    this.http.delete(`${this.apiURL}/${id}`).subscribe((result: any) => {
+    this.roomService.delete(id).subscribe((result: any) => {
       if (result) {
         console.log('Deleted Success');
+        this.search();
       } else {
         console.log('Fail to delete');
       }
-      this.search();
     });
   }
 
