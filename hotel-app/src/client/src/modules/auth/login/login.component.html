@@ -13,17 +13,17 @@
         formControlName="username"
         id="username"
         placeholder="Enter user name"
-        class="w-full rounded-lg p-1 border border-slate-400"
+        class="w-full text-black rounded-lg p-1 border border-slate-400"
       />
     </div>
     <div class="form-group mb-4">
       <label for="password" class="font-extralight text-lg">Password</label>
       <input
-        type="text"
+        type="password"
         formControlName="password"
         id="password"
         placeholder="Enter password"
-        class="w-full rounded-lg p-1 border border-slate-400"
+        class="w-full text-black rounded-lg p-1 border border-slate-400"
       />
     </div>
     <div class="form-group flex items-center justify-between">
@@ -40,16 +40,10 @@
         >Forgot password?
       </a>
     </div>
-    <div class="navigate mt-4 flex items-center">
-      <button
-        type="button"
-        class="w-[50%] shadow-lg p-2 rounded-md hover:font-bold text-lg"
-      >
-        <a [routerLink]="['/']">Home</a>
-      </button>
+    <div class="navigate mt-4">
       <button
         type="submit"
-        class="w-[50%] p-2 rounded-md text-lg hover:font-bold bg-blue-500 hover:bg-blue-700"
+        class="w-full p-2 rounded-md text-lg hover:font-bold bg-blue-500 hover:bg-blue-700"
       >
         Login
       </button>
