@@ -64,9 +64,9 @@ export class HotelServiceListComponent implements OnInit {
       page: this.currentPage,
       size: this.currentPageSize
     }
-    this.orderService.search(params).subscribe((data: any) => {
-      this.dataApi = data._embedded.orderMasterDTOList;
-      this.pageInfo = data.page;
+    this.orderService.search(params).subscribe((response: any) => {
+      this.dataApi = response.data;
+      this.pageInfo = response.page;
     });
   }
 

@@ -67,9 +67,9 @@ export class RoleListComponent implements OnInit {
       page: this.currentPage,
       size: this.currentPageSize
     }
-    this.roleService.search(params).subscribe((data: any) => {
-      this.dataApi = data._embedded.roleMasterDTOList;
-      this.pageInfo = data.page;
+    this.roleService.search(params).subscribe((response: any) => {
+      this.dataApi = response.data;
+      this.pageInfo = response.page;
     });
   }
 

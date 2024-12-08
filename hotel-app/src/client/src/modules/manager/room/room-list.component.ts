@@ -66,9 +66,9 @@ export class RoomListComponent implements OnInit {
       page: this.currentPage,
       size: this.currentPageSize,
     }
-    this.roomService.search(params).subscribe((data: any) => {
-      this.dataApi = data._embedded.roomMasterDTOList;
-      this.pageInfo = data.page;
+    this.roomService.search(params).subscribe((response: any) => {
+      this.dataApi = response.data;
+      this.pageInfo = response.page;
     });
   }
 
