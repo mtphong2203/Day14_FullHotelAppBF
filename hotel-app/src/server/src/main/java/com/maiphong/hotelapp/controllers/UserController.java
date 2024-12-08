@@ -1,5 +1,6 @@
 package com.maiphong.hotelapp.controllers;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.maiphong.hotelapp.dtos.user.UserCreateUpdateDTO;
 import com.maiphong.hotelapp.dtos.user.UserMasterDTO;
+import com.maiphong.hotelapp.mappers.CustomPageResponse;
 import com.maiphong.hotelapp.services.UserService;
 
 import jakarta.validation.Valid;
@@ -76,7 +79,16 @@ public class UserController {
 
         var masterDTOs = userService.searchByPage(keyword, pageable);
 
-        return ResponseEntity.ok(pageResource.toModel(masterDTOs));
+        var pageModel = pageResource.toModel(masterDTOs);
+
+        Collection<EntityModel<UserMasterDTO>> data = pageModel.getContent();
+
+        var links = pageModel.getLinks();
+
+        var response = new CustomPageResponse<EntityModel<UserMasterDTO>>(data, pageModel.getMetadata(), links);
+
+        return ResponseEntity.ok(response);
+
     }
 
     @GetMapping("/searchByName")

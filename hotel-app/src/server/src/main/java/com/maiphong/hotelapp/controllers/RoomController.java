@@ -1,5 +1,6 @@
 package com.maiphong.hotelapp.controllers;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Links;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.maiphong.hotelapp.dtos.room.RoomCreateUpdateDTO;
 import com.maiphong.hotelapp.dtos.room.RoomMasterDTO;
 import com.maiphong.hotelapp.entities.RoomType;
+import com.maiphong.hotelapp.mappers.CustomPageResponse;
 import com.maiphong.hotelapp.services.RoomService;
 
 import jakarta.validation.Valid;
@@ -88,7 +92,16 @@ public class RoomController {
 
         var masterDTOs = roomService.searchPage(keyword, pageable);
 
-        return ResponseEntity.ok(pagedResourcesAssembler.toModel(masterDTOs));
+        var pageModel = pagedResourcesAssembler.toModel(masterDTOs);
+
+        Collection<EntityModel<RoomMasterDTO>> data = pageModel.getContent();
+
+        Links links = pageModel.getLinks();
+
+        var response = new CustomPageResponse<EntityModel<RoomMasterDTO>>(data, pageModel.getMetadata(), links);
+
+        return ResponseEntity.ok(response);
+
     }
 
     @GetMapping("/{id}")

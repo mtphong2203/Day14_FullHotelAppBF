@@ -1,5 +1,6 @@
 package com.maiphong.hotelapp.controllers;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Links;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.maiphong.hotelapp.dtos.order.OrderCreateEditDTO;
 import com.maiphong.hotelapp.dtos.order.OrderMasterDTO;
+import com.maiphong.hotelapp.mappers.CustomPageResponse;
 import com.maiphong.hotelapp.services.OrderService;
 
 import jakarta.validation.Valid;
@@ -67,7 +71,15 @@ public class OrderController {
 
         Page<OrderMasterDTO> orders = orderService.searchPage(keyword, pageable);
 
-        return ResponseEntity.ok(pageResource.toModel(orders));
+        var pageModel = pageResource.toModel(orders);
+
+        Collection<EntityModel<OrderMasterDTO>> data = pageModel.getContent();
+
+        Links links = pageModel.getLinks();
+
+        var response = new CustomPageResponse<EntityModel<OrderMasterDTO>>(data, pageModel.getMetadata(), links);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/searchByName")
