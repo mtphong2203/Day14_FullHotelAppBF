@@ -7,6 +7,10 @@ import { faPlus, faSearch, faEdit, faTrash, IconDefinition } from '@fortawesome/
 import { TableComponent } from "../../../core/components/table/table.component";
 import { USER_SERVICE } from '../../../constants/injection.constant';
 import { IUserService } from '../../../services/user/user.interface';
+import { MasterListComponent } from '../master-list/master-list.component';
+import { UserMasterDto } from '../../../models/user/user-master-dto.model';
+import { Column } from '../../../models/common/column.model';
+import { Response } from '../../../models/response.model';
 @Component({
   selector: 'app-user-list',
   standalone: true,
@@ -14,24 +18,9 @@ import { IUserService } from '../../../services/user/user.interface';
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent extends MasterListComponent<UserMasterDto> implements OnInit {
 
-  public selectedItem: any;
-
-  // form and api control
-  public searchForm!: FormGroup;
-  public dataApi: any[] = [];
-
-  // response
-  public response: string = '';
-
-  // pagination
-  public currentPage: number = 0;
-  public currentPageSize: number = 5;
-  public pageInfo: any;
-  public pageSizes: number[] = [5, 10, 15, 20, 30];
-
-  public columns: any[] = [
+  public columns: Column[] = [
     { name: 'firstName', title: 'FirstName' },
     { name: 'lastName', title: 'lastName' },
     { name: 'username', title: 'Username' },
@@ -40,36 +29,24 @@ export class UserListComponent implements OnInit {
     { name: 'active', title: 'Active' },
   ]
 
-  // boolean
-  public isShow: boolean = false;
-  public isEdit: boolean = false;
+  public response: string = '';
 
-  // icon
-  public faPlus: IconDefinition = faPlus;
-  public faSearch: IconDefinition = faSearch;
-  public faEdit: IconDefinition = faEdit;
-  public faTrash: IconDefinition = faTrash;
-
-  constructor(@Inject(USER_SERVICE) private userService: IUserService) { }
+  constructor(@Inject(USER_SERVICE) private userService: IUserService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.createForm();
     this.search();
   }
 
-  private createForm(): void {
-    this.searchForm = new FormGroup({
-      keyword: new FormControl('', Validators.required),
-    });
-  }
-
   private search(): void {
-    const params = {
+    const params: any = {
       keyword: this.searchForm.value.keyword,
       page: this.currentPage,
       size: this.currentPageSize
     }
-    this.userService.search(params).subscribe((response: any) => {
+    this.userService.search(params).subscribe((response: Response<UserMasterDto>) => {
       this.dataApi = response.data;
       this.pageInfo = response.page;
     });
@@ -81,19 +58,19 @@ export class UserListComponent implements OnInit {
 
   // create show details
   public onCreate(): void {
-    this.isShow = true;
-    this.isEdit = false;
+    this.isShowDetail = true;
+    this.isEditMode = false;
   }
   // edit show details
-  public onEdit(id: any): void {
-    this.isShow = true;
-    this.isEdit = true;
-    this.selectedItem = this.dataApi.find((item: any) => item.id === id);
+  public onEdit(id: string): void {
+    this.isShowDetail = true;
+    this.isEditMode = true;
+    this.selectedItem = this.dataApi.find((item) => item.id === id);
   }
 
   // delete object
-  public onDelete(id: any): void {
-    this.userService.delete(id).subscribe((result) => {
+  public onDelete(id: string): void {
+    this.userService.delete(id).subscribe((result: boolean) => {
       if (result) {
         this.response = 'Delete Successfully!';
       } else {
@@ -106,7 +83,7 @@ export class UserListComponent implements OnInit {
 
   // hidden details
   public onCancelDetail(): void {
-    this.isShow = false;
+    this.isShowDetail = false;
   }
 
   // research table
@@ -122,7 +99,7 @@ export class UserListComponent implements OnInit {
   }
 
   public onChangePageNumber(pageNumber: any): void {
-    if (this.currentPage < 0 || this.currentPage - 1 >= this.pageInfo?.totalPages) {
+    if (this.currentPage < 0 || this.currentPage - 1 >= this.pageInfo!.totalPages) {
       return;
     }
     this.currentPage = pageNumber;

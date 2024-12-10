@@ -49,12 +49,11 @@
   <!-- details -->
   <div class="details mt-4">
     <app-user-details
-      *ngIf="isShow"
+      *ngIf="isShowDetail"
       (cancel)="onCancelDetail()"
       (resetForm)="onResearch()"
-      [dataApi]="dataApi"
-      [selectedItem]="selectedItem"
-      [isEdit]="isEdit"
+      [selected-item]="selectedItem"
+      [isEdit]="isEditMode"
     >
     </app-user-details>
   </div>

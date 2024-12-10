@@ -6,6 +6,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { USER_SERVICE } from '../../../../constants/injection.constant';
 import { IUserService } from '../../../../services/user/user.interface';
+import { MasterListDetailComponent } from '../../master-list-detail/master-list-detail.component';
+import { UserMasterDto } from '../../../../models/user/user-master-dto.model';
 
 @Component({
   selector: 'app-user-details',
@@ -14,28 +16,11 @@ import { IUserService } from '../../../../services/user/user.interface';
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.css'
 })
-export class UserDetailsComponent implements OnChanges {
+export class UserDetailsComponent extends MasterListDetailComponent<UserMasterDto> implements OnChanges {
 
-  @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() resetForm: EventEmitter<void> = new EventEmitter<void>();
-  @Input('dataApi') dataApi: any;
-  @Input('selectedItem') selectedItem: any;
-  @Input('isEdit') isEdit: any;
 
-  // api and form control
-  public form!: FormGroup;
-  public apiURL = 'http://localhost:8080/api/v1/users';
-
-
-  // response
-  public message: string = '';
-
-  // icon
-  public faCancel: IconDefinition = faCancel;
-  public faRefresh: IconDefinition = faRefresh;
-  public faSave: IconDefinition = faSave;
-
-  constructor(@Inject(USER_SERVICE) private userService: IUserService) { }
+  constructor(@Inject(USER_SERVICE) private userService: IUserService) { super() }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
@@ -43,7 +28,7 @@ export class UserDetailsComponent implements OnChanges {
   }
 
   private patchValue(): void {
-    if (this.isEdit) {
+    if (this.isEditMode && this.selectedItem) {
       this.form.patchValue(this.selectedItem);
     }
   }
@@ -62,8 +47,8 @@ export class UserDetailsComponent implements OnChanges {
 
   public onSubmit(): void {
     const data = this.form.value;
-    if (this.isEdit) {
-      this.userService.update(this.selectedItem.id, data).subscribe((result) => {
+    if (this.isEditMode && this.selectedItem) {
+      this.userService.update(this.selectedItem.id, data).subscribe((result: UserMasterDto) => {
         if (result) {
           this.message = 'Update successfully!';
         } else {
@@ -72,7 +57,7 @@ export class UserDetailsComponent implements OnChanges {
         this.resetForm.emit();
       });
     } else {
-      this.userService.create(data).subscribe((result) => {
+      this.userService.create(data).subscribe((result: UserMasterDto) => {
         if (result) {
           this.message = 'Create successfully!';
         } else {
@@ -82,16 +67,6 @@ export class UserDetailsComponent implements OnChanges {
       });
     }
   }
-
-  // private validateForm(): void {
-  //   if (this.dataApi.find((item: any) => item.username == this.form.value.username)) {
-  //     this.message = 'Username already exist!';
-  //   } else if (this.dataApi.find((item: any) => item.email == this.form.value.email)) {
-  //     this.message = 'Email already exist!';
-  //   } else if (this.dataApi.find((item: any) => item.phoneNumber == this.form.value.phoneNumber)) {
-  //     this.message = 'Phone number already exist!';
-  //   }
-  // }
 
   private onReset(): void {
     this.resetForm.emit();
