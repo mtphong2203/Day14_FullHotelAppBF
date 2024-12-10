@@ -103,13 +103,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingMasterDTO> searchByBooking(String keyword) {
+    public List<BookingMasterDTO> searchByBooking(String status) {
         Specification<Booking> spec = (root, _, cb) -> {
-            if (keyword == null) {
+            if (status == null) {
                 return null;
             }
 
-            BookingStatus bookingStatus = BookingStatus.valueOf(keyword.toUpperCase());
+            BookingStatus bookingStatus = BookingStatus.valueOf(status.toUpperCase());
 
             return cb.equal(root.get("status"), bookingStatus);
 

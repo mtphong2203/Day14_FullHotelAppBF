@@ -50,8 +50,8 @@ public class BookingController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<BookingMasterDTO>> search(@RequestParam(required = false) String keyword) {
-        var masterDTOs = bookingService.searchByBooking(keyword);
+    public ResponseEntity<List<BookingMasterDTO>> search(@RequestParam(required = false) String status) {
+        var masterDTOs = bookingService.searchByBooking(status);
         return ResponseEntity.ok(masterDTOs);
     }
 
