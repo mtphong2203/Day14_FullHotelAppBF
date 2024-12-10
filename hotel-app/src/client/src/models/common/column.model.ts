@@ -1,6 +1,6 @@
 export class Column {
-    name: string;
-    title: string;
+    public name: string;
+    public title: string;
 
     constructor(name: string, title: string) {
         this.name = name;
