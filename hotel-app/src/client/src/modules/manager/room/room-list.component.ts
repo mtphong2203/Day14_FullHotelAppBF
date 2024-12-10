@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSearch, IconDefinition, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { RoomDetailsComponent } from "./room-details/room-details.component";
 import { TableComponent } from "../../../core/components/table/table.component";
 import { ROOM_SERVICE } from '../../../constants/injection.constant';
 import { IRoomService } from '../../../services/room/room.interface';
+import { MasterListComponent } from '../master-list/master-list.component';
+import { RoomMasterDto } from '../../../models/room/room-master-dto.model';
+import { Response } from '../../../models/response.model';
 @Component({
   selector: 'app-room-list',
   standalone: true,
@@ -14,22 +16,7 @@ import { IRoomService } from '../../../services/room/room.interface';
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css'
 })
-export class RoomListComponent implements OnInit {
-
-  // form control and api
-  public searchForm!: FormGroup;
-  public dataApi: any;
-
-  public currentPage: number = 0;
-  public currentPageSize: number = 10;
-  public pageInfo: any;
-
-
-  // boolean
-  public isShow: boolean = false;
-  public isEdit: boolean = false;
-
-  public pageSizes: number[] = [10, 20, 30, 40, 50];
+export class RoomListComponent extends MasterListComponent<RoomMasterDto> implements OnInit {
 
   public columns: any[] = [
     { name: 'number', title: 'Number' },
@@ -39,25 +26,10 @@ export class RoomListComponent implements OnInit {
     { name: 'active', title: 'Active' },
   ]
 
-  // edit object
-  public editSelect: any;
-
-  // icon
-  public faSearch: IconDefinition = faSearch;
-  public faPlus: IconDefinition = faPlus;
-
-
-
-  constructor(@Inject(ROOM_SERVICE) private roomService: IRoomService) { }
+  constructor(@Inject(ROOM_SERVICE) private roomService: IRoomService) { super(); }
   ngOnInit(): void {
     this.createForm();
     this.search();
-  }
-
-  private createForm(): void {
-    this.searchForm = new FormGroup({
-      keyword: new FormControl('', Validators.required),
-    });
   }
 
   private search(): void {
@@ -66,7 +38,7 @@ export class RoomListComponent implements OnInit {
       page: this.currentPage,
       size: this.currentPageSize,
     }
-    this.roomService.search(params).subscribe((response: any) => {
+    this.roomService.search(params).subscribe((response: Response<RoomMasterDto>) => {
       this.dataApi = response.data;
       this.pageInfo = response.page;
     });
@@ -80,26 +52,26 @@ export class RoomListComponent implements OnInit {
   }
 
   public onCreate(): void {
-    this.isShow = true;
-    this.isEdit = false;
+    this.isShowDetail = true;
+    this.isEditMode = false;
   }
 
   public onCancel(): void {
-    this.isShow = false;
+    this.isShowDetail = false;
   }
 
   public reSearch(): void {
     this.search();
   }
 
-  public onEdit(id: any): void {
-    this.isShow = true;
-    this.editSelect = this.dataApi.find((item: any) => item.id === id);
-    this.isEdit = true;
+  public onEdit(id: string): void {
+    this.isShowDetail = true;
+    this.selectedItem = this.dataApi.find((item) => item.id === id);
+    this.isEditMode = true;
   }
 
-  public onDelete(id: any): void {
-    this.roomService.delete(id).subscribe((result: any) => {
+  public onDelete(id: string): void {
+    this.roomService.delete(id).subscribe((result: boolean) => {
       if (result) {
         console.log('Deleted Success');
         this.search();
@@ -117,8 +89,8 @@ export class RoomListComponent implements OnInit {
     this.search();
   }
 
-  public onChangePageNumber(pageNumber: any): void {
-    if (this.currentPage < 0 || this.currentPage >= this.pageInfo?.totalPages) {
+  public onChangePageNumber(pageNumber: number): void {
+    if (this.currentPage < 0 || this.currentPage >= this.pageInfo!.totalPages) {
       return;
     }
     this.currentPage = pageNumber;

@@ -6,6 +6,7 @@ import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-s
 import { ORDER_SERVICE } from '../../../../constants/injection.constant';
 import { IOrderService } from '../../../../services/order/order.interface';
 import { OrderMasterDto } from '../../../../models/order/order-master-dto.model';
+import { MasterListDetailComponent } from '../../master-list-detail/master-list-detail.component';
 @Component({
   selector: 'app-hotel-details',
   standalone: true,
@@ -13,25 +14,15 @@ import { OrderMasterDto } from '../../../../models/order/order-master-dto.model'
   templateUrl: './hotel-details.component.html',
   styleUrl: './hotel-details.component.css'
 })
-export class HotelDetailsComponent implements OnChanges {
-  @Input('selected-item') selectedItem: OrderMasterDto | null | undefined = null;
-  @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
-  @Input('isEdit') isEditMode: boolean = true;
+export class HotelDetailsComponent extends MasterListDetailComponent<OrderMasterDto> implements OnChanges {
 
-  public message: string = '';
-
-  constructor(@Inject(ORDER_SERVICE) private orderService: IOrderService) { }
+  constructor(@Inject(ORDER_SERVICE) private orderService: IOrderService) { super() }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
     this.getPatchValue();
   }
 
-  public form!: FormGroup;
-
-  public faCancel: IconDefinition = faCancel;
-  public faRefresh: IconDefinition = faRefresh;
-  public faSave: IconDefinition = faSave;
 
   private getPatchValue(): void {
     if (this.isEditMode && this.selectedItem) {

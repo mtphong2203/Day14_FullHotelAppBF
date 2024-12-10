@@ -6,6 +6,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ROOM_SERVICE } from '../../../../constants/injection.constant';
 import { IRoomService } from '../../../../services/room/room.interface';
+import { MasterListDetailComponent } from '../../master-list-detail/master-list-detail.component';
+import { RoomMasterDto } from '../../../../models/room/room-master-dto.model';
+import { RoomType } from '../../../../models/common/room-type.model';
 @Component({
   selector: 'app-room-details',
   standalone: true,
@@ -13,40 +16,25 @@ import { IRoomService } from '../../../../services/room/room.interface';
   templateUrl: './room-details.component.html',
   styleUrl: './room-details.component.css'
 })
-export class RoomDetailsComponent implements OnChanges {
+export class RoomDetailsComponent extends MasterListDetailComponent<RoomMasterDto> implements OnChanges {
 
-  @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() reSearch: EventEmitter<void> = new EventEmitter<void>();
-  @Input('editSelectItem') editSelectItem: any;
-  @Input('isEdit') isEdit: any;
-  @Input('dataApi') dataApi: any;
 
-  // form control and api
-  public form!: FormGroup;
-
-  //response
-  public message: string = '';
-
-  public roomType: any[] = [
+  public roomType: RoomType[] = [
     { id: "Standard", name: 'Standard' },
     { id: 'Deluxe', name: 'Deluxe' },
     { id: 'Suite', name: 'Suite' },
   ];
 
-  // icon
-  public faCancel: IconDefinition = faCancel;
-  public faRefresh: IconDefinition = faRefresh;
-  public faSave: IconDefinition = faSave;
-
-  constructor(@Inject(ROOM_SERVICE) private roomService: IRoomService) { }
+  constructor(@Inject(ROOM_SERVICE) private roomService: IRoomService) { super() }
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
     this.patchData();
   }
 
   private patchData(): void {
-    if (this.isEdit) {
-      this.form.patchValue(this.editSelectItem);
+    if (this.isEditMode && this.selectedItem) {
+      this.form.patchValue(this.selectedItem);
     }
   }
 
@@ -65,8 +53,8 @@ export class RoomDetailsComponent implements OnChanges {
       return;
     }
     const data = this.form.value;
-    if (this.isEdit) {
-      this.roomService.update(this.editSelectItem.id, data).subscribe((result: any) => {
+    if (this.isEditMode && this.selectedItem) {
+      this.roomService.update(this.selectedItem.id, data).subscribe((result: any) => {
         if (result) {
           this.message = 'Update success!';
         } else {
@@ -82,13 +70,13 @@ export class RoomDetailsComponent implements OnChanges {
           this.message = 'Fail to create!';
         }
         this.onReset();
+        this.form.reset();
       });
     }
   }
 
   private onReset(): void {
     this.reSearch.emit();
-    this.form.reset();
   }
 
   public onCancel(): void {
