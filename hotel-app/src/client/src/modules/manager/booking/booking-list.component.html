@@ -14,10 +14,9 @@
             id="status"
             class="w-full p-1 border rounded-md border-slate-400 focus:outline-slate-500"
           >
-            <option>PENDING</option>
-            <option>CONFIRMED</option>
-            <option>CANCELLED</option>
-            <option>COMPLETED</option>
+            <option *ngFor="let item of bookingType" [value]="item.id">
+              {{ item.name }}
+            </option>
           </select>
         </div>
       </div>
@@ -37,57 +36,21 @@
   </div>
   <!-- list -->
   <div class="list mt-4">
-    <table class="w-full border-collapse rounded-md text-center">
-      <thead>
-        <tr>
-          <th
-            colspan="6"
-            class="text-blue-500 text-lg text-center p-2 font-medium"
-          >
-            {{ response }}
-          </th>
-        </tr>
-        <tr class="*:border-2 p-2">
-          <th>No</th>
-          <th>Booking</th>
-          <th>Check In</th>
-          <th>Check Out</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of dataApi; let i = index"
-          class="*:border-2 *:p-2"
-        >
-          <td>{{ i + 1 }}</td>
-          <td>{{ item.bookingDate }}</td>
-          <td>{{ item.checkInDate }}</td>
-          <td>{{ item.checkOutDate }}</td>
-          <td>{{ item.status }}</td>
-          <td>
-            <div class="action flex gap-3 justify-center">
-              <button type="submit" (click)="onEdit(item.id)" title="Edit">
-                <fa-icon [icon]="faEdit" class="text-green-500"></fa-icon>
-              </button>
-              <button type="submit" (click)="onDelete(item.id)" title="Delete">
-                <fa-icon [icon]="faTrash" class="text-red-500"></fa-icon>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <app-table
+      [data]="dataApi"
+      [columns]="columns"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+    ></app-table>
   </div>
   <!-- details -->
   <div class="details mt-4">
     <app-booking-details
-      *ngIf="isShow"
+      *ngIf="isShowDetail"
       (cancel)="onCancelDetail()"
       (resetForm)="onResetForm()"
-      [selectedItem]="selectedItem"
-      [isEdit]="isEdit"
+      [selected-item]="selectedItem"
+      [isEdit]="isEditMode"
     >
     </app-booking-details>
   </div>

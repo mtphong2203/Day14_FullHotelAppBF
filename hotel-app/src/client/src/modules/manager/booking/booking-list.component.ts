@@ -1,102 +1,110 @@
-import { Component, OnInit } from '@angular/core';
-import { RoomDetailsComponent } from "../room/room-details/room-details.component";
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus, faSearch, faEdit, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { BookingDetailsComponent } from "./booking-details/booking-details.component";
+import { RoomType } from '../../../models/common/room-type.model';
+import { BOOKING_SERVICE } from '../../../constants/injection.constant';
+import { IBookingService } from '../../../services/booking/booking.interface';
+import { MasterListComponent } from '../master-list/master-list.component';
+import { BookingMasterDto } from '../../../models/booking/booking-master-dto.model';
+import { Column } from '../../../models/common/column.model';
+import { TableComponent } from "../../../core/components/table/table.component";
+import { Response } from '../../../models/response.model';
 
 @Component({
   selector: 'app-booking-list',
   standalone: true,
-  imports: [ReactiveFormsModule, FontAwesomeModule, CommonModule, BookingDetailsComponent],
+  imports: [ReactiveFormsModule, FontAwesomeModule, CommonModule, BookingDetailsComponent, TableComponent],
   templateUrl: './booking-list.component.html',
   styleUrl: './booking-list.component.css'
 })
-export class BookingListComponent implements OnInit {
+export class BookingListComponent extends MasterListComponent<BookingMasterDto> implements OnInit {
 
 
-  // form and api control
-  public searchForm!: FormGroup;
-  public apiURL: string = 'http://localhost:8080/api/v1/bookings';
-  public dataApi: any[] = [];
+  public bookingType: RoomType[] = [
+    { id: 'PENDING', name: 'PENDING' },
+    { id: 'CONFIRMED', name: 'CONFIRMED' },
+    { id: 'CANCELLED', name: 'CANCELLED' },
+    { id: 'COMPLETED', name: 'COMPLETED' },
+  ]
 
-  // boolean
-  public isShow: boolean = false;
-  public isEdit: boolean = false;
+  public columns: Column[] = [
+    { name: 'bookingDate', title: 'Booking' },
+    { name: 'checkInDate', title: 'CheckIn' },
+    { name: 'checkOutDate', title: 'CheckOut' },
+    { name: 'status', title: 'status' },
+  ]
 
   // response
   public response: string = '';
 
-  // edit object
-  public selectedItem: any;
-
-  // icon
-  public faPlus: IconDefinition = faPlus;
-  public faSearch: IconDefinition = faSearch;
-  public faEdit: IconDefinition = faEdit;
-  public faTrash: IconDefinition = faTrash;
-
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(BOOKING_SERVICE) private bookingService: IBookingService) { super() }
 
   ngOnInit(): void {
     this.createForm();
-    this.search();
+    this.getAll();
   }
 
-  private createForm(): void {
+  override createForm(): void {
     this.searchForm = new FormGroup({
-      status: new FormControl(null, Validators.required),
+      status: new FormControl('', Validators.required),
+    });
+  }
+
+  private getAll(): void {
+    this.bookingService.getAll().subscribe((data: BookingMasterDto[]) => {
+      this.dataApi = data;
     });
   }
 
   private search(): void {
-    this.http.get(this.apiURL).subscribe((data: any) => {
+    const params: any = {
+      status: this.searchForm.value.status
+    }
+    this.bookingService.search(params).subscribe((data: any) => {
       this.dataApi = data;
-    })
+    });
   }
 
   // form search submit
   public onSubmit(): void {
-    this.apiURL = `http://localhost:8080/api/v1/bookings/search?keyword=${this.searchForm.value.status}`;
     this.search();
   }
 
   // create to show form details
   public onCreate(): void {
-    this.isShow = true;
-    this.isEdit = false;
+    this.isShowDetail = true;
+    this.isEditMode = false;
   }
 
   // edit to show form details
   public onEdit(id: string): void {
-    this.isShow = true;
-    this.isEdit = true;
+    this.isShowDetail = true;
+    this.isEditMode = true;
     this.selectedItem = this.dataApi.find((item) => item.id === id);
   }
 
   // delete object
   public onDelete(id: string): void {
-    this.http.delete(`${this.apiURL}/${id}`).subscribe((result) => {
+    this.bookingService.delete(id).subscribe((result: boolean) => {
       if (result) {
         this.response = 'Delete success!';
       } else {
         this.response = 'Fail to delete!';
       }
-      this.search();
+      this.getAll();
     });
 
   }
 
-  // click cancel from child to hidden form details
   public onCancelDetail(): void {
-    this.isShow = false;
+    this.isShowDetail = false;
   }
 
-  // submit form create or edit -> reset form list
   public onResetForm(): void {
-    this.search();
+    this.getAll();
   }
 
 

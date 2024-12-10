@@ -7,10 +7,11 @@ import { BookingListComponent } from './booking/booking-list.component';
 import { UserListComponent } from './user/user-list.component';
 import { RoleListComponent } from './role/role-list.component';
 import { OrderService } from '../../services/order/order.service';
-import { ORDER_SERVICE, ROLE_SERVICE, ROOM_SERVICE, USER_SERVICE } from '../../constants/injection.constant';
+import { BOOKING_SERVICE, ORDER_SERVICE, ROLE_SERVICE, ROOM_SERVICE, USER_SERVICE } from '../../constants/injection.constant';
 import { RoomService } from '../../services/room/room.service';
 import { UserService } from '../../services/user/user.service';
 import { RoleService } from '../../services/role/role.service';
+import { BookingService } from '../../services/booking/booking.service';
 
 const routes: Routes = [
   {
@@ -58,6 +59,10 @@ const routes: Routes = [
     {
       provide: ROLE_SERVICE,
       useClass: RoleService
+    },
+    {
+      provide: BOOKING_SERVICE,
+      useClass: BookingService
     },
   ],
   imports: [

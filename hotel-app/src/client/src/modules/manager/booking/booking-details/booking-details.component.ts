@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { BOOKING_SERVICE } from '../../../../constants/injection.constant';
+import { IBookingService } from '../../../../services/booking/booking.interface';
+import { BookingMasterDto } from '../../../../models/booking/booking-master-dto.model';
+import { MasterListDetailComponent } from '../../master-list-detail/master-list-detail.component';
 
 @Component({
   selector: 'app-booking-details',
@@ -11,25 +15,10 @@ import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-s
   templateUrl: './booking-details.component.html',
   styleUrl: './booking-details.component.css'
 })
-export class BookingDetailsComponent implements OnChanges {
-  @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
+export class BookingDetailsComponent extends MasterListDetailComponent<BookingMasterDto> implements OnChanges {
   @Output() resetForm: EventEmitter<void> = new EventEmitter<void>();
-  @Input('selectedItem') selectedItem: any;
-  @Input('isEdit') isEdit: any;
 
-  // form and api control
-  public form!: FormGroup;
-  public apiURL: string = 'http://localhost:8080/api/v1/bookings';
-
-  // response
-  public message: string = '';
-
-  // icon
-  public faCancel: IconDefinition = faCancel;
-  public faRefresh: IconDefinition = faRefresh;
-  public faSave: IconDefinition = faSave;
-
-  constructor(private http: HttpClient) { }
+  constructor(@Inject(BOOKING_SERVICE) private bookingService: IBookingService) { super() }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
@@ -38,7 +27,7 @@ export class BookingDetailsComponent implements OnChanges {
   }
 
   private patchValueEdit(): void {
-    if (this.isEdit) {
+    if (this.isEditMode && this.selectedItem) {
       this.form.patchValue(this.selectedItem);
     }
   }
@@ -53,7 +42,7 @@ export class BookingDetailsComponent implements OnChanges {
   }
 
   private setDefaultValue(): void {
-    if (!this.isEdit) {
+    if (!this.isEditMode) {
       const defaultValue = '2024-12-01T02:23:33.618Z';
       this.form.patchValue({
         checkInDate: defaultValue,
@@ -67,8 +56,8 @@ export class BookingDetailsComponent implements OnChanges {
       return;
     }
     const data = this.form.value;
-    if (this.isEdit) {
-      this.http.put(`${this.apiURL}/${this.selectedItem.id}`, data).subscribe((result) => {
+    if (this.isEditMode && this.selectedItem) {
+      this.bookingService.update(this.selectedItem.id, data).subscribe((result: BookingMasterDto) => {
         if (result) {
           this.message = 'Updated success!';
         } else {
@@ -77,7 +66,7 @@ export class BookingDetailsComponent implements OnChanges {
         this.resetForm.emit();
       })
     } else {
-      this.http.post(this.apiURL, data).subscribe((result) => {
+      this.bookingService.create(data).subscribe((result: BookingMasterDto) => {
         if (result) {
           this.message = 'Create success!';
         } else {
@@ -86,10 +75,8 @@ export class BookingDetailsComponent implements OnChanges {
         this.resetForm.emit();
       });
     }
-
-
   }
-  // cancel to hidden form details
+
   public onCancel(): void {
     this.cancel.emit();
   }
