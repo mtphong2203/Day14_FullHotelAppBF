@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ORDER_SERVICE } from '../../../../constants/injection.constant';
 import { IOrderService } from '../../../../services/order/order.interface';
+import { OrderMasterDto } from '../../../../models/order/order-master-dto.model';
 @Component({
   selector: 'app-hotel-details',
   standalone: true,
@@ -13,10 +14,9 @@ import { IOrderService } from '../../../../services/order/order.interface';
   styleUrl: './hotel-details.component.css'
 })
 export class HotelDetailsComponent implements OnChanges {
-  @Input('selected-item') selectedItem: any;
+  @Input('selected-item') selectedItem: OrderMasterDto | null | undefined = null;
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
-  @Input('isEdit') isEditMode: any;
-  @Input('dataApi') dataApi: any;
+  @Input('isEdit') isEditMode: boolean = true;
 
   public message: string = '';
 
@@ -33,8 +33,8 @@ export class HotelDetailsComponent implements OnChanges {
   public faRefresh: IconDefinition = faRefresh;
   public faSave: IconDefinition = faSave;
 
-  private getPatchValue(): any {
-    if (this.isEditMode) {
+  private getPatchValue(): void {
+    if (this.isEditMode && this.selectedItem) {
       this.form.patchValue(this.selectedItem);
     }
   }
@@ -54,8 +54,8 @@ export class HotelDetailsComponent implements OnChanges {
 
     const data = this.form.value;
 
-    if (this.isEditMode) {
-      this.orderService.update(this.selectedItem.id, data).subscribe((result: any) => {
+    if (this.isEditMode && this.selectedItem) {
+      this.orderService.update(this.selectedItem.id, data).subscribe((result: OrderMasterDto) => {
         if (result) {
           this.message = 'Update successfully!';
           this.cancel.emit();
@@ -64,7 +64,7 @@ export class HotelDetailsComponent implements OnChanges {
         }
       });
     } else {
-      this.orderService.create(data).subscribe((result: any) => {
+      this.orderService.create(data).subscribe((result: OrderMasterDto) => {
         console.log(data);
         if (result != null) {
           this.cancel.emit();

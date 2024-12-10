@@ -8,6 +8,10 @@ import { HttpClient } from '@angular/common/http';
 import { TableComponent } from "../../../core/components/table/table.component";
 import { IOrderService } from '../../../services/order/order.interface';
 import { ORDER_SERVICE } from '../../../constants/injection.constant';
+import { OrderMasterDto } from '../../../models/order/order-master-dto.model';
+import { PageInfo, Response } from '../../../models/response.model';
+import { Column } from '../../../models/common/column.model';
+import { MasterListComponent } from '../master-list/master-list.component';
 
 @Component({
   selector: 'app-hotel-service-list',
@@ -16,55 +20,30 @@ import { ORDER_SERVICE } from '../../../constants/injection.constant';
   templateUrl: './hotel-service-list.component.html',
   styleUrl: './hotel-service-list.component.css'
 })
-export class HotelServiceListComponent implements OnInit {
+export class HotelServiceListComponent extends MasterListComponent<OrderMasterDto> implements OnInit {
 
-  public selectedItem: any;
-  public isEditMode: boolean = false;
-
-  public currentPage: number = 0;
-  public currentPageSize: number = 10;
-  public pageInfo: any;
-
-  public faPlus = faPlus;
-  public faSearch = faSearch;
-  public faEdit = faEdit;
-  public faTrash = faTrash;
-
-  public isShowDetail: boolean = false;
-  public keyword: string = '';
-  public searchForm!: FormGroup;
-  public dataApi: any[] = [];
-
-  public columns: any[] = [
+  public columns: Column[] = [
     { name: 'name', title: 'Name' },
     { name: 'price', title: 'Price' },
     { name: 'active', title: 'Active' },
   ]
 
-  public pageSizes: number[] = [2, 5, 10, 20, 30, 40, 50];
-
   constructor(
     @Inject(ORDER_SERVICE) private orderService: IOrderService,
-  ) { }
+  ) { super(); }
 
   ngOnInit(): void {
     this.createForm();
     this.search();
   }
 
-  private createForm(): void {
-    this.searchForm = new FormGroup({
-      keyword: new FormControl('', [Validators.required]),
-    });
-  }
-
   private search(): void {
-    const params = {
+    const params: any = {
       keyword: this.searchForm.value.keyword,
       page: this.currentPage,
       size: this.currentPageSize
     }
-    this.orderService.search(params).subscribe((response: any) => {
+    this.orderService.search(params).subscribe((response: Response<OrderMasterDto>) => {
       this.dataApi = response.data;
       this.pageInfo = response.page;
     });
@@ -88,8 +67,8 @@ export class HotelServiceListComponent implements OnInit {
     this.search();
   }
 
-  public onDelete(id: any): void {
-    this.orderService.delete(id).subscribe((result: any) => {
+  public onDelete(id: string): void {
+    this.orderService.delete(id).subscribe((result: boolean) => {
       if (result) {
         console.log("Delete success");
       } else {
@@ -99,7 +78,7 @@ export class HotelServiceListComponent implements OnInit {
     })
   }
 
-  public onEdit(id: any): void {
+  public onEdit(id: string): void {
     this.isEditMode = true;
     this.selectedItem = this.dataApi.find((data) => data.id === id);
     this.isShowDetail = true;
@@ -111,8 +90,8 @@ export class HotelServiceListComponent implements OnInit {
     this.search();
   }
 
-  public onChangePageNumber(pageNumber: any) {
-    if (this.currentPage < 0 || this.currentPage >= this.pageInfo?.totalPages) {
+  public onChangePageNumber(pageNumber: number) {
+    if (this.currentPage < 0 || this.currentPage >= this.pageInfo!.totalPages) {
       return;
     }
     this.currentPage = pageNumber;

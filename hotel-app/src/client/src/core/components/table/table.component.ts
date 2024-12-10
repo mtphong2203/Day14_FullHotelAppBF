@@ -20,10 +20,10 @@ export class TableComponent {
 
   public pageLimit: number = 2;
 
-  @Output() edit: EventEmitter<void> = new EventEmitter<void>();
-  @Output() delete: EventEmitter<void> = new EventEmitter<void>();
-  @Output() changeSize: EventEmitter<void> = new EventEmitter<void>();
-  @Output() changePageNumber: EventEmitter<void> = new EventEmitter<void>();
+  @Output() edit: EventEmitter<string> = new EventEmitter<string>();
+  @Output() delete: EventEmitter<string> = new EventEmitter<string>();
+  @Output() changeSize: EventEmitter<number> = new EventEmitter<number>();
+  @Output() changePageNumber: EventEmitter<number> = new EventEmitter<number>();
 
   public faEdit: IconDefinition = faEdit;
   public faTrash: IconDefinition = faTrash;
@@ -32,11 +32,11 @@ export class TableComponent {
   public faAngleLeft: IconDefinition = faAngleLeft;
   public faAngleDoubleLeft: IconDefinition = faAngleDoubleLeft;
 
-  public onEdit(item: any) {
+  public onEdit(item: string) {
     this.edit.emit(item);
   }
 
-  public onDelete(item: any) {
+  public onDelete(item: string) {
     this.delete.emit(item);
   }
 
@@ -51,7 +51,7 @@ export class TableComponent {
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
-  public onChangePageNumber(item: any) {
+  public onChangePageNumber(item: number) {
     this.changePageNumber.emit(item);
   }
 
