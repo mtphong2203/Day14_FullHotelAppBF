@@ -4,6 +4,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCancel, faRefresh, faSave, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ROLE_SERVICE } from '../../../../constants/injection.constant';
 import { IRoleService } from '../../../../services/role/role.interface';
+import { MasterListDetailComponent } from '../../master-list-detail/master-list-detail.component';
+import { RoleMasterDto } from '../../../../models/role/role-master.model';
 
 @Component({
   selector: 'app-role-details',
@@ -12,26 +14,11 @@ import { IRoleService } from '../../../../services/role/role.interface';
   templateUrl: './role-details.component.html',
   styleUrl: './role-details.component.css'
 })
-export class RoleDetailsComponent implements OnChanges {
+export class RoleDetailsComponent extends MasterListDetailComponent<RoleMasterDto> implements OnChanges {
 
-  // form and api control
-  public form!: FormGroup;
-
-  @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() response: EventEmitter<any> = new EventEmitter<any>();
-  @Input('isEdit') isEdit: any;
-  @Input('selectedItem') selectedItem: any;
-  @Input('dataApi') dataApi: any;
 
-  // resposne
-  public message: string = '';
-
-  // icon
-  public faCancel: IconDefinition = faCancel;
-  public faRefresh: IconDefinition = faRefresh;
-  public faSave: IconDefinition = faSave;
-
-  constructor(@Inject(ROLE_SERVICE) private roleService: IRoleService) { }
+  constructor(@Inject(ROLE_SERVICE) private roleService: IRoleService) { super() }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.createForm();
@@ -39,7 +26,7 @@ export class RoleDetailsComponent implements OnChanges {
   }
 
   private patchValue(): void {
-    if (this.isEdit) {
+    if (this.isEditMode && this.selectedItem) {
       this.form.patchValue(this.selectedItem);
     }
   }
@@ -57,8 +44,8 @@ export class RoleDetailsComponent implements OnChanges {
       return;
     }
     const data = this.form.value;
-    if (this.isEdit) {
-      this.roleService.update(this.selectedItem.id, data).subscribe((result) => {
+    if (this.isEditMode && this.selectedItem) {
+      this.roleService.update(this.selectedItem.id, data).subscribe((result: RoleMasterDto) => {
         if (result) {
           this.message = 'Update successfully';
         } else {
@@ -67,15 +54,15 @@ export class RoleDetailsComponent implements OnChanges {
         this.response.emit();
       });
     } else {
-      this.roleService.create(data).subscribe((result) => {
+      this.roleService.create(data).subscribe((result: RoleMasterDto) => {
         if (result) {
           console.log(result);
-
-          // this.message = 'Create successfully';
+          this.message = 'Create successfully';
         } else {
           this.message = 'Fail to create';
         }
         this.response.emit();
+        this.form.reset();
       });
     }
   }

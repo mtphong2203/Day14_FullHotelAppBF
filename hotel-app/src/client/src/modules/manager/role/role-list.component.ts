@@ -7,6 +7,10 @@ import { faPlus, faSearch, faEdit, faTrash, IconDefinition } from '@fortawesome/
 import { TableComponent } from "../../../core/components/table/table.component";
 import { ROLE_SERVICE } from '../../../constants/injection.constant';
 import { IRoleService } from '../../../services/role/role.interface';
+import { MasterListComponent } from '../master-list/master-list.component';
+import { RoleMasterDto } from '../../../models/role/role-master.model';
+import { Response } from '../../../models/response.model';
+import { Column } from '../../../models/common/column.model';
 
 @Component({
   selector: 'app-role-list',
@@ -15,50 +19,21 @@ import { IRoleService } from '../../../services/role/role.interface';
   templateUrl: './role-list.component.html',
   styleUrl: './role-list.component.css'
 })
-export class RoleListComponent implements OnInit {
+export class RoleListComponent extends MasterListComponent<RoleMasterDto> implements OnInit {
 
-  // form and api control
-  public searchForm!: FormGroup;
-  public dataApi: any[] = [];
-
-  // pagination
-  public pageSizes: number[] = [5, 10, 15, 20, 25, 30];
-  public currentPage: number = 0;
-  public currentPageSize: number = 5;
-  public pageInfo: any;
-  public start: number = 0;
-  public end: number = 0;
-
-  public columns: any[] = [
+  public columns: Column[] = [
     { name: 'name', title: 'Name' },
     { name: 'description', title: 'Description' },
     { name: 'active', title: 'Active' },
   ]
 
-  public selectedItem: any;
   public response: string = '';
 
-  // boolean 
-  public isEdit: boolean = false;
-  public isShow: boolean = false;
-
-  // icon
-  public faPlus: IconDefinition = faPlus;
-  public faSearch: IconDefinition = faSearch;
-  public faEdit: IconDefinition = faEdit;
-  public faTrash: IconDefinition = faTrash;
-
-  constructor(@Inject(ROLE_SERVICE) private roleService: IRoleService) { }
+  constructor(@Inject(ROLE_SERVICE) private roleService: IRoleService) { super() }
 
   ngOnInit(): void {
     this.createForm();
     this.search();
-  }
-
-  private createForm(): void {
-    this.searchForm = new FormGroup({
-      keyword: new FormControl('', Validators.required),
-    });
   }
 
   private search(): void {
@@ -67,7 +42,7 @@ export class RoleListComponent implements OnInit {
       page: this.currentPage,
       size: this.currentPageSize
     }
-    this.roleService.search(params).subscribe((response: any) => {
+    this.roleService.search(params).subscribe((response: Response<RoleMasterDto>) => {
       this.dataApi = response.data;
       this.pageInfo = response.page;
     });
@@ -83,20 +58,20 @@ export class RoleListComponent implements OnInit {
 
   // create
   public onCreate(): void {
-    this.isShow = true;
-    this.isEdit = false;
+    this.isShowDetail = true;
+    this.isEditMode = false;
   }
 
   // edit
-  public onEdit(id: any): void {
-    this.isShow = true;
-    this.isEdit = true;
+  public onEdit(id: string): void {
+    this.isShowDetail = true;
+    this.isEditMode = true;
     this.selectedItem = this.dataApi.find((item) => item.id === id);
   }
 
   // delete
-  public onDelete(id: any): void {
-    this.roleService.delete(id).subscribe((result) => {
+  public onDelete(id: string): void {
+    this.roleService.delete(id).subscribe((result: boolean) => {
       if (result) {
         this.response = 'Delete successfully!';
         this.search();
@@ -108,7 +83,7 @@ export class RoleListComponent implements OnInit {
 
   // cancel form details
   public onCancelDetail(): void {
-    this.isShow = false;
+    this.isShowDetail = false;
     this.search();
   }
 
@@ -124,7 +99,7 @@ export class RoleListComponent implements OnInit {
   }
 
   public onChangePageNumber(item: any): void {
-    if (this.currentPage < 0 || this.currentPage - 1 > this.pageInfo?.totalPages) {
+    if (this.currentPage < 0 || this.currentPage - 1 > this.pageInfo!.totalPages) {
       return;
     }
     this.currentPage = item;

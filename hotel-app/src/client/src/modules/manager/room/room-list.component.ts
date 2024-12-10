@@ -9,6 +9,7 @@ import { IRoomService } from '../../../services/room/room.interface';
 import { MasterListComponent } from '../master-list/master-list.component';
 import { RoomMasterDto } from '../../../models/room/room-master-dto.model';
 import { Response } from '../../../models/response.model';
+import { Column } from '../../../models/common/column.model';
 @Component({
   selector: 'app-room-list',
   standalone: true,
@@ -18,7 +19,7 @@ import { Response } from '../../../models/response.model';
 })
 export class RoomListComponent extends MasterListComponent<RoomMasterDto> implements OnInit {
 
-  public columns: any[] = [
+  public columns: Column[] = [
     { name: 'number', title: 'Number' },
     { name: 'type', title: 'Type' },
     { name: 'capacity', title: 'Capacity' },

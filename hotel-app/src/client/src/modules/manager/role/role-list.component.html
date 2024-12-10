@@ -52,12 +52,11 @@
   <!-- details -->
   <div class="details mt-4">
     <app-role-details
-      *ngIf="isShow"
-      [isEdit]="isEdit"
-      [selectedItem]="selectedItem"
+      *ngIf="isShowDetail"
+      [isEdit]="isEditMode"
+      [selected-item]="selectedItem"
       (cancel)="onCancelDetail()"
       (response)="onResponse()"
-      [dataApi]="dataApi"
     >
     </app-role-details>
   </div>
