@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUser, faCompass, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { AUTH_SERVICE } from '../../../constants/injection.constant';
+import { IAuthService } from '../../../services/auth/auth.interface';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -15,12 +17,11 @@ import { faUser, faCompass, IconDefinition } from '@fortawesome/free-solid-svg-i
 export class LoginComponent implements OnInit {
 
   public form!: FormGroup;
-  public apiUrl: string = 'http://localhost:8080/api/auth';
 
   public faUser: IconDefinition = faUser;
   public faCompass: IconDefinition = faCompass;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(@Inject(AUTH_SERVICE) private authService: IAuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit {
       return;
     }
     const data = this.form.value;
-    this.http.post(`${this.apiUrl}/login`, data)
+    this.authService.login(data)
       .subscribe((result: any) => {
         if (result) {
           console.log(result);

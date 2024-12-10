@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faRegistered, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { AUTH_SERVICE } from '../../../constants/injection.constant';
+import { IAuthService } from '../../../services/auth/auth.interface';
 
 @Component({
   selector: 'app-register',
@@ -19,9 +21,8 @@ export class RegisterComponent implements OnInit {
 
   public faRegister: IconDefinition = faRegistered;
 
-  public apiUrl: string = 'http://localhost:8080/api/auth/register';
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(@Inject(AUTH_SERVICE) private authService: IAuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -46,26 +47,10 @@ export class RegisterComponent implements OnInit {
     }
 
     const data = this.form.value;
-    this.http.post(this.apiUrl, data).subscribe(
+    this.authService.register(data).subscribe(
       (result) => {
         console.log('Registration successful', result);
         this.router.navigate(['/auth/login']);
-      },
-      (error) => {
-        console.error('Registration failed', error);
-        if (error.status === 400) {
-          console.log(data);
-          // Lỗi từ server, có thể có thông tin chi tiết trong response body
-          console.error('Response body:', error.error);
-          alert('Lỗi: Dữ liệu đăng ký không hợp lệ. Vui lòng kiểm tra lại.');
-        } else if (error.status === 500) {
-          alert('Lỗi hệ thống. Vui lòng thử lại sau.');
-        } else {
-          alert('Có lỗi xảy ra, vui lòng thử lại.');
-        }
-      }
-    );
-
+      });
   }
-
 }
