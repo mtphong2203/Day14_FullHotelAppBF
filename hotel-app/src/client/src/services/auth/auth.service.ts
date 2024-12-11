@@ -11,10 +11,10 @@ export class AuthService implements IAuthService {
     private apiUrl: string = 'http://localhost:8080/api/auth';
 
     constructor(private http: HttpClient) { }
-    login(param: any): Observable<any> {
+    login(param: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/login`, param);
     }
-    register(param: any): Observable<any> {
+    register(param: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/register`, param);
     }
 

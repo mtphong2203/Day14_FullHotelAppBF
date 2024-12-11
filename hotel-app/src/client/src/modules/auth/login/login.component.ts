@@ -44,8 +44,8 @@ export class LoginComponent implements OnInit {
       .subscribe((result: any) => {
         if (result) {
           console.log(result);
-          localStorage.setItem('authToken', result.token);
-          this.router.navigate(['/']);
+          localStorage.setItem('accessToken', result.accessToken);
+          this.router.navigate(['/manager/rooms']);
         }
       });
   }
