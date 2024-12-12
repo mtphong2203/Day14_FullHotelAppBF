@@ -10,6 +10,16 @@ import { IPermissionService } from "./permission.interface";
 
 export class PermissionService implements IPermissionService {
     constructor(@Inject(AUTH_SERVICE) private authService: IAuthService, private router: Router) { }
+    isUnauthenticated(): boolean {
+        this.authService.isAuthenticated().subscribe((res) => {
+            if (res) {
+                this.router.navigate(['/']);
+                return false;
+            }
+            return true;
+        });
+        return true;
+    }
 
     canActivate(): boolean {
         if (this.authService.isAuthenticated()) {

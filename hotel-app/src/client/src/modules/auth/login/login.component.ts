@@ -41,11 +41,8 @@ export class LoginComponent implements OnInit {
     }
     const data = this.form.value;
     this.authService.login(data)
-      .subscribe((result: any) => {
+      .subscribe((result) => {
         if (result) {
-          console.log(result);
-          localStorage.setItem('accessToken', result.accessToken);
-          localStorage.setItem('roles', result.roles);
           this.router.navigate(['/']);
         }
       });

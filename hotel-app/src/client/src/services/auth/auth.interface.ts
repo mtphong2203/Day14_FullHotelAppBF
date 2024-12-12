@@ -5,9 +5,11 @@ export interface IAuthService {
 
     register(param: string): Observable<any>;
 
-    isAuthenticated(): boolean;
+    isAuthenticated(): Observable<boolean>;
 
     getAccessToken(): string;
 
     isManager(): boolean
+
+    logout(): void
 }
