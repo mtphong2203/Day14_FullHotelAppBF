@@ -12,11 +12,12 @@ import { RoomService } from '../../services/room/room.service';
 import { UserService } from '../../services/user/user.service';
 import { RoleService } from '../../services/role/role.service';
 import { BookingService } from '../../services/booking/booking.service';
+import { AuthenticateGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
   {
     path: 'users',
-    component: UserListComponent
+    component: UserListComponent,
   },
   {
     path: 'roles',
@@ -50,7 +51,7 @@ const routes: Routes = [
     },
     {
       provide: ROOM_SERVICE,
-      useClass: RoomService
+      useClass: RoomService,
     },
     {
       provide: USER_SERVICE,

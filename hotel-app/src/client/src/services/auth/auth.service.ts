@@ -10,7 +10,24 @@ export class AuthService implements IAuthService {
 
     private apiUrl: string = 'http://localhost:8080/api/auth';
 
-    constructor(private http: HttpClient) { }
+    private accessToken!: string;
+
+    constructor(private http: HttpClient) {
+        this.accessToken = localStorage.getItem('accessToken') || '';
+    }
+    public getAccessToken(): string {
+        return this.accessToken;
+    }
+    isAuthenticated(): boolean {
+        return !!this.accessToken;
+    }
+    isManager(): boolean {
+        const roles = localStorage.getItem('roles');
+        if (roles?.includes('Editor') || roles?.includes('Manager')) {
+            return true;
+        }
+        return false;
+    }
     login(param: string): Observable<any> {
         return this.http.post(`${this.apiUrl}/login`, param);
     }
