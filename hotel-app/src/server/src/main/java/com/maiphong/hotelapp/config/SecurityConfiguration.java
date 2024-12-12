@@ -51,12 +51,13 @@ public class SecurityConfiguration {
                 .addFilterBefore(new JWTFilter(tokenService),
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/manager/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/manager/role/**").permitAll()
-                        .requestMatchers("/api/manager/user/**").permitAll()
-                        .requestMatchers("/api/manager/room/**").permitAll()
-                        .requestMatchers("/api/manager/service/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").authenticated()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/v1/roles/**").hasRole("Editor")
+                        .requestMatchers("/api/v1/users/**").hasRole("Editor")
+                        .requestMatchers("/api/v1/rooms/**").hasRole("Editor")
+                        .requestMatchers("/api/v1/orders/**").hasRole("Editor")
+                        .requestMatchers("/api/v1/bookings/**").hasRole("Editor")
                         .anyRequest().anonymous())
                 .httpBasic(Customizer.withDefaults());
         return http.build();

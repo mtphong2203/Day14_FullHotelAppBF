@@ -48,8 +48,11 @@ public class AuthController {
 
         String accessToken = tokenService.generateAccessToken(authentication);
 
+        var loginUser = authService.getUserRoles(loginRequestDTO.getUsername());
+
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
         loginResponseDTO.setAccessToken(accessToken);
+        loginResponseDTO.setRoles(loginUser);
 
         return ResponseEntity.ok(loginResponseDTO);
     }
