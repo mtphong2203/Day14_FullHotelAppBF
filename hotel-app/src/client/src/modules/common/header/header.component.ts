@@ -15,12 +15,20 @@ import { IAuthService } from '../../../services/auth/auth.interface';
 })
 export class HeaderComponent {
 
+  public isAuthenticated: boolean = false;
+  public userInformation: any;
+
   constructor(
     @Inject(AUTH_SERVICE) private authService: IAuthService,
     private router: Router
   ) {
     this.authService.isAuthenticated().subscribe((res) => {
       this.isAuthenticated = res;
+    });
+
+    // Lay thong tin user
+    this.authService.getUserInformation().subscribe((res: any) => {
+      this.userInformation = res;
     });
   }
 
@@ -34,7 +42,7 @@ export class HeaderComponent {
     this.isHovered = status;
   }
 
-  public isAuthenticated: boolean = false;
+
 
   public logout(): void {
     this.authService.logout();

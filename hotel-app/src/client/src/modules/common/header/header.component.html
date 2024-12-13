@@ -48,6 +48,9 @@
         <li class="nav-item">
           <a [routerLink]="['/contact']" class="nav-link"> Contact </a>
         </li>
+        <li class="nav-item">
+          <a [routerLink]="['/test']" class="nav-link"> Test </a>
+        </li>
       </ul>
     </nav>
     <!-- Profile Menu -->
@@ -70,7 +73,9 @@
 
 <ng-template #authenticated>
   <li class="nav-item">
-    <a [routerLink]="['/profile']" class="nav-link">Profile</a>
+    <a [routerLink]="['/profile']" class="nav-link">{{
+      userInformation.displayName
+    }}</a>
   </li>
   <li class="nav-item">
     <a (click)="logout()" class="nav-link">Logout</a>
