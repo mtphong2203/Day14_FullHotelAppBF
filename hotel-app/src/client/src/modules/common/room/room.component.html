@@ -1,0 +1,29 @@
+<div
+  class="room-item flex border border-slate-400 justify-between p-4 rounded-md"
+>
+  <div class="aside">
+    <h3 class="text-2xl font-light mb-2">{{ roomItem.title }}</h3>
+    <p class="my-1">
+      <span class="mr-6">
+        <fa-icon [icon]="faSquare" class="mr-1"></fa-icon>
+        {{ roomItem.size }}
+      </span>
+      <span class="mr-6">
+        <fa-icon [icon]="faRoom" class="mr-1"></fa-icon>
+        {{ roomItem.bed }}
+      </span>
+      <span class="mr-6">
+        <fa-icon [icon]="faBath" class="mr-1"></fa-icon>
+        {{ roomItem.bathroom }}
+      </span>
+    </p>
+    <p class="description text-slate-400 mb-4">
+      {{ roomItem.description }}
+    </p>
+    <a [routerLink]="['/room-suite']" class="nav-link">
+      More
+      <fa-icon [icon]="faArrow"></fa-icon>
+    </a>
+  </div>
+  <img [src]="roomItem.images" class="w-48 h-40 rounded-md" alt="Room01" />
+</div>

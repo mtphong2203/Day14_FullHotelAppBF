@@ -1,0 +1,13 @@
+.form-group {
+  margin-bottom: 0.8rem;
+}
+label {
+  font-size: 1.2rem;
+}
+
+input {
+  width: 100%;
+  border-radius: 1rem;
+  padding: 0.4rem;
+  margin-top: 0.3rem;
+}

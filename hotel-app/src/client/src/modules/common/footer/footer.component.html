@@ -1,0 +1,72 @@
+<footer class="bg-slate-100 border-t-2 py-2">
+  <div class="container w-[75%] m-auto">
+    <div class="list flex justify-between">
+      <div class="item w-[35%]">
+        <h3 class="text-2xl font-medium mb-4">Amzing Hotel</h3>
+        <p class="flex gap-2 mb-2">
+          <fa-icon [icon]="faEnvelope"></fa-icon>
+          <a href="mailto:reservations@amazinghotel.com.vn">
+            reservations&#64;zmazinghotel.com.vn
+          </a>
+        </p>
+        <p class="flex gap-2 mb-2">
+          <fa-icon [icon]="faPhoneVolume"></fa-icon>
+          <a href="tel:+84 (0) 2143 865 888"> +84 (0) 2143 865 888 </a>
+        </p>
+        <p class="flex gap-2 mb-2">
+          <fa-icon [icon]="faMap"></fa-icon>
+          <span>Đường Đồng Lợi, thị trấn Sapa, Sapa, Lào Cai, Việt Nam</span>
+        </p>
+      </div>
+      <div class="item w-[35%]">
+        <h3 class="text-2xl font-medium mb-3">Infomation</h3>
+        <a class="block hover:font-medium w-[100px]" [routerLink]="['/']"
+          >Intro
+        </a>
+        <a class="block hover:font-medium w-[100px]" [routerLink]="['/contact']"
+          >Contact
+        </a>
+        <a
+          class="block hover:font-medium w-[100px]"
+          [routerLink]="['/room-suite']"
+          >Room & Suite
+        </a>
+        <a
+          class="block hover:font-medium w-[100px]"
+          [routerLink]="['/services']"
+          >Serving
+        </a>
+        <a
+          class="block hover:font-medium w-[100px]"
+          [routerLink]="['/restaurant']"
+          >Restaurant
+        </a>
+      </div>
+      <div class="item w-[30%]">
+        <h3 class="text-2xl font-medium">Kết nối với Amazing</h3>
+        <p class="text-slate-600">
+          Amazing có rất nhiều chương trình ưu đãi dành cho khách hàng, hãy đăng
+          ký bằng cách để lại Email dưới đây:
+        </p>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <input
+            type="email"
+            class="p-2 rounded-md"
+            formControlName="email"
+            id="email"
+            placeholder="Email"
+          />
+          <button
+            type="submit"
+            class="p-2 text-white rounded-md bg-orange-400 ml-2"
+          >
+            Subcribe
+          </button>
+        </form>
+      </div>
+    </div>
+    <p class="text-center py-2 border-t-2">
+      &copy; {{ date | date : "MMM yyyy" }} - HotelApp
+    </p>
+  </div>
+</footer>

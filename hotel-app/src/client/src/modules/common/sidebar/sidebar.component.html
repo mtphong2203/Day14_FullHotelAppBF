@@ -1,0 +1,40 @@
+<aside class="border-r-2 h-screen">
+  <h2 class="text-lg font-medium text-center py-2 border-b-2">Management</h2>
+  <div class="navigate">
+    <a
+      [routerLink]="['/manager/rooms']"
+      class="p-2 border-b-2 flex gap-2 hover:bg-slate-300 hover:text-white hover:font-medium"
+    >
+      <fa-icon [icon]="faRoom"></fa-icon>
+      <span> Room</span>
+    </a>
+    <a
+      [routerLink]="['/manager/hotel-services']"
+      class="p-2 border-b-2 flex gap-2 hover:bg-slate-300 hover:text-white hover:font-medium"
+    >
+      <fa-icon [icon]="faService"></fa-icon>
+      <span> Service</span>
+    </a>
+    <a
+      [routerLink]="['/manager/bookings']"
+      class="p-2 border-b-2 flex gap-2 hover:bg-slate-300 hover:text-white hover:font-medium"
+    >
+      <fa-icon [icon]="faBooking"></fa-icon>
+      <span> Booking</span>
+    </a>
+    <a
+      [routerLink]="['/manager/users']"
+      class="p-2 border-b-2 flex gap-2 hover:bg-slate-300 hover:text-white hover:font-medium"
+    >
+      <fa-icon [icon]="faUser"></fa-icon>
+      <span> User </span>
+    </a>
+    <a
+      [routerLink]="['/manager/roles']"
+      class="p-2 border-b-2 flex gap-2 hover:bg-slate-300 hover:text-white hover:font-medium"
+    >
+      <fa-icon [icon]="faRole"></fa-icon>
+      <span> Role </span>
+    </a>
+  </div>
+</aside>

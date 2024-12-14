@@ -1,0 +1,15 @@
+<div class="event-item mt-12 w-[350px]">
+  <a [routerLink]="['/locations']">
+    <img [src]="eventItem.images" alt="Top 10 hotel" />
+  </a>
+  <p class="text-slate-500 my-2 flex justify-between">
+    <a [routerLink]="eventItem.link">{{ eventItem.title }}</a>
+    <span>{{ 90 | formatDate }}</span>
+  </p>
+  <a
+    [routerLink]="['/locations']"
+    class="title text-2xl font-medium hover:text-slate-500"
+  >
+    {{ eventItem.description }}
+  </a>
+</div>

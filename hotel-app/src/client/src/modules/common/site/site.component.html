@@ -1,0 +1,14 @@
+<div
+  class="contain flex justify-between items-center rounded-md border mb-12 border-slate-300"
+>
+  <div class="side w-[60%] pl-10">
+    <h2 class="text-3xl font-bold">{{ siteItem.title }}</h2>
+    <p class="mt-2 mb-4 text-lg font-light">{{ siteItem.description }}</p>
+    <a
+      [routerLink]="['/']"
+      class="text-xl border-b border-b-slate-400 hover:text-orange-600"
+      >Read more
+    </a>
+  </div>
+  <img [src]="siteItem.image" class="w-[300px] h-auto" alt="" />
+</div>

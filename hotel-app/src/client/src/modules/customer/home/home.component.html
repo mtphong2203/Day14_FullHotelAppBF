@@ -1,0 +1,48 @@
+<section class="home">
+  <div class="brand-home relative">
+    <img
+      [src]="brandHome"
+      class="w-full h-[600px] overflow-hidden object-fill"
+      alt=""
+    />
+    <div class="overlay"></div>
+  </div>
+
+  <section class="head absolute top-[40%] left-[50%] translate-x-[-50%] z-10">
+    <h2 class="text-6xl text-white font-medium mb-4">Amazing Hotel</h2>
+    <p class="text-white font-mono text-4xl mt-8 text-center">
+      Nơi để thuộc về
+    </p>
+  </section>
+
+  <div class="home-body w-[75%] m-auto mt-8">
+    <div class="room-booking">
+      <h2 class="text-5xl font-bold text-center">Description</h2>
+      <p class="mt-4 font-medium">
+        Chúng tôi có 82 phòng với nhiều loại phòng khác nhau, từ phòng Superior
+        view thành phố cho đến phòng Deluxe Family. Mỗi phòng đều được trang bị
+        đầy đủ tiện nghi và có ban công riêng. Khách sạn còn có nhà hàng, bar,
+        hồ bơi, spa, gym và karaoke để phục vụ nhu cầu giải trí của du khách
+      </p>
+      <p class="title text-3xl my-4 font-medium text-center">
+        <fa-icon [icon]="faMinus"></fa-icon>
+        Explore
+      </p>
+      <p class="ranking text-3xl font-bold mb-6 text-center">Room & Ranking</p>
+      <div class="rooms grid my-2 grid-cols-2 grid-rows-2 gap-4">
+        <ng-container *ngFor="let item of rooms">
+          <app-room [roomItem]="item"></app-room>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="news my-4">
+      <h2 class="text-3xl font-bold text-center">News & Events</h2>
+      <div class="events grid grid-rows-2 grid-cols-3">
+        <ng-container *ngFor="let item of events">
+          <app-event [eventItem]="item"></app-event>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</section>

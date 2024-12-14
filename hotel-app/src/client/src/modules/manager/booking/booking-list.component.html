@@ -1,0 +1,57 @@
+<div class="hotel-service p-4">
+  <div class="card border-2 border-slate-200 rounded-md">
+    <div class="card-header">
+      <h1 class="text-2xl text-center font-medium border-b-2 p-2">
+        Booking Service Management
+      </h1>
+    </div>
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <div class="card-body border-b-2 p-2">
+        <div class="form-group">
+          <label for="status" class="block mb-1">Search By Status</label>
+          <select
+            formControlName="status"
+            id="status"
+            class="w-full p-1 border rounded-md border-slate-400 focus:outline-slate-500"
+          >
+            <option *ngFor="let item of bookingType" [value]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="card-footer flex justify-between p-2">
+        <button
+          type="button"
+          (click)="onCreate()"
+          class="p-2 bg-green-500 text-white rounded-full"
+        >
+          <fa-icon [icon]="faPlus" class="mr-1"></fa-icon>Create
+        </button>
+        <button type="submit" class="p-2 bg-blue-500 text-white rounded-full">
+          <fa-icon [icon]="faSearch" class="mr-1"></fa-icon>Search
+        </button>
+      </div>
+    </form>
+  </div>
+  <!-- list -->
+  <div class="list mt-4">
+    <app-table
+      [data]="dataApi"
+      [columns]="columns"
+      (edit)="onEdit($event)"
+      (delete)="onDelete($event)"
+    ></app-table>
+  </div>
+  <!-- details -->
+  <div class="details mt-4">
+    <app-booking-details
+      *ngIf="isShowDetail"
+      (cancel)="onCancelDetail()"
+      (resetForm)="onResetForm()"
+      [selected-item]="selectedItem"
+      [isEdit]="isEditMode"
+    >
+    </app-booking-details>
+  </div>
+</div>
