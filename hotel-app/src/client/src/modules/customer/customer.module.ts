@@ -10,6 +10,7 @@ import { ServiceComponent } from './service/service.component';
 import { RoomSuiteComponent } from './room-suite/room-suite.component';
 import { NewsComponent } from './news/news.component';
 import { LocationComponent } from './location/location.component';
+import { DemoTestComponent } from './demo-test/demo-test.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: 'contact',
     component: ContactComponent,
+  },
+  {
+    path: 'test',
+    component: DemoTestComponent,
   },
   {
     path: '',

@@ -48,12 +48,36 @@
         <li class="nav-item">
           <a [routerLink]="['/contact']" class="nav-link"> Contact </a>
         </li>
+        <li class="nav-item">
+          <a [routerLink]="['/test']" class="nav-link"> Test </a>
+        </li>
       </ul>
     </nav>
-
-    <div class="profile flex">
-      <a [routerLink]="['/auth/login']" class="nav-link"> Login </a>
-      <a [routerLink]="['/auth/register']" class="nav-link"> Register </a>
-    </div>
+    <!-- Profile Menu -->
+    <ul class="profile-menu flex">
+      <ng-container *ngIf="!isAuthenticated; else authenticated">
+        <ng-container *ngTemplateOutlet="notAuthenticated"></ng-container>
+      </ng-container>
+    </ul>
   </div>
 </header>
+
+<ng-template #notAuthenticated>
+  <li class="nav-item">
+    <a [routerLink]="['/auth/login']" class="nav-link">Login</a>
+  </li>
+  <li class="nav-item">
+    <a [routerLink]="['/auth/register']" class="nav-link">Register</a>
+  </li>
+</ng-template>
+
+<ng-template #authenticated>
+  <li class="nav-item">
+    <a [routerLink]="['/profile']" class="nav-link">{{
+      userInformation.displayName
+    }}</a>
+  </li>
+  <li class="nav-item">
+    <a (click)="logout()" class="nav-link">Logout</a>
+  </li>
+</ng-template>

@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { AUTH_SERVICE } from '../../constants/injection.constant';
-import { AuthService } from '../../services/auth/auth.service';
+import { canActivateAnonymous } from '../../guards/anonymous.guard';
 
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [canActivateAnonymous]
   },
   {
     path: 'register',
@@ -19,12 +19,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [],
-  providers: [
-    {
-      provide: AUTH_SERVICE,
-      useClass: AuthService
-    }
-  ],
+
   imports: [
     CommonModule, RouterModule.forChild(routes)
   ]
