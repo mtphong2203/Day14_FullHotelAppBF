@@ -1,6 +1,7 @@
 package com.maiphong.hotelapp.dtos.auth;
 
-import java.util.List;
+import com.maiphong.hotelapp.dtos.user.UserInformationDTO;
+
 import lombok.*;
 
 @Getter
@@ -10,5 +11,5 @@ import lombok.*;
 public class LoginResponseDTO {
     private String accessToken;
 
-    private List<String> roles;
+    private UserInformationDTO userInformationDTO;
 }

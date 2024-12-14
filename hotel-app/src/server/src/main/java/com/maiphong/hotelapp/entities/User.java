@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.*;
 
 @Getter
@@ -21,6 +22,9 @@ public class User extends MasterEntityBase {
 
     @Column(columnDefinition = "NVARCHAR(20)")
     private String lastName;
+
+    @Transient
+    private String displayName;
 
     @Column(columnDefinition = "NVARCHAR(30)", unique = true, nullable = false)
     private String username;
@@ -37,5 +41,9 @@ public class User extends MasterEntityBase {
     @ManyToMany()
     @JoinTable(name = "UserRoles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    public String getDisplayName() {
+        return this.firstName + " " + this.lastName;
+    }
 
 }
